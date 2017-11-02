@@ -1,3 +1,8 @@
+import { PreferencesPage } from './../pages/preferences/preferences';
+import { SignupPage } from './../pages/signup/signup';
+import { SigninPage } from './../pages/signin/signin';
+import { StatisticsPage } from './../pages/statistics/statistics';
+import { AuthService } from './../services/auth';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
@@ -17,7 +22,11 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    SigninPage,
+    SignupPage,
+    PreferencesPage,
+    StatisticsPage
   ],
   imports: [
     BrowserModule,
@@ -29,12 +38,18 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    SigninPage,
+    SignupPage,
+    PreferencesPage,
+    StatisticsPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    AuthService,
+    SignupPage
   ]
 })
 export class AppModule {}
