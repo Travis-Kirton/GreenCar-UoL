@@ -1,0 +1,29 @@
+<ion-header>
+</ion-header>
+
+
+<ion-content padding>
+  <div id="logoContainer">
+    <h1 text-center>green<span>Car</span></h1>
+    <h5 text-center>@UoL</h5>
+  </div>
+
+  <form #f="ngForm" (ngSubmit)="onSignin(f)">
+    <ion-list>
+      <ion-item>
+        <ion-input type="email" ngModel name="email" placeholder="email" required></ion-input>
+        <ion-icon name="mail-outline" item-left></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="lock-outline" item-left></ion-icon>
+        <ion-input type="password" ngModel name="password" placeholder="password" required></ion-input>
+      </ion-item>
+    </ion-list>
+    <button ion-button block type="submit">
+            Sign In</button>
+
+  </form>
+  <button ion-button block (click)="onRegister()">
+  Register</button>
+  <p (click)="onRegister()" text-center>fogotten password?</p>
+</ion-content>

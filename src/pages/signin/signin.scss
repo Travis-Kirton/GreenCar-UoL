@@ -1,0 +1,49 @@
+.ios,
+.md {
+
+page-signin {
+    p{
+        color:gray;
+    }
+    h1 {
+        color:#4E8F5E;
+        font-size: 2.5em;
+        margin:auto;
+        span {
+            font-weight: 100;
+        }
+    }
+
+    h1:first-child{
+        margin-top:1.1em;
+    }
+
+    h5{
+        font-weight: 100;
+        font-size: 1.2em;
+        color:#606060;
+        margin-left:120px;
+        margin-top:-6px;
+    }
+    form{
+        margin-top:25%;
+
+        ion-item{
+            width:85%;
+            margin:auto;
+            color:#383838;
+            background-color: transparent;
+            
+        }
+       
+    }
+
+    .button {
+        width:85%;
+        margin-left: auto;
+        margin-right:auto;
+        background-color: #71C485
+    }
+
+}
+}
