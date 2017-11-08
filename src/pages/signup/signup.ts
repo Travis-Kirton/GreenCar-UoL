@@ -43,8 +43,4 @@ export class SignupPage {
         alert.present();
       });
   }
-
-  pushModalitySelection(){
-    this.navCtrl.popToRoot();
-  }
 }
