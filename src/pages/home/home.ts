@@ -1,3 +1,4 @@
+import { CreateJourneyPage } from './../create-journey/create-journey';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
@@ -7,8 +8,13 @@ import { NavController } from 'ionic-angular';
 })
 export class HomePage {
 
+
   constructor(public navCtrl: NavController) {
 
+  }
+
+  createJourney(){
+    this.navCtrl.push(CreateJourneyPage);
   }
 
 }

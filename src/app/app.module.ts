@@ -1,3 +1,4 @@
+import { CreateJourneyPage } from './../pages/create-journey/create-journey';
 import { PreferencesPage } from './../pages/preferences/preferences';
 import { SignupPage } from './../pages/signup/signup';
 import { SigninPage } from './../pages/signin/signin';
@@ -7,6 +8,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
+import { AngularOpenlayersModule } from 'ngx-openlayers';
 
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
@@ -26,11 +28,13 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     SigninPage,
     SignupPage,
     PreferencesPage,
-    StatisticsPage
+    StatisticsPage,
+    CreateJourneyPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    AngularOpenlayersModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -42,7 +46,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     SigninPage,
     SignupPage,
     PreferencesPage,
-    StatisticsPage
+    StatisticsPage,
+    CreateJourneyPage
   ],
   providers: [
     StatusBar,
