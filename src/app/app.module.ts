@@ -1,3 +1,5 @@
+import { HttpModule } from '@angular/http';
+import { RoutingService } from './../services/routing';
 import { CreateJourneyPage } from './../pages/create-journey/create-journey';
 import { PreferencesPage } from './../pages/preferences/preferences';
 import { SignupPage } from './../pages/signup/signup';
@@ -33,6 +35,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   ],
   imports: [
     BrowserModule,
+    HttpModule,
     IonicModule.forRoot(MyApp),
     AngularOpenlayersModule
   ],
@@ -54,7 +57,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthService,
-    SignupPage
+    SignupPage,
+    RoutingService
   ]
 })
 export class AppModule {}

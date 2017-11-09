@@ -1,6 +1,7 @@
 #### BSc Comptuing Final Year Project
 ---
 #### GreenCar@Uol - Progressive Web App
+[![Build Status](https://travis-ci.org/Travis-Kirton/GreenCar-UoL.svg?branch=master)](https://travis-ci.org/Travis-Kirton/GreenCar-UoL)
 
 ##### Database
 

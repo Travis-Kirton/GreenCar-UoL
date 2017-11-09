@@ -1,5 +1,5 @@
+import { RoutingService } from './../../services/routing';
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
 
 @Component({
   selector: 'page-create-journey',
@@ -9,12 +9,39 @@ export class CreateJourneyPage {
 
   public zoom = 15;
   public opacity = 1.0;
-  public width = 5;
+  public width = 3;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  startingPoint: string;
+  destination: string;
+
+  lat_lng: number[] = [];
+  lat_lng_pairs: number[][] = [];
+
+  constructor(private routingService: RoutingService) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CreateJourneyPage');
+  }
+
+  showRoute() {
+    this.routingService.getRoute(this.startingPoint).subscribe(data => {
+      this.saveLatLng(data);
+    });
+  }
+
+  saveLatLng(data) {
+    this.lat_lng_pairs = [];
+    data.forEach(element => {
+      this.lat_lng.push(element.x1)
+      this.lat_lng.push(element.y1);
+      this.lat_lng_pairs.push(this.lat_lng);
+      this.lat_lng = [];
+      this.lat_lng.push(element.x2);
+      this.lat_lng.push(element.y2);
+      this.lat_lng_pairs.push(this.lat_lng);
+      this.lat_lng = [];
+    });
+    console.log(this.lat_lng_pairs);
   }
 }

@@ -1,5 +1,4 @@
 import { SignupPage } from './../signup/signup';
-import { TabsPage } from './../tabs/tabs';
 import { HomePage } from './../home/home';
 import { Component } from '@angular/core';
 import { NgForm } from "@angular/forms";
