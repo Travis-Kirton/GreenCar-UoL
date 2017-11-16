@@ -42,6 +42,5 @@ export class CreateJourneyPage {
       this.lat_lng_pairs.push(this.lat_lng);
       this.lat_lng = [];
     });
-    console.log(this.lat_lng_pairs);
   }
 }

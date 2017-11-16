@@ -19,6 +19,7 @@ app.use(function (req, res, next) {
   next();
   });
 
+// Allow access via http://localhost:4000/route
 app.get('/route', function (req, res, next) {
   pool.connect(function (err, client, done) {
     if (err) {

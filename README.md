@@ -40,9 +40,14 @@
 * Parsed OSM Data into PostGres using osm2pgrouting
 * Created NodeJS Web API to allow simple queries of database
 * Included Map functionality within Ionic 2 application using Openlayers 3
-* Allow basic road queries within Front-end, showing markers on map. Data being pulled from DB utilising NodeJs Web API
+* Allow basic road queries within Front-end, showing road lines on map. Data being pulled from DB utilising NodeJs Web API
 
-#### Sprint 2 (TBC)
+#### Sprint 2 (Nov 16th - November 30th)
+* Research Dijkstras algorithm and how to apply to network
+* Research technologies and other similar applications for Interim Report
+* Sketch out Prototype System Design
+* Attempt implementation of Dijkstras algorithm using NodeJS and PostGres OSM data
+* (extra) Update preferences view & save user info
 ---
 
 
