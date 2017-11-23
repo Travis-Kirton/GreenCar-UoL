@@ -43,11 +43,11 @@
 * Allow basic road queries within Front-end, showing road lines on map. Data being pulled from DB utilising NodeJs Web API
 
 #### Sprint 2 (Nov 16th - November 30th)
-* Research Dijkstras algorithm and how to apply to network
+* Research A-Star algorithm and how to apply to network
 * Research technologies and other similar applications for Interim Report
 * Sketch out Prototype System Design
-* Attempt implementation of Dijkstras algorithm using NodeJS and PostGres OSM data
-* (extra) Update preferences view & save user info
+* Find 2-4 roads within Leicester that are fairly close & pull data to perform routing on them. Don't focus on pre-processing data
+* Allow for testing on routed roads. Test for correct latitude & longitudes
 ---
 
 

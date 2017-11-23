@@ -17,7 +17,7 @@ app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
-  });
+});
 
 // Allow access via http://localhost:4000/route
 app.get('/route', function (req, res, next) {
