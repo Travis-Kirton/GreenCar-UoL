@@ -1,3 +1,4 @@
+import { Edge } from './../../models/edge';
 import { RoutingService } from './../../services/routing';
 import { Component } from '@angular/core';
 
@@ -11,11 +12,13 @@ export class CreateJourneyPage {
   public opacity = 1.0;
   public width = 3;
 
-  startingPoint: string;
-  destination: string;
+  startingPoint: number;
+  destination: number;
 
   lat_lng: number[] = [];
   lat_lng_pairs: number[][] = [];
+
+  edges: Edge[] = [];
 
   constructor(private routingService: RoutingService) {
   }
@@ -33,6 +36,8 @@ export class CreateJourneyPage {
   saveLatLng(data) {
     this.lat_lng_pairs = [];
     data.forEach(element => {
+      this.edges.push(new Edge(element.source, element.target, element.cost, element.reverse_cost));
+
       this.lat_lng.push(element.x1)
       this.lat_lng.push(element.y1);
       this.lat_lng_pairs.push(this.lat_lng);
@@ -42,5 +47,6 @@ export class CreateJourneyPage {
       this.lat_lng_pairs.push(this.lat_lng);
       this.lat_lng = [];
     });
+    console.log(this.edges.length);
   }
 }
