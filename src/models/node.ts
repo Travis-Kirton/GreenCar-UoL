@@ -4,9 +4,9 @@ export class MapNode{
               public y: number,
               public neighbours: MapNode[]){}
 
-  f: number;
-  g: number; // g = cost to this node
-  h: number; // h = cost from this node to goal
+  f: number = 0;
+  g: number = 0; // g = cost to this node
+  h: number = 0; // h = cost from this node to goal
 
   // Accessors/Mutators for heuristic value (f,g,h)
   setF(newF: number){

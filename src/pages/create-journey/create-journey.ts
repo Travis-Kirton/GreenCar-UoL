@@ -35,8 +35,7 @@ export class CreateJourneyPage {
       this.saveLatLng(data);
     });
 
-     let neighbours: MapNode[] = [];
-     neighbours = this.astar.getNodeNeighbours(this.startingPoint);
+    this.astar.astar(this.startingPoint, 0);
   }
 
   saveLatLng(data) {
