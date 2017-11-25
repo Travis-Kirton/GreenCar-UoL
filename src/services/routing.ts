@@ -15,12 +15,12 @@ export class RoutingService {
   }
 
   getNodeNeighbours(nodeID: number) {
-    return this.http.get(`http://localhost:4000/neighbours?node${nodeID}`)
+    return this.http.get(`http://localhost:4000/neighbours?nodeID=${nodeID}`)
     .map((res: Response) => res.json());
   }
 
   getNode(nodeID: number){
-    return this.http.get(`http://localhost:4000/node?node${nodeID}`)
+    return this.http.get(`http://localhost:4000/node?nodeID=${nodeID}`)
     .map((res: Response) => res.json());
   }
 

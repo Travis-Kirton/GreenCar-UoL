@@ -1,3 +1,4 @@
+import { Astar } from './../services/astar';
 import { HttpModule } from '@angular/http';
 import { RoutingService } from './../services/routing';
 import { CreateJourneyPage } from './../pages/create-journey/create-journey';
@@ -31,7 +32,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     SignupPage,
     PreferencesPage,
     StatisticsPage,
-    CreateJourneyPage
+    CreateJourneyPage,
+
   ],
   imports: [
     BrowserModule,
@@ -58,7 +60,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthService,
     SignupPage,
-    RoutingService
+    RoutingService,
+    Astar
   ]
 })
 export class AppModule {}

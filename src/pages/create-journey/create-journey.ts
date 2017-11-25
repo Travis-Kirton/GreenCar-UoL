@@ -1,3 +1,5 @@
+import { MapNode } from './../../models/node';
+import { Astar } from './../../services/astar';
 import { Edge } from './../../models/edge';
 import { RoutingService } from './../../services/routing';
 import { Component } from '@angular/core';
@@ -20,7 +22,8 @@ export class CreateJourneyPage {
 
   edges: Edge[] = [];
 
-  constructor(private routingService: RoutingService) {
+  constructor(private routingService: RoutingService,
+              private astar: Astar) {
   }
 
   ionViewDidLoad() {
@@ -31,6 +34,9 @@ export class CreateJourneyPage {
     this.routingService.getRoute(this.startingPoint).subscribe(data => {
       this.saveLatLng(data);
     });
+
+     let neighbours: MapNode[] = [];
+     neighbours = this.astar.getNodeNeighbours(this.startingPoint);
   }
 
   saveLatLng(data) {
@@ -47,6 +53,5 @@ export class CreateJourneyPage {
       this.lat_lng_pairs.push(this.lat_lng);
       this.lat_lng = [];
     });
-    console.log(this.edges.length);
   }
 }
