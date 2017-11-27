@@ -22,13 +22,12 @@ export class CreateJourneyPage {
 
   lat_lng: number[] = [];
   lat_lng_pairs: number[][] = [];
-
-  edges: Edge[] = [];
+  dijkstraRoute: number[][] = [];
 
   constructor(private routingService: RoutingService,
-              private nodeStorageService: NodeStorageService,
-              private edgeStorageService: EdgeStorageService,
-              private dijkstra: Dijkstra) {
+    private nodeStorageService: NodeStorageService,
+    private edgeStorageService: EdgeStorageService,
+    private dijkstra: Dijkstra) {
   }
 
   ionViewDidLoad() {
@@ -39,19 +38,21 @@ export class CreateJourneyPage {
     this.routingService.getRoute(this.startingPoint).subscribe(data => {
       this.saveLatLng(data);
     });
+  }
 
-    // 20812 -> 17305
+  showRouteDijkstra() {
+    // e.g. 20812 -> 9657
     this.edgeStorageService.demoSearchingNode();
     this.dijkstra.performDijkstras(this.startingPoint, this.destination);
+    this.dijkstraRoute = this.dijkstra.getPathAsCoords();
+    console.log(JSON.stringify(this.dijkstraRoute));
   }
 
   saveLatLng(data) {
     this.lat_lng_pairs = [];
     data.forEach(element => {
-      this.edges.push(new Edge(element.source, element.target, element.cost, element.reverse_cost));
-
-      this.lat_lng.push(element.x1)
-      this.lat_lng.push(element.y1);
+      this.lat_lng.push(element.x1) // longitude
+      this.lat_lng.push(element.y1); // latitude
       this.lat_lng_pairs.push(this.lat_lng);
       this.lat_lng = [];
       this.lat_lng.push(element.x2);
@@ -59,5 +60,6 @@ export class CreateJourneyPage {
       this.lat_lng_pairs.push(this.lat_lng);
       this.lat_lng = [];
     });
+    console.log(JSON.stringify(this.lat_lng_pairs));
   }
 }

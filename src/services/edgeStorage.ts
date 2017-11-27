@@ -14,8 +14,7 @@ export class EdgeStorageService {
     this.getAllEdgesFromAPI().subscribe(nodes =>{
       nodes.forEach(node => {
         this.edges.push(new Edge(node.source, node.target, node.cost, node.reverse_cost));
-      }),
-      () => {console.log("complete");}
+      })
     });
 
   }
@@ -30,7 +29,7 @@ export class EdgeStorageService {
       }
     });
     // averages 1.0-7ms +-2ms to find node within edges
-    console.log(`Time taken to find node: ${(t1-t0)}`);
+    //console.log(`Time taken to find node: ${(t1-t0)}`);
   }
 
   // Get all edges as JSON

@@ -32,10 +32,9 @@ export class Dijkstra {
   }
 
   performDijkstras(source: number, target: number) {
-    console.log(this.nodes.length);
+    console.log(`Routing from ${source} to ${target}`);
     this.source = this.graph.getNode(source);
     this.target = this.graph.getNode(target);
-
     this.execute(this.source);
   }
 
@@ -54,7 +53,7 @@ export class Dijkstra {
       this.settledNodes.add(node);
       this.unsettledNodes.delete(node);
       this.findMinimalDistances(node);
-      if(node.nodeId == this.target.nodeId) break;
+      if(node.nodeId == this.target.nodeId) break; //found target node
     }
     let t1 = performance.now();
     console.log("DONE");
@@ -141,6 +140,20 @@ export class Dijkstra {
     //Order correctly
     path.reverse();
     return path;
+  }
+
+  getPathAsCoords():number[][]{
+    let path = this.getPath(this.target);
+    let lat_lng: number[] = [];
+    let lat_lng_pairs: number[][] = [];
+
+    for(let i = 0; i < path.length; i++){
+      lat_lng.push(path[i].lon);
+      lat_lng.push(path[i].lat);
+      lat_lng_pairs.push(lat_lng);
+      lat_lng = [];
+    }
+    return lat_lng_pairs;
   }
 
 }

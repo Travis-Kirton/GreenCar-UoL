@@ -20,7 +20,7 @@
       <aol-source-vector>
         <aol-feature>
           <aol-geometry-linestring>
-            <aol-collection-coordinates [coordinates]="lat_lng_pairs" [srid]="'EPSG:4326'">
+            <aol-collection-coordinates [coordinates]="dijkstraRoute" [srid]="'EPSG:4326'">
             </aol-collection-coordinates>
           </aol-geometry-linestring>
           <aol-style>
@@ -41,5 +41,5 @@
       <ion-input type="text" [(ngModel)]="destination" name="destination" placeholder="Destination..." required></ion-input>
     </ion-item>
   </ion-list>
-  <button ion-button block (click)="showRoute()">Route</button>
+  <button ion-button block (click)="showRouteDijkstra()">Route</button>
 </ion-content>

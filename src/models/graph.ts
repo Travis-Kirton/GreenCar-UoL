@@ -24,5 +24,4 @@ export class Graph{
   getNode(nodeId: number): MapNode{
     return this.nSS.getNode(nodeId);
   }
-
 }

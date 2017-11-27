@@ -1,7 +1,7 @@
 export class MapNode{
   constructor(public nodeId: number,
-              public x: number,
-              public y: number){}
+              public lat: number,
+              public lon: number){}
 
   f: number = 0;
   g: number = 0; // g = cost to this node
