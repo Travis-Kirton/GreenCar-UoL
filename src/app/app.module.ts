@@ -1,3 +1,6 @@
+import { Dijkstra } from './../services/dijkstra';
+import { EdgeStorageService } from './../services/edgeStorage';
+import { NodeStorageService } from './../services/nodeStorage';
 import { Astar } from './../services/astar';
 import { HttpModule } from '@angular/http';
 import { RoutingService } from './../services/routing';
@@ -61,7 +64,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     AuthService,
     SignupPage,
     RoutingService,
-    Astar
+    NodeStorageService,
+    EdgeStorageService,
+    Astar,
+    Dijkstra
   ]
 })
 export class AppModule {}

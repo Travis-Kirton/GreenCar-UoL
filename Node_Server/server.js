@@ -57,7 +57,7 @@ app.get('/neighbours', function (req, res, next) {
   });
 });
 
-// Allow access via http://localhost:4000/neighbours
+// Allow access via http://localhost:4000/node
 app.get('/node', function (req, res, next) {
   pool.connect(function (err, client, done) {
     if (err) {
@@ -75,6 +75,43 @@ app.get('/node', function (req, res, next) {
     });
   });
 });
+
+app.get('/allNode', function (req, res, next) {
+  pool.connect(function (err, client, done) {
+    if (err) {
+      console.log('unable to connect to database: ' + err);
+      res.status(400).send(err);
+    }
+    var tmpQuery = `SELECT * FROM ways_vertices_pgr`;
+    client.query(tmpQuery, function (err, result) {
+      if (err) {
+        console.log(err);
+        res.status(400).send(err);
+      }
+      res.json(result.rows);
+      client.release();
+    });
+  });
+});
+
+app.get('/allEdge', function (req, res, next) {
+  pool.connect(function (err, client, done) {
+    if (err) {
+      console.log('unable to connect to database: ' + err);
+      res.status(400).send(err);
+    }
+    var tmpQuery = `SELECT * FROM ways`;
+    client.query(tmpQuery, function (err, result) {
+      if (err) {
+        console.log(err);
+        res.status(400).send(err);
+      }
+      res.json(result.rows);
+      client.release();
+    });
+  });
+});
+
 
 app.listen(4000, function () {
   console.log('Server is running.. on Port 4000');

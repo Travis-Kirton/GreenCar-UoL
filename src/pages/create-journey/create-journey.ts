@@ -1,3 +1,6 @@
+import { Dijkstra } from './../../services/dijkstra';
+import { EdgeStorageService } from './../../services/edgeStorage';
+import { NodeStorageService } from './../../services/nodeStorage';
 import { MapNode } from './../../models/node';
 import { Astar } from './../../services/astar';
 import { Edge } from './../../models/edge';
@@ -23,7 +26,9 @@ export class CreateJourneyPage {
   edges: Edge[] = [];
 
   constructor(private routingService: RoutingService,
-              private astar: Astar) {
+              private nodeStorageService: NodeStorageService,
+              private edgeStorageService: EdgeStorageService,
+              private dijkstra: Dijkstra) {
   }
 
   ionViewDidLoad() {
@@ -35,7 +40,9 @@ export class CreateJourneyPage {
       this.saveLatLng(data);
     });
 
-    this.astar.astar(this.startingPoint, 0);
+    // 20812 -> 17305
+    this.edgeStorageService.demoSearchingNode();
+    this.dijkstra.performDijkstras(this.startingPoint, this.destination);
   }
 
   saveLatLng(data) {

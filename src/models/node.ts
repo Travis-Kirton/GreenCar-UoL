@@ -1,12 +1,13 @@
 export class MapNode{
   constructor(public nodeId: number,
               public x: number,
-              public y: number,
-              public neighbours: MapNode[]){}
+              public y: number){}
 
   f: number = 0;
   g: number = 0; // g = cost to this node
   h: number = 0; // h = cost from this node to goal
+  previous: MapNode = undefined;
+  neighbours: MapNode[] = [];
 
   // Accessors/Mutators for heuristic value (f,g,h)
   setF(newF: number){
