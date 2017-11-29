@@ -1,3 +1,4 @@
+import { MapService } from './../services/map';
 import { Dijkstra } from './../services/dijkstra';
 import { EdgeStorageService } from './../services/edgeStorage';
 import { NodeStorageService } from './../services/nodeStorage';
@@ -66,6 +67,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     RoutingService,
     NodeStorageService,
     EdgeStorageService,
+    MapService,
     Astar,
     Dijkstra
   ]

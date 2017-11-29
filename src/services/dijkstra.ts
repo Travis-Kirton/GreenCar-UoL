@@ -21,6 +21,9 @@ export class Dijkstra {
   predecessors: Map<MapNode, MapNode>;
   distance: Map<MapNode, number>;
 
+  lat_lng: number[] = [];
+  lat_lng_pairs: number[][] = [];
+
 
 
   constructor(private nSS: NodeStorageService,
@@ -31,14 +34,19 @@ export class Dijkstra {
     this.edges = this.graph.getEdges();
   }
 
-  performDijkstras(source: number, target: number) {
-    console.log(`Routing from ${source} to ${target}`);
-    this.source = this.graph.getNode(source);
-    this.target = this.graph.getNode(target);
-    this.execute(this.source);
+  performDijkstras(source: string, target: string) {
+    return new Promise((resolve => {
+      console.log(`Routing from ${source} to ${target}`);
+      this.source = this.graph.getNodeByName(source);
+      this.target = this.graph.getNodeByName(target);
+      this.execute(this.source).then(() =>{
+        resolve();
+      });
+      }));
   }
 
   execute(source: MapNode) {
+    return new Promise((resolve) => {
     this.settledNodes = new Set<MapNode>();
     this.unsettledNodes = new Set<MapNode>();
 
@@ -53,11 +61,12 @@ export class Dijkstra {
       this.settledNodes.add(node);
       this.unsettledNodes.delete(node);
       this.findMinimalDistances(node);
-      if(node.nodeId == this.target.nodeId) break; //found target node
+      if (node.nodeId == this.target.nodeId) break; //found target node
     }
     let t1 = performance.now();
-    console.log("DONE");
-    console.log(`Completed in: ${(t1-t0)}ms`);
+    console.log(`Completed in: ${(t1 - t0)}ms`);
+    resolve(true);
+    });
   }
 
   findMinimalDistances(node: MapNode) {
@@ -108,7 +117,7 @@ export class Dijkstra {
   isSettled(nodeId: number): boolean {
     let contains: boolean = false;
     this.unsettledNodes.forEach(vertex => {
-      if(vertex.nodeId == nodeId){
+      if (vertex.nodeId == nodeId) {
         contains = true;
       }
     });
@@ -142,18 +151,16 @@ export class Dijkstra {
     return path;
   }
 
-  getPathAsCoords():number[][]{
+  getPathAsCoords(): number[][] {
     let path = this.getPath(this.target);
-    let lat_lng: number[] = [];
-    let lat_lng_pairs: number[][] = [];
-
-    for(let i = 0; i < path.length; i++){
-      lat_lng.push(path[i].lon);
-      lat_lng.push(path[i].lat);
-      lat_lng_pairs.push(lat_lng);
-      lat_lng = [];
+    this.lat_lng_pairs = [];
+    for (let i = 0; i < path.length; i++) {
+      this.lat_lng.push(parseFloat(path[i].lat.toString()));
+      this.lat_lng.push(parseFloat(path[i].lon.toString()));
+      this.lat_lng_pairs.push(this.lat_lng);
+      this.lat_lng = [];
     }
-    return lat_lng_pairs;
+    return this.lat_lng_pairs;
   }
 
 }

@@ -22,7 +22,7 @@
 ##### Front End
 * Ionic 2 as user front-end, allowing PWA on mobile devices
 * Making use of Angular2/TypeScript
-* Map functionality provided by Openlayers3, using ngx-openlayers NPM library for easy Angular integration
+* Map functionality provided by LeafletJS
 
 ---
 
@@ -48,6 +48,11 @@
 * Sketch out Prototype System Design
 * Find 2-4 roads within Leicester that are fairly close & pull data to perform routing on them. Don't focus on pre-processing data
 * Allow for testing on routed roads. Test for correct latitude & longitudes
+
+###### Sprint 2 -Retrospective
+* <sub>Dijkstra's algorithm was applied due to not knowing how to compute straight line distances from neighbours to goal
+* <sub>LeafletJS is now implemented for mapping, as it offers more modularity and customisation. (allowed for a Map Service)</sub>
+* <sub>Dijkstra's algorithm is inefficient, but a good start to now optimis from.</sub>
 ---
 
 

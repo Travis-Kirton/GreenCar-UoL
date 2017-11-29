@@ -24,4 +24,9 @@ export class Graph{
   getNode(nodeId: number): MapNode{
     return this.nSS.getNode(nodeId);
   }
+
+  getNodeByName(name: string): MapNode{
+    let node = this.eSS.getNodeByEdgeName(name);
+    return this.nSS.getNode(node);
+  }
 }

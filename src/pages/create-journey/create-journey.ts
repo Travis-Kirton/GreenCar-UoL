@@ -1,3 +1,4 @@
+import { LoadingController } from 'ionic-angular';
 import { Dijkstra } from './../../services/dijkstra';
 import { EdgeStorageService } from './../../services/edgeStorage';
 import { NodeStorageService } from './../../services/nodeStorage';
@@ -5,47 +6,52 @@ import { MapNode } from './../../models/node';
 import { Astar } from './../../services/astar';
 import { Edge } from './../../models/edge';
 import { RoutingService } from './../../services/routing';
-import { Component } from '@angular/core';
+import { MapService } from './../../services/map';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'page-create-journey',
   templateUrl: 'create-journey.html',
 })
-export class CreateJourneyPage {
+export class CreateJourneyPage implements OnInit{
 
   public zoom = 15;
   public opacity = 1.0;
   public width = 3;
 
-  startingPoint: number;
-  destination: number;
+  startingPoint: string;
+  destination: string;
 
   lat_lng: number[] = [];
   lat_lng_pairs: number[][] = [];
   dijkstraRoute: number[][] = [];
 
-  constructor(private routingService: RoutingService,
-    private nodeStorageService: NodeStorageService,
-    private edgeStorageService: EdgeStorageService,
-    private dijkstra: Dijkstra) {
+  constructor(private loadingCtrl: LoadingController,
+              private routingService: RoutingService,
+              private mapService: MapService,
+              private nodeStorageService: NodeStorageService,
+              private edgeStorageService: EdgeStorageService,
+              private dijkstra: Dijkstra) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CreateJourneyPage');
   }
 
-  showRoute() {
-    this.routingService.getRoute(this.startingPoint).subscribe(data => {
-      this.saveLatLng(data);
-    });
-  }
-
   showRouteDijkstra() {
     // e.g. 20812 -> 9657
     this.edgeStorageService.demoSearchingNode();
-    this.dijkstra.performDijkstras(this.startingPoint, this.destination);
-    this.dijkstraRoute = this.dijkstra.getPathAsCoords();
-    console.log(JSON.stringify(this.dijkstraRoute));
+    let loading = this.loadingCtrl.create({
+      content: "Calculating route..."
+    });
+    loading.present().then(() => {
+      this.dijkstra.performDijkstras(this.startingPoint, this.destination).then(() => {
+        loading.dismiss();
+        this.dijkstraRoute = this.dijkstra.getPathAsCoords();
+        console.log(JSON.stringify(this.dijkstraRoute));
+        this.mapService.drawRoute(this.dijkstraRoute);
+      });
+    });
   }
 
   saveLatLng(data) {
@@ -60,6 +66,17 @@ export class CreateJourneyPage {
       this.lat_lng_pairs.push(this.lat_lng);
       this.lat_lng = [];
     });
-    console.log(JSON.stringify(this.lat_lng_pairs));
   }
+
+    saveRoute(){
+
+    }
+
+    ngOnInit() {
+      this.mapService.initialise();
+    }
+
+    onLocateMe() {
+      this.mapService.locateMe();
+    }
 }

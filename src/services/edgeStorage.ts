@@ -13,7 +13,7 @@ export class EdgeStorageService {
               private nodeSS: NodeStorageService){
     this.getAllEdgesFromAPI().subscribe(nodes =>{
       nodes.forEach(node => {
-        this.edges.push(new Edge(node.source, node.target, node.cost, node.reverse_cost));
+        this.edges.push(new Edge(node.source, node.target, node.name, node.cost, node.reverse_cost));
       })
     });
 
@@ -41,6 +41,18 @@ export class EdgeStorageService {
   // Get all edges as Array of Edges
   getEdges(): Edge[]{
     return this.edges;
+  }
+
+  getNodeByEdgeName(name: string): number{
+    let nodeId: number = 0;
+    while(nodeId == 0){
+    this.edges.forEach(edge => {
+      if(edge.name == name){
+        nodeId = edge.target;
+      }
+    });
+  }
+    return nodeId;
   }
 
   // return neighbours of node as/when required

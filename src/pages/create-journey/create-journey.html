@@ -8,30 +8,14 @@
 
 
 <ion-content padding>
-  <aol-map [width]="'100%'" [height]="'400px'">
-    <aol-interaction-default></aol-interaction-default>
-    <aol-view [zoom]="17">
-      <aol-coordinate [x]="-1.136715" [y]="52.63295" [srid]="'EPSG:4326'"></aol-coordinate>
-    </aol-view>
-    <aol-layer-tile>
-      <aol-source-osm></aol-source-osm>
-    </aol-layer-tile>
-    <aol-layer-vector>
-      <aol-source-vector>
-        <aol-feature>
-          <aol-geometry-linestring>
-            <aol-collection-coordinates [coordinates]="dijkstraRoute" [srid]="'EPSG:4326'">
-            </aol-collection-coordinates>
-          </aol-geometry-linestring>
-          <aol-style>
-            <aol-style>
-              <aol-style-stroke [color]="'red'" [width]="width"></aol-style-stroke>
-            </aol-style>
-          </aol-style>
-        </aol-feature>
-      </aol-source-vector>
-    </aol-layer-vector>
-  </aol-map>
+  <div id="map">
+    <ion-fab bottom right>
+      <button ion-fab mini (click)="onLocateMe()">
+        <ion-icon name="compass" large></ion-icon>
+      </button>
+    </ion-fab>
+  </div>
+
 
   <ion-list>
     <ion-item>
