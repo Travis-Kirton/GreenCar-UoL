@@ -1,44 +1,36 @@
 <ion-header>
 
-    <ion-navbar>
+  <ion-navbar>
 
-      <ion-title>GreenCar@UoL</ion-title>
-      <ion-buttons left>
-        <button ion-button icon-only menuToggle>
+    <ion-title>GreenCar@UoL</ion-title>
+    <ion-buttons left>
+      <button ion-button icon-only menuToggle>
           <ion-icon name="menu"></ion-icon>
         </button>
-      </ion-buttons>
-    </ion-navbar>
+    </ion-buttons>
+  </ion-navbar>
 
-  </ion-header>
+</ion-header>
 
 <ion-content padding>
   <p align="center">your booked journeys</p>
-    <ion-card>
+  <ion-list no-lines reorder="true" (ionItemReorder)="reorderItems($event)">
+  <ion-item-sliding *ngFor="let route of routingService.getRoutes(); let i = index">
 
-          <img src="https://ionicframework.com/dist/preview-app/www/assets/img/advance-card-map-madison.png">
-          <ion-item>
-            <ion-icon name="navigate-outline" item-start large></ion-icon>
-            <h2>44 Friar Lane</h2>
-            <p>LE1 5RA</p>
-          </ion-item>
+    <ion-item (click)="showRoute(route, i)">
+      <h4>Route Created</h4>
+      <p>From: {{route.start}}</p>
+      <p>To: {{route.end}}</p>
+    </ion-item>
 
-          <ion-item>
-            <ion-icon name="navigate" item-left large ></ion-icon>
-            <h2>35 Noel Street</h2>
-            <p>LE1 1YG</p>
-          </ion-item>
+    <ion-item-options side="right">
+      <button color="danger" ion-button icon-only (click)="routingService.removeRoute(routine)">
+                               <ion-icon name="trash"></ion-icon>
+                           </button>
+    </ion-item-options>
+  </ion-item-sliding>
+  </ion-list>
 
-          <ion-item>
-            <span item-left>18 min</span>
-            <span item-left>(2.6 mi)</span>
-            <button ion-button icon-left clear item-end>
-              <ion-icon name="navigate"></ion-icon>
-              View
-            </button>
-          </ion-item>
-        </ion-card>
-
-        <button ion-button block (click)="createJourney()">Create Journey</button>
+  <button ion-button block (click)="createJourney()">Create Journey</button>
 
 </ion-content>

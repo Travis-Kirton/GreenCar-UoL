@@ -68,6 +68,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     NodeStorageService,
     EdgeStorageService,
     MapService,
+    RoutingService,
     Astar,
     Dijkstra
   ]

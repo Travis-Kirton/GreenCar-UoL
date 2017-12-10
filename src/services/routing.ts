@@ -1,28 +1,58 @@
-import { MapNode } from './../models/node';
+import { AuthService } from './auth';
+import { Route } from './../models/route';
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toPromise';
+import { reorderArray } from 'ionic-angular';
+import { Http, Response } from "@angular/http";
+import 'rxjs/Rx';
 
 @Injectable()
 export class RoutingService {
 
-  constructor(private http: Http) {
+  private routes: Route[] = [];
+
+  constructor(private http: Http,
+              private authService: AuthService) {
   }
 
-  getRoute(startingPoint: number) {
-    return this.http.get(`http://localhost:4000/route?source='${startingPoint}'`)
-      .map((res: Response) => res.json());
+  addRoute(route: Route){
+    this.routes.push(route);
+
+
   }
 
-  getNodeNeighboursJSON(nodeID: number) {
-    return this.http.get(`http://localhost:4000/neighbours?nodeID=${nodeID}`)
-      .map((res: Response) => res.json());
+  getRoutes(){
+    return this.routes.slice();
   }
 
-  async getNode(nodeID: number): Promise<any> {
-    const response = await this.http.get(`http://localhost:4000/node?nodeID=${nodeID}`)
-      .toPromise();
-    return response.json();
+  removeRoute(index: number){
+    this.routes.splice(index,1);
   }
+
+  storeRoutes(token: string){
+    const userId = this.authService.getUID();
+    return this.http.put('https://greencar-uol.firebaseio.com/' + userId + '/routes.json?auth=' + token, this.routes)
+    .map((response: Response) => {
+      return response.json();
+    });
+  }
+
+  fetchRoutes(token: string){
+    const userId = this.authService.getUID();
+    return this.http.get('https://greencar-uol.firebaseio.com/' + userId + '/routes.json?auth=' + token)
+      .map((response: Response) => {
+        return response.json();
+      })
+      .do((routes: Route[]) => {
+        if (routes) {
+          this.routes = routes;
+        } else {
+          this.routes = [];
+        }
+      });
+  }
+
+  reorderRoutines(data){
+    this.routes = reorderArray(this.routes, data);
+  }
+
 }

@@ -14,35 +14,35 @@ import firebase from 'firebase';
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp{
+export class MyApp {
   tabsPage: any = TabsPage;
   signinPage = SigninPage;
   signupPage = SignupPage;
   preferencesPage = PreferencesPage;
   statisticsPage = StatisticsPage;
   rootPage: any;
+  isAuthenticated = false;
 
   userName: string;
-  
+
   @ViewChild('nav') nav: NavController;
 
   constructor(platform: Platform,
-              statusBar: StatusBar, 
-              splashScreen: SplashScreen, 
-              private menuCtrl: MenuController,
-              private authService: AuthService,
-              public events: Events,
-              signupPage: SignupPage) {
-    firebase.initializeApp({
+    statusBar: StatusBar,
+    splashScreen: SplashScreen,
+    private menuCtrl: MenuController,
+    private authService: AuthService,
+    public events: Events,
+    signupPage: SignupPage) {
+    var config = {
       apiKey: "AIzaSyD3J_qrrKO3avQltX5mgtbA4ZY9QHbway4",
-      authDomain: "greencar-uol.firebaseapp.com",  
-    });
-
-
-    platform.ready().then(() => {
-      statusBar.styleDefault();
-      splashScreen.hide();
-    });
+      authDomain: "greencar-uol.firebaseapp.com",
+      databaseURL: "https://greencar-uol.firebaseio.com",
+      projectId: "greencar-uol",
+      storageBucket: "greencar-uol.appspot.com",
+      messagingSenderId: "762723967654"
+    };
+    firebase.initializeApp(config);
 
     this.checkUserState();
     let fireBaseUser = firebase.auth().currentUser;
@@ -50,7 +50,14 @@ export class MyApp{
     events.subscribe('user:name', (username) => {
       this.userName = username;
     })
-    
+
+    platform.ready().then(() => {
+      statusBar.styleDefault();
+      splashScreen.hide();
+    });
+
+
+
   }
 
   onLoad(page: any) {
@@ -58,7 +65,7 @@ export class MyApp{
     this.menuCtrl.close();
   }
 
-  onPushPage(page: any){
+  onPushPage(page: any) {
     this.nav.push(page);
     this.menuCtrl.close();
   }
@@ -70,10 +77,18 @@ export class MyApp{
   }
 
   checkUserState() {
+    let userToken: string = "";
+    let userUID: string = "";
     firebase.auth().onAuthStateChanged((user) => {
-      if(user) {
+      if (user) {
+        user.getIdToken().then(function(data) {
+          userToken = data;
+          userUID = user.uid;
+        });
         this.events.publish('user:name', firebase.auth().currentUser.displayName);
         this.nav.setRoot(TabsPage);
+        this.authService.setActiveUserToken(userToken);
+        this.authService.setUID(userUID);
       }
       else {
         this.nav.setRoot(SigninPage);

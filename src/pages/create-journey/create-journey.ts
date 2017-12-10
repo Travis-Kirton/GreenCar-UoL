@@ -1,3 +1,6 @@
+import { Route } from './../../models/route';
+import { AlertController, NavController, NavParams } from 'ionic-angular';
+import { AuthService } from './../../services/auth';
 import { LoadingController } from 'ionic-angular';
 import { Dijkstra } from './../../services/dijkstra';
 import { EdgeStorageService } from './../../services/edgeStorage';
@@ -27,17 +30,25 @@ export class CreateJourneyPage implements OnInit{
   dijkstraRoute: number[][] = [];
 
   constructor(private loadingCtrl: LoadingController,
+              private navParams: NavParams,
               private routingService: RoutingService,
               private mapService: MapService,
+              private authService: AuthService,
               private nodeStorageService: NodeStorageService,
               private edgeStorageService: EdgeStorageService,
+              private alertCtrl: AlertController,
+              public navCtrl: NavController,
               private dijkstra: Dijkstra) {
-  }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad CreateJourneyPage');
+                if (this.navParams.get('isSet')) {
+                  let route = navParams.get('route');
+                  console.log(route);
+                   this.dijkstraRoute = route.coords;
+                   console.log(this.dijkstraRoute);
+                   this.startingPoint = route.start;
+                   this.destination = route.end;
+                }
   }
-
   showRouteDijkstra() {
     // e.g. 20812 -> 9657
     this.edgeStorageService.demoSearchingNode();
@@ -69,14 +80,46 @@ export class CreateJourneyPage implements OnInit{
   }
 
     saveRoute(){
+      if(this.dijkstraRoute == []){
+        const alert = this.alertCtrl.create({
+          title: 'Missing Route',
+          message: 'Please Pick a Route',
+          buttons: ['Ok']
+        });
+        alert.present();
+      }else{
+      this.routingService.addRoute(new Route(this.startingPoint, this.destination, this.dijkstraRoute));
+      const loading = this.loadingCtrl.create({
+        content: 'Please wait...'
+      });
 
+          this.routingService.storeRoutes(this.authService.getActiveUserToken())
+            .subscribe(
+              () => loading.dismiss(),
+              error => {
+                loading.dismiss();
+                this.handleError(error.json().error);
+              }
+            );
+      this.navCtrl.popToRoot();
+    }
     }
 
     ngOnInit() {
       this.mapService.initialise();
+      setTimeout(() => this.mapService.getMap().invalidateSize(), 600);
     }
 
     onLocateMe() {
       this.mapService.locateMe();
+    }
+
+    private handleError(errorMessage: string) {
+      const alert = this.alertCtrl.create({
+        title: 'An error occurred!',
+        message: errorMessage,
+        buttons: ['Ok']
+      });
+      alert.present();
     }
 }

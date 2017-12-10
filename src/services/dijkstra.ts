@@ -5,6 +5,7 @@ import { NodeStorageService } from './nodeStorage';
 import { Injectable } from '@angular/core';
 import { MapNode } from './../models/node';
 import { RoutingService } from './routing';
+import * as Collections from 'typescript-collections';
 
 @Injectable()
 export class Dijkstra {
@@ -17,6 +18,7 @@ export class Dijkstra {
 
   settledNodes: Set<MapNode>;
   unsettledNodes: Set<MapNode>;
+
 
   predecessors: Map<MapNode, MapNode>;
   distance: Map<MapNode, number>;
