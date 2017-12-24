@@ -6,8 +6,7 @@ import { TabsPage } from './../pages/tabs/tabs';
 import { AuthService } from './../services/auth';
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController, MenuController, Events } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
+import { StatusBar, Splashscreen } from 'ionic-native';
 import firebase from 'firebase';
 
 
@@ -15,12 +14,11 @@ import firebase from 'firebase';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  tabsPage: any = TabsPage;
+
   signinPage = SigninPage;
   signupPage = SignupPage;
   preferencesPage = PreferencesPage;
   statisticsPage = StatisticsPage;
-  rootPage: any;
   isAuthenticated = false;
 
   userName: string;
@@ -28,12 +26,9 @@ export class MyApp {
   @ViewChild('nav') nav: NavController;
 
   constructor(platform: Platform,
-    statusBar: StatusBar,
-    splashScreen: SplashScreen,
     private menuCtrl: MenuController,
     private authService: AuthService,
-    public events: Events,
-    signupPage: SignupPage) {
+    private events: Events) {
     var config = {
       apiKey: "AIzaSyD3J_qrrKO3avQltX5mgtbA4ZY9QHbway4",
       authDomain: "greencar-uol.firebaseapp.com",
@@ -44,20 +39,23 @@ export class MyApp {
     };
     firebase.initializeApp(config);
 
-    this.checkUserState();
-    let fireBaseUser = firebase.auth().currentUser;
-    this.rootPage = fireBaseUser ? TabsPage : SigninPage;
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.events.publish('user:name', firebase.auth().currentUser.displayName);
+        this.nav.setRoot(TabsPage);
+      }
+      else {
+        this.nav.setRoot(SigninPage);
+      }
+    });
     events.subscribe('user:name', (username) => {
       this.userName = username;
-    })
-
-    platform.ready().then(() => {
-      statusBar.styleDefault();
-      splashScreen.hide();
     });
 
-
-
+    platform.ready().then(() => {
+      StatusBar.styleDefault();
+      Splashscreen.hide();
+    });
   }
 
   onLoad(page: any) {
@@ -74,25 +72,5 @@ export class MyApp {
     this.authService.logout();
     this.menuCtrl.close();
     this.nav.setRoot(SigninPage);
-  }
-
-  checkUserState() {
-    let userToken: string = "";
-    let userUID: string = "";
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        user.getIdToken().then(function(data) {
-          userToken = data;
-          userUID = user.uid;
-        });
-        this.events.publish('user:name', firebase.auth().currentUser.displayName);
-        this.nav.setRoot(TabsPage);
-        this.authService.setActiveUserToken(userToken);
-        this.authService.setUID(userUID);
-      }
-      else {
-        this.nav.setRoot(SigninPage);
-      }
-    });
   }
 }

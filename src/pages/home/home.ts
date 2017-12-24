@@ -37,23 +37,26 @@ export class HomePage {
     const loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
-    //loading.present();
-      this.routingService.fetchRoutes(this.authService.getActiveUserToken())
-        .subscribe(
-        (list: Route[]) => {
-          loading.dismiss();
-          if (list) {
-            this.routes = list;
-          } else {
-            this.routes = [];
+    loading.present();
+    this.authService.getActiveUser().getToken()
+      .then(
+      (token: string) => {
+        this.routingService.fetchRoutes(token)
+          .subscribe(
+          (route: Route[]) => {
+            loading.dismiss();
+            if (route) {
+              this.routes = route;
+            } else {
+              this.routes = [];
+            }
+          },
+          error => {
+            loading.dismiss();
+            this.handleError(error.json().error);
           }
-        },
-        error => {
-          loading.dismiss();
-          //this.handleError(error.json().error);
-          console.log("Error accessing firebase DB");
-        }
-        );
+          );
+      });
   }
 
   private handleError(errorMessage: string) {
@@ -69,8 +72,8 @@ export class HomePage {
     this.routingService.reorderRoutines(data);
   }
 
-  showRoute(route: Route, index: number){
-    this.navCtrl.push(CreateJourneyPage, {route: route,isSet: true , index: index});
+  showRoute(route: Route, index: number) {
+    this.navCtrl.push(CreateJourneyPage, { route: route, isSet: true, index: index });
   }
 
 }

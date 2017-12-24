@@ -1,7 +1,7 @@
 import { AuthService } from './auth';
 import { Route } from './../models/route';
-import { Injectable } from '@angular/core';
 import { reorderArray } from 'ionic-angular';
+import { Injectable } from "@angular/core";
 import { Http, Response } from "@angular/http";
 import 'rxjs/Rx';
 
@@ -37,7 +37,7 @@ export class RoutingService {
   }
 
   fetchRoutes(token: string){
-    const userId = this.authService.getUID();
+    const userId = this.authService.getActiveUser().uid;
     return this.http.get('https://greencar-uol.firebaseio.com/' + userId + '/routes.json?auth=' + token)
       .map((response: Response) => {
         return response.json();
