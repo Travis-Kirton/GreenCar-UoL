@@ -15,10 +15,6 @@ export class MapService {
 
     initialise(): void {
 
-        if (this.map) {
-            return;
-        }
-
         this.map = L.map("map", {
             center: [52.63295, -1.136715],
             zoom: 16,
@@ -32,7 +28,8 @@ export class MapService {
 
         this.map.locate({ setView: true, maxZoom: 17 });
         this.map.on('locationfound', (e) => this.onLocationFound(e));
-    }
+        console.log(this.map);
+      }
 
     onLocationFound(e) {
         this.currentLocation = e;

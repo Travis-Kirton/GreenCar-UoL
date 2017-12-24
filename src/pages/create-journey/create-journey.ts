@@ -107,7 +107,6 @@ export class CreateJourneyPage implements OnInit{
 
     ngOnInit() {
       this.mapService.initialise();
-      setTimeout(() => this.mapService.getMap().invalidateSize(), 600);
     }
 
     onLocateMe() {

@@ -1,3 +1,4 @@
+import { MapService } from './../../services/map';
 import { Route } from './../../models/route';
 import { RoutingService } from './../../services/routing';
 import { AuthService } from './../../services/auth';
@@ -17,6 +18,7 @@ export class HomePage {
 
   constructor(public navCtrl: NavController,
     private authService: AuthService,
+    private mapService: MapService,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private routingService: RoutingService) {
