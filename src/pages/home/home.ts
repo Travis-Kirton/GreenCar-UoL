@@ -1,4 +1,3 @@
-import { MapService } from './../../services/map';
 import { Route } from './../../models/route';
 import { RoutingService } from './../../services/routing';
 import { AuthService } from './../../services/auth';
@@ -18,7 +17,6 @@ export class HomePage {
 
   constructor(public navCtrl: NavController,
     private authService: AuthService,
-    private mapService: MapService,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private routingService: RoutingService) {
@@ -38,7 +36,7 @@ export class HomePage {
       content: 'Please wait...'
     });
     loading.present();
-    this.authService.getActiveUser().getToken()
+    this.authService.getActiveUser().getIdToken()
       .then(
       (token: string) => {
         this.routingService.fetchRoutes(token)

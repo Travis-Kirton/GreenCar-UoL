@@ -16,7 +16,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'page-create-journey',
   templateUrl: 'create-journey.html',
 })
-export class CreateJourneyPage implements OnInit{
+export class CreateJourneyPage implements OnInit {
 
   public zoom = 15;
   public opacity = 1.0;
@@ -30,24 +30,23 @@ export class CreateJourneyPage implements OnInit{
   dijkstraRoute: number[][] = [];
 
   constructor(private loadingCtrl: LoadingController,
-              private navParams: NavParams,
-              private routingService: RoutingService,
-              private mapService: MapService,
-              private authService: AuthService,
-              private nodeStorageService: NodeStorageService,
-              private edgeStorageService: EdgeStorageService,
-              private alertCtrl: AlertController,
-              public navCtrl: NavController,
-              private dijkstra: Dijkstra) {
+    private navParams: NavParams,
+    private routingService: RoutingService,
+    private mapService: MapService,
+    private authService: AuthService,
+    private nodeStorageService: NodeStorageService,
+    private edgeStorageService: EdgeStorageService,
+    private alertCtrl: AlertController,
+    public navCtrl: NavController,
+    private dijkstra: Dijkstra) {
 
-                if (this.navParams.get('isSet')) {
-                  let route = navParams.get('route');
-                  console.log(route);
-                   this.dijkstraRoute = route.coords;
-                   console.log(this.dijkstraRoute);
-                   this.startingPoint = route.start;
-                   this.destination = route.end;
-                }
+    if (this.navParams.get('isSet')) {
+      let route = navParams.get('route');
+      this.dijkstraRoute = route.coords;
+      this.startingPoint = route.start;
+      this.destination = route.end;
+      this.mapService.drawRoute(this.dijkstraRoute);
+    }
   }
   showRouteDijkstra() {
     // e.g. 20812 -> 9657
@@ -79,46 +78,48 @@ export class CreateJourneyPage implements OnInit{
     });
   }
 
-    saveRoute(){
-      if(this.dijkstraRoute == []){
-        const alert = this.alertCtrl.create({
-          title: 'Missing Route',
-          message: 'Please Pick a Route',
-          buttons: ['Ok']
-        });
-        alert.present();
-      }else{
-      this.routingService.addRoute(new Route(this.startingPoint, this.destination, this.dijkstraRoute));
-      const loading = this.loadingCtrl.create({
-        content: 'Please wait...'
-      });
-
-          this.routingService.storeRoutes(this.authService.getActiveUserToken())
-            .subscribe(
-              () => loading.dismiss(),
-              error => {
-                loading.dismiss();
-                this.handleError(error.json().error);
-              }
-            );
-      this.navCtrl.popToRoot();
-    }
-    }
-
-    ngOnInit() {
-      this.mapService.initialise();
-    }
-
-    onLocateMe() {
-      this.mapService.locateMe();
-    }
-
-    private handleError(errorMessage: string) {
+  saveRoute() {
+    if (this.dijkstraRoute == []) {
       const alert = this.alertCtrl.create({
-        title: 'An error occurred!',
-        message: errorMessage,
+        title: 'Missing Route',
+        message: 'Please Pick a Route',
         buttons: ['Ok']
       });
       alert.present();
+    } else {
+      this.routingService.addRoute(new Route(this.startingPoint, this.destination, this.dijkstraRoute));
+      const loading = this.loadingCtrl.create({
+        content: 'Saving...'
+      });
+      loading.present();
+      this.authService.getActiveUser().getToken().then((token => {
+        this.routingService.storeRoutes(token)
+          .subscribe(
+          () => loading.dismiss(),
+          error => {
+            loading.dismiss();
+            this.handleError(error.json().error);
+          }
+          );
+        this.navCtrl.popToRoot();
+      }));
     }
+  }
+
+  ngOnInit() {
+    this.mapService.initialise();
+  }
+
+  onLocateMe() {
+    this.mapService.locateMe();
+  }
+
+  private handleError(errorMessage: string) {
+    const alert = this.alertCtrl.create({
+      title: 'An error occurred!',
+      message: errorMessage,
+      buttons: ['Ok']
+    });
+    alert.present();
+  }
 }

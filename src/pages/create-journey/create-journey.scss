@@ -1,14 +1,26 @@
 .ios, .md {
 
   page-create-journey{
+      ion-navbar .toolbar-background {
+        background: transparent;
+    }
 
-      ion-content .scroll-content {
-          margin-top:0px !important;
+    ion-content .scroll-content {
+        margin-top:0px !important;
+    }
+
+    ion-header ion-icon.back-button-icon.icon,
+    ion-header span.back-button-text.back-button-text-ios {
+       color: #25811F;
+       font-weight:350px;
+    }
+
+    .header-md {
+       display: none;
       }
       #map {
           width:100%;
           height:75%;
-          margin-top:10%;
       }
 
 

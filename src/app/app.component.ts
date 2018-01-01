@@ -37,17 +37,9 @@ export class MyApp {
       storageBucket: "greencar-uol.appspot.com",
       messagingSenderId: "762723967654"
     };
-    firebase.initializeApp(config);
 
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.events.publish('user:name', firebase.auth().currentUser.displayName);
-        this.nav.setRoot(TabsPage);
-      }
-      else {
-        this.nav.setRoot(SigninPage);
-      }
-    });
+    firebase.initializeApp(config);
+    this.checkIfVerified();
     events.subscribe('user:name', (username) => {
       this.userName = username;
     });
@@ -72,5 +64,17 @@ export class MyApp {
     this.authService.logout();
     this.menuCtrl.close();
     this.nav.setRoot(SigninPage);
+  }
+
+  checkIfVerified(){
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.events.publish('user:name', firebase.auth().currentUser.displayName);
+        this.nav.setRoot(TabsPage);
+      }
+      else {
+        this.nav.setRoot(SigninPage);
+      }
+    });
   }
 }
