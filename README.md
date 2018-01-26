@@ -53,7 +53,12 @@
 * <sub>Dijkstra's algorithm was applied due to not knowing how to compute straight line distances from neighbours to goal
 * <sub>LeafletJS is now implemented for mapping, as it offers more modularity and customisation. (allowed for a Map Service)</sub>
 * <sub>Dijkstra's algorithm is inefficient, but a good start to now optimis from.</sub>
----
+
+#### Sprint 3 (January 20 - February 3rd)
+
+* Create specific views for Riders/Drivers/Admins
+* Allow Drivers to create journeys and attach dummy users to routes
+* Allow Riders to join dummy journeys
 
 
 
