@@ -27,7 +27,6 @@ export class Dijkstra {
   lat_lng_pairs: number[][] = [];
 
 
-
   constructor(private nSS: NodeStorageService,
     private eSS: EdgeStorageService) {
     //creates copies of graph arrays to work with

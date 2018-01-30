@@ -24,6 +24,8 @@ import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { MessagesPage } from '../pages/messages/messages';
+import { UserService } from '../services/user';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     PreferencesPage,
     StatisticsPage,
     CreateJourneyPage,
-
+    MessagesPage
   ],
   imports: [
     BrowserModule,
@@ -56,13 +58,15 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     SignupPage,
     PreferencesPage,
     StatisticsPage,
-    CreateJourneyPage
+    CreateJourneyPage,
+    MessagesPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthService,
+    UserService,
     SignupPage,
     RoutingService,
     NodeStorageService,

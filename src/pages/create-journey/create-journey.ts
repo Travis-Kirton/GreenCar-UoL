@@ -29,6 +29,9 @@ export class CreateJourneyPage implements OnInit {
   lat_lng_pairs: number[][] = [];
   dijkstraRoute: number[][] = [];
 
+  private disableBtns: boolean = false;
+  private currentDate: number = Date.now();
+
   constructor(private loadingCtrl: LoadingController,
     private navParams: NavParams,
     private routingService: RoutingService,
@@ -40,13 +43,6 @@ export class CreateJourneyPage implements OnInit {
     public navCtrl: NavController,
     private dijkstra: Dijkstra) {
 
-    if (this.navParams.get('isSet')) {
-      let route = navParams.get('route');
-      this.dijkstraRoute = route.coords;
-      this.startingPoint = route.start;
-      this.destination = route.end;
-      this.mapService.drawRoute(this.dijkstraRoute);
-    }
   }
   showRouteDijkstra() {
     // e.g. 20812 -> 9657
@@ -87,7 +83,7 @@ export class CreateJourneyPage implements OnInit {
       });
       alert.present();
     } else {
-      this.routingService.addRoute(new Route(this.startingPoint, this.destination, this.dijkstraRoute));
+      this.routingService.addRoute(new Route(this.currentDate,false,this.startingPoint, this.destination, this.dijkstraRoute));
       const loading = this.loadingCtrl.create({
         content: 'Saving...'
       });
@@ -108,6 +104,14 @@ export class CreateJourneyPage implements OnInit {
 
   ngOnInit() {
     this.mapService.initialise();
+    if (this.navParams.get('isSet')) {
+      let route = this.navParams.get('route');
+      this.dijkstraRoute = route.coords;
+      this.startingPoint = route.start;
+      this.destination = route.end;
+      this.disableBtns = true;
+      this.mapService.drawRoute(this.dijkstraRoute);
+    }
   }
 
   onLocateMe() {

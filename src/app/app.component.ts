@@ -22,6 +22,7 @@ export class MyApp {
   isAuthenticated = false;
 
   userName: string;
+  userType: string;
 
   @ViewChild('nav') nav: NavController;
 
@@ -66,11 +67,26 @@ export class MyApp {
     this.nav.setRoot(SigninPage);
   }
 
-  checkIfVerified(){
+  checkIfVerified() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.events.publish('user:name', firebase.auth().currentUser.displayName);
-        this.nav.setRoot(TabsPage);
+
+        this.authService.getActiveUser().getIdToken()
+          .then(
+          (token: string) => {
+            this.authService.checkUserRoles(token).subscribe(
+              (role) => {
+                if (role.rider == true) {
+                  this.nav.setRoot(TabsPage);
+                  this.userType = 'rider';
+                }else{
+                  this.nav.setRoot(TabsPage);
+                  this.userType = 'driver';
+                }
+              }
+            );
+          });
       }
       else {
         this.nav.setRoot(SigninPage);

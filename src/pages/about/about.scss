@@ -1,3 +1,42 @@
-page-about {
+.ios,
+.md {
+  page-about {
+    .card{
+      padding:0 !important;
+    }
 
+    p{
+      color:#6F6F6F;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+    }
+
+    .dateAdded{
+      border-bottom: 1px solid #a1a1a1;
+
+    }
+
+    ion-item-sliding {
+      margin-bottom: 10px;
+      width: 100%;
+      margin-left: 2%;
+      margin-right: 2%;
+      background-color: #fff;
+  }
+
+  ion-item {
+      padding-bottom: 10px;
+      height:80px;
+
+      h4 {
+          font-weight: bold;
+          padding-top:5px;
+      }
+  }
+
+  ion-item-options button {
+      padding-left: 20px !important;
+      padding-right: 20px !important;
+  }
+  }
 }

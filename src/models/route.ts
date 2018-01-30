@@ -1,6 +1,8 @@
 export class Route{
 
-    constructor(private start:string,
+    constructor(private dateBooked: number,
+                private matchedWithDriver: boolean,
+                private start:string,
                 private end: string,
                 private coords: number[][]){}
 

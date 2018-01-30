@@ -1,7 +1,5 @@
-<ion-header>
-
-  <ion-navbar>
-
+<ion-header no-border>
+  <ion-navbar color="primary">
     <ion-title>GreenCar@UoL</ion-title>
     <ion-buttons left>
       <button ion-button icon-only menuToggle>
@@ -13,24 +11,8 @@
 </ion-header>
 
 <ion-content padding>
-  <p align="center">your booked journeys</p>
-  <ion-list no-lines reorder="true" (ionItemReorder)="reorderItems($event)">
-  <ion-item-sliding *ngFor="let route of routingService.getRoutes(); let i = index">
+  <p align="center">Recently Booked Journeys</p>
 
-    <ion-item (click)="showRoute(route, i)">
-      <h4>Route Created</h4>
-      <p>From: {{route.start}}</p>
-      <p>To: {{route.end}}</p>
-    </ion-item>
-
-    <ion-item-options side="right">
-      <button color="danger" ion-button icon-only (click)="routingService.removeRoute(routine)">
-                               <ion-icon name="trash"></ion-icon>
-                           </button>
-    </ion-item-options>
-  </ion-item-sliding>
-  </ion-list>
-
-  <button ion-button block (click)="createJourney()">Create Journey</button>
+  <p align="center">Suggested Journeys</p>
 
 </ion-content>

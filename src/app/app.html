@@ -7,7 +7,7 @@
           <img src="../assets/travatar.png">
         </ion-thumbnail>
         <h2>{{userName}}</h2>
-        <p>rider</p>
+        <p>{{userType}}</p>
       </ion-item>
       <button ion-item icon-left (click)="onLoad(tabsPage)">
           <ion-icon name="home-outline"></ion-icon>
@@ -27,6 +27,6 @@
         </button>
     </ion-list>
   </ion-content>
-</ion-menu>Loading...
+</ion-menu>Loading GreenCar...
 
 <ion-nav [root]="tabsPage" #nav></ion-nav>

@@ -16,8 +16,6 @@ export class RoutingService {
 
   addRoute(route: Route){
     this.routes.push(route);
-
-
   }
 
   getRoutes(){
@@ -26,6 +24,10 @@ export class RoutingService {
 
   removeRoute(index: number){
     this.routes.splice(index,1);
+    this.authService.getActiveUser().getIdToken().then((token => {
+      this.storeRoutes(token)
+        .subscribe();
+    }));
   }
 
   storeRoutes(token: string){
@@ -49,10 +51,6 @@ export class RoutingService {
           this.routes = [];
         }
       });
-  }
-
-  reorderRoutines(data){
-    this.routes = reorderArray(this.routes, data);
   }
 
 }
