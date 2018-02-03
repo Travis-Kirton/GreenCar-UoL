@@ -65,7 +65,7 @@ export class Dijkstra {
       if (node.nodeId == this.target.nodeId) break; //found target node
     }
     let t1 = performance.now();
-    console.log(`Completed in: ${(t1 - t0)}ms`);
+    console.log(`Dijkstra Completed in: ${(t1 - t0)}ms`);
     resolve(true);
     });
   }

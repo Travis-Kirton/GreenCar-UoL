@@ -34,80 +34,93 @@ export class Astar {
   performAstar(source: string, target: string) {
 
     return new Promise((resolve => {
-    //add start node to open set
-    this.start = this.graph.getNodeByName(source);
-    this.end = this.graph.getNodeByName(target);
-    this.start.neighbours = this.eSS.findNeighbours(this.start);
-    this.openSet.push(this.start);
-    console.log(this.openSet);
+      //add start node to open set
+      this.start = this.graph.getNodeByName(source);
+      this.end = this.graph.getNodeByName(target);
+      this.start.neighbours = this.eSS.findNeighbours(this.start);
+      this.openSet.push(this.start);
 
-     //keep running until openset is empty
-    while (this.openSet.length > 0) {
+      //keep running until openset is empty
+      let t0 = performance.now(); //performance start
+      while (this.openSet.length > 0) {
 
-      let winner = 0;
+        let winner = 0;
 
-      let current = this.openSet[winner];
+        let current = this.openSet[winner];
 
-      //find neighours of currentNode
-      current.neighbours = this.eSS.findNeighbours(current);
+        //find neighours of currentNode
+        current.neighbours = this.eSS.findNeighbours(current);
 
-      if (current.nodeId == this.end.nodeId) {
-        console.log("DONE");
-        console.log(current.nodeId);
-        break; // found target node
-      }
-
-      //remove current node from openSet
-      this.removeCurrent(current)
-
-      //add current node to closed set
-      this.closedSet.push(current);
-
-      // for each neighbour of current
-      let neighbours = current.neighbours;
-
-
-      neighbours.forEach(neighbour => {
-        if(!this.includes(neighbour.nodeId, this.closedSet)){
-          var tempG = current.g + this.getDistance(current, neighbour);
-
-          if(this.includes(neighbour.nodeId, this.openSet)){
-            if(tempG < neighbour.g){
-              neighbour.g = tempG;
-            }
-          } else {
-            neighbour.g = tempG;
-            this.openSet.push(neighbour);
-          }
-
-          neighbour.h = this.heuristic(neighbour, this.end);
-          neighbour.f = neighbour.g + neighbour.h;
-          neighbour.previous = current;
+        if (current.nodeId == this.end.nodeId) {
+          console.log("DONE");
+          break; // found target node
         }
-      });
-    }
-    resolve(true);
-  }));
+
+        //remove current node from openSet
+        this.removeCurrent(current)
+
+        //add current node to closed set
+        this.closedSet.push(current);
+
+        // for each neighbour of current
+        let neighbours = current.neighbours;
+
+
+        neighbours.forEach(neighbour => {
+          if (!this.includes(neighbour.nodeId, this.closedSet)) {
+            var tempG = current.g + this.getDistance(current, neighbour);
+
+            if (this.includes(neighbour.nodeId, this.openSet)) {
+              if (tempG < neighbour.g) {
+                neighbour.g = tempG;
+              }
+            } else {
+              neighbour.g = tempG;
+              this.openSet.push(neighbour);
+            }
+
+            neighbour.h = this.heuristic(neighbour, this.end);
+            neighbour.f = neighbour.g + neighbour.h;
+            neighbour.previous = current;
+          }
+        });
+      }
+      let t1 = performance.now();
+      console.log(`A-Star Completed in: ${(t1 - t0)}ms`);
+      resolve(true);
+    }));
   }
 
   heuristic(node: MapNode, end: MapNode): number {
-    // Haversine formula to compute distance between 2 lat/lng points
-    let dist: number = 0;
+    //let dist: number = 0;
+    //havensine formula
+    // var R = 6371 // km
+    // var dLat = this.toRadians(this.end.lat - node.lat);
+    // var dLon = this.toRadians(this.end.lon - node.lon);
+    // var lat1 = this.toRadians(node.lat);
+    // var lat2 = this.toRadians(this.end.lat);
 
-    var R = 6371 // km
-    var dLat = this.toRadians(this.end.lat - node.lat);
-    var dLon = this.toRadians(this.end.lon - node.lon);
-    var lat1 = this.toRadians(node.lat);
-    var lat2 = this.toRadians(this.end.lat);
+    // var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+    // var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    // dist = R * c;
+    //return dist;
 
-    var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    dist = R * c;
+    //manhattan
+    // var D = 1;
+    // var D2 = Math.sqrt(2);
+    // var d1 = Math.abs(end.lat - node.lat);
+    // var d2 = Math.abs(end.lon - node.lon);
+    // return (dist * (d1 + d2)) + ((D2 - (2 * D)) * Math.min(d1,d2));
 
-    return dist;
+    //euclidian
+    var deglen = 110.25;
+    var x = node.lat - end.lat;
+    var y = (node.lon - end.lon) * Math.cos((end.lat));
+    return deglen * Math.sqrt(x*x + y*y);
+
   }
 
-  toRadians(value){
+  toRadians(value) {
     return value * Math.PI / 180;
   }
 

@@ -49,7 +49,7 @@ export class CreateJourneyPage implements OnInit {
     // e.g. 20812 -> 9657
     //this.edgeStorageService.demoSearchingNode();
     this.astar.performAstar(this.startingPoint, this.destination).then(() => {
-      this.astar.getPathFound;
+      this.astar.getPathFound();
     });
     let loading = this.loadingCtrl.create({
       content: "Calculating route..."
