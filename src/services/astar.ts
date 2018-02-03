@@ -4,7 +4,6 @@ import { EdgeStorageService } from './edgeStorage';
 import { NodeStorageService } from './nodeStorage';
 import { Injectable } from '@angular/core';
 import { MapNode } from './../models/node';
-import { RoutingService } from './routing';
 
 @Injectable()
 export class Astar {
@@ -32,33 +31,30 @@ export class Astar {
   }
 
   // 20812 -> 17305
-  astar(startNode: number, endNode: number) {
+  performAstar(source: string, target: string) {
+
+    return new Promise((resolve => {
     //add start node to open set
-    this.start = this.nSS.getNode(startNode);
+    this.start = this.graph.getNodeByName(source);
+    this.end = this.graph.getNodeByName(target);
     this.start.neighbours = this.eSS.findNeighbours(this.start);
     this.openSet.push(this.start);
     console.log(this.openSet);
 
-    // keep running until openset is empty
+     //keep running until openset is empty
     while (this.openSet.length > 0) {
 
       let winner = 0;
 
       let current = this.openSet[winner];
+
       //find neighours of currentNode
       current.neighbours = this.eSS.findNeighbours(current);
 
-      if (current.nodeId == endNode) {
+      if (current.nodeId == this.end.nodeId) {
         console.log("DONE");
-
-        //Find the path
-        this.path = [];
-        let temp = current;
-        this.path.push(temp);
-        while (temp.previous) {
-          this.path.push(temp.previous)
-          temp = temp.previous;
-        }
+        console.log(current.nodeId);
+        break; // found target node
       }
 
       //remove current node from openSet
@@ -66,40 +62,32 @@ export class Astar {
 
       //add current node to closed set
       this.closedSet.push(current);
-      console.log(current.neighbours.length);
 
       // for each neighbour of current
       let neighbours = current.neighbours;
-      console.log(neighbours.length);
 
 
-      neighbours.forEach(async neighbour => {
-        console.log(neighbour.nodeId);
-        // if closed set doesn't includes neighbour
-        if (this.includes(neighbour.nodeId, this.closedSet) === false) {
-          console.log("closed doesn't have neighbour");
-          let tempG = current.g + neighbour.g;
+      neighbours.forEach(neighbour => {
+        if(!this.includes(neighbour.nodeId, this.closedSet)){
+          var tempG = current.g + this.getDistance(current, neighbour);
 
-          if (this.includes(neighbour.nodeId, this.openSet) === true) {
-            console.log("open has neighbour");
-            if (tempG < neighbour.g) {
+          if(this.includes(neighbour.nodeId, this.openSet)){
+            if(tempG < neighbour.g){
               neighbour.g = tempG;
             }
           } else {
-            console.log("Adding neighbours to neighbour");
             neighbour.g = tempG;
-            console.log("added neighbours to neighbour");
-            //await this.createNodeInOpenSet(neighbour.nodeId);
-            console.log("added to openSet: " + neighbour);
+            this.openSet.push(neighbour);
           }
 
           neighbour.h = this.heuristic(neighbour, this.end);
-
-          // add where this node came from
+          neighbour.f = neighbour.g + neighbour.h;
           neighbour.previous = current;
         }
       });
     }
+    resolve(true);
+  }));
   }
 
   heuristic(node: MapNode, end: MapNode): number {
@@ -133,7 +121,6 @@ export class Astar {
 
   // Check for existence of node within a set (array)
   includes(nodeId: number, set: MapNode[]): boolean {
-    console.log("checking for" + nodeId);
     let includes: boolean = false;
     for (let i = 0; i < set.length - 1; i++) {
       if (set[i].nodeId === nodeId) {
@@ -147,6 +134,15 @@ export class Astar {
     for (let i = 0; i < this.path.length; i++) {
       console.log(this.path[i].nodeId);
     }
+  }
+
+  getDistance(node: MapNode, target: MapNode): number {
+    this.edges.forEach(edge => {
+      if (edge.source == node.nodeId && edge.target == target.nodeId) {
+        return edge.cost;
+      }
+    });
+    return null;
   }
 
 }

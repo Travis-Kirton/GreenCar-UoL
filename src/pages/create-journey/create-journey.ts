@@ -41,12 +41,16 @@ export class CreateJourneyPage implements OnInit {
     private edgeStorageService: EdgeStorageService,
     private alertCtrl: AlertController,
     public navCtrl: NavController,
-    private dijkstra: Dijkstra) {
+    private dijkstra: Dijkstra,
+    private astar: Astar) {
 
   }
   showRouteDijkstra() {
     // e.g. 20812 -> 9657
-    this.edgeStorageService.demoSearchingNode();
+    //this.edgeStorageService.demoSearchingNode();
+    this.astar.performAstar(this.startingPoint, this.destination).then(() => {
+      this.astar.getPathFound;
+    });
     let loading = this.loadingCtrl.create({
       content: "Calculating route..."
     });
