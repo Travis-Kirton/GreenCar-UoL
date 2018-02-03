@@ -33,4 +33,5 @@ export class MapNode{
   getH(): number{
     return this.h;
   }
+
 }

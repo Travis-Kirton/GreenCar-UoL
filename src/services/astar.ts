@@ -1,3 +1,5 @@
+import { Graph } from './../models/graph';
+import { Edge } from './../models/edge';
 import { EdgeStorageService } from './edgeStorage';
 import { NodeStorageService } from './nodeStorage';
 import { Injectable } from '@angular/core';
@@ -10,6 +12,10 @@ export class Astar {
   openSet: MapNode[] = [];
   closedSet: MapNode[] = [];
 
+  nodes: MapNode[];
+  edges: Edge[];
+  graph: Graph;
+
   nodeJSON: any;
 
   end: MapNode;
@@ -17,9 +23,13 @@ export class Astar {
 
   path: MapNode[] = [];
 
-  constructor(private routingService: RoutingService,
-              private nSS: NodeStorageService,
-              private eSS: EdgeStorageService) { }
+  constructor(private nSS: NodeStorageService,
+    private eSS: EdgeStorageService) {
+    //creates copies of graph arrays to work with
+    this.graph = new Graph(nSS, eSS);
+    this.nodes = this.graph.getVertexes();
+    this.edges = this.graph.getEdges();
+  }
 
   // 20812 -> 17305
   astar(startNode: number, endNode: number) {
@@ -33,16 +43,10 @@ export class Astar {
     while (this.openSet.length > 0) {
 
       let winner = 0;
-      for (let i = 0; i < this.openSet.length; i++) {
-        console.log("openSet g: " + this.openSet[i].g);
-        console.log("curr winner g: " + this.openSet[winner].g);
-        if (this.openSet[i].g < this.openSet[winner].g) {
-          console.log("g is less than current g");
-          winner = i;
-        }
-      }
 
       let current = this.openSet[winner];
+      //find neighours of currentNode
+      current.neighbours = this.eSS.findNeighbours(current);
 
       if (current.nodeId == endNode) {
         console.log("DONE");
@@ -59,6 +63,7 @@ export class Astar {
 
       //remove current node from openSet
       this.removeCurrent(current)
+
       //add current node to closed set
       this.closedSet.push(current);
       console.log(current.neighbours.length);
@@ -88,8 +93,7 @@ export class Astar {
             console.log("added to openSet: " + neighbour);
           }
 
-          //requires more research
-          //neighbour.h = this.heuristic(neighbour, this.end);
+          neighbour.h = this.heuristic(neighbour, this.end);
 
           // add where this node came from
           neighbour.previous = current;
@@ -99,9 +103,24 @@ export class Astar {
   }
 
   heuristic(node: MapNode, end: MapNode): number {
-    // Euclidean distance
+    // Haversine formula to compute distance between 2 lat/lng points
     let dist: number = 0;
+
+    var R = 6371 // km
+    var dLat = this.toRadians(this.end.lat - node.lat);
+    var dLon = this.toRadians(this.end.lon - node.lon);
+    var lat1 = this.toRadians(node.lat);
+    var lat2 = this.toRadians(this.end.lat);
+
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    dist = R * c;
+
     return dist;
+  }
+
+  toRadians(value){
+    return value * Math.PI / 180;
   }
 
   removeCurrent(current: MapNode) {
@@ -112,11 +131,7 @@ export class Astar {
     }
   }
 
-  /**Check for existence of node within a set (array)
-   *
-   * @param nodeId
-   * @param set
-   */
+  // Check for existence of node within a set (array)
   includes(nodeId: number, set: MapNode[]): boolean {
     console.log("checking for" + nodeId);
     let includes: boolean = false;
