@@ -1,5 +1,6 @@
 import { Graph } from './../models/graph';
 import { Edge } from './../models/edge';
+import { BinaryHeap } from './../dataStructures/BinaryHeap';
 import { EdgeStorageService } from './edgeStorage';
 import { NodeStorageService } from './nodeStorage';
 import { Injectable } from '@angular/core';
@@ -8,14 +9,12 @@ import { MapNode } from './../models/node';
 @Injectable()
 export class Astar {
 
-  openSet: MapNode[] = [];
-  closedSet: MapNode[] = [];
+  openSet: BinaryHeap;
+  closedSet: BinaryHeap;
 
   nodes: MapNode[];
   edges: Edge[];
   graph: Graph;
-
-  nodeJSON: any;
 
   end: MapNode;
   start: MapNode;
@@ -30,10 +29,19 @@ export class Astar {
     this.edges = this.graph.getEdges();
   }
 
+  heap():BinaryHeap {
+    return new BinaryHeap(function(node:MapNode) {
+      return node.f;
+    });
+  }
+
   // 20812 -> 17305
   performAstar(source: string, target: string) {
 
     return new Promise((resolve => {
+      this.openSet = this.heap();
+      this.closedSet = this.heap();
+
       //add start node to open set
       this.start = this.graph.getNodeByName(source);
       this.end = this.graph.getNodeByName(target);
@@ -42,11 +50,11 @@ export class Astar {
 
       //keep running until openset is empty
       let t0 = performance.now(); //performance start
-      while (this.openSet.length > 0) {
+      while (this.openSet.size() > 0) {
 
         let winner = 0;
 
-        let current = this.openSet[winner];
+        let current = this.openSet.pop();
 
         //find neighours of currentNode
         current.neighbours = this.eSS.findNeighbours(current);
@@ -57,7 +65,7 @@ export class Astar {
         }
 
         //remove current node from openSet
-        this.removeCurrent(current)
+        this.openSet.remove(current);
 
         //add current node to closed set
         this.closedSet.push(current);
@@ -125,18 +133,18 @@ export class Astar {
   }
 
   removeCurrent(current: MapNode) {
-    for (let i = this.openSet.length - 1; i >= 0; i--) {
-      if (this.openSet[i].nodeId == current.nodeId) {
-        this.openSet.splice(i, 1);
-      }
-    }
+    // for (let i = this.openSet.size - 1; i >= 0; i--) {
+    //   if (this.openSet[i].nodeId == current.nodeId) {
+    //     this.openSet.splice(i, 1);
+    //   }
+    // }
   }
 
   // Check for existence of node within a set (array)
-  includes(nodeId: number, set: MapNode[]): boolean {
+  includes(nodeId: number, set: BinaryHeap): boolean {
     let includes: boolean = false;
-    for (let i = 0; i < set.length - 1; i++) {
-      if (set[i].nodeId === nodeId) {
+    for (let i = 0; i < set.size() - 1; i++) {
+      if (set.content[i].nodeId === nodeId) {
         includes = true;
       }
     }

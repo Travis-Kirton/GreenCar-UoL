@@ -1,3 +1,4 @@
+import { BinaryHeap } from './../dataStructures/BinaryHeap';
 import { Graph } from './../models/graph';
 import { Edge } from './../models/edge';
 import { EdgeStorageService } from './edgeStorage';

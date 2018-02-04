@@ -32,6 +32,7 @@ export class CreateJourneyPage implements OnInit {
   private disableBtns: boolean = false;
   private currentDate: number = Date.now();
 
+
   constructor(private loadingCtrl: LoadingController,
     private navParams: NavParams,
     private routingService: RoutingService,

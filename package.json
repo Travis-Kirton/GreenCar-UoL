@@ -52,6 +52,7 @@
     "@ionic/app-scripts": "3.0.0",
     "@ionic/cli-plugin-cordova": "^1.4.1",
     "@ionic/cli-plugin-ionic-angular": "1.4.1",
+    "@types/jasmine": "^2.8.6",
     "typescript": "2.3.4"
   },
   "description": "An Ionic project",
