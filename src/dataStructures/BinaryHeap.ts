@@ -1,18 +1,19 @@
+import { MapNode } from './../models/node';
 export class BinaryHeap{
-  content: any[];
-  scoreFunction: (node: any) => number;
+  content: MapNode[];
+  scoreFunction: (node: MapNode) => number;
 
-  constructor(scoreFunction:(node:any) => number) {
+  constructor(scoreFunction:(node:MapNode) => number) {
     this.content = [];
     this.scoreFunction = scoreFunction;
   }
 
-  push(element: any) {
+  push(element: MapNode) {
     this.content.push(element);
     this.bubbleUp(this.content.length - 1);
   }
 
-  pop(): any {
+  pop(): MapNode {
     let result = this.content[0];
     let end = this.content.pop();
     if (this.content.length > 0) {
@@ -22,7 +23,7 @@ export class BinaryHeap{
     return result;
   }
 
-  remove(node: any) {
+  remove(node: MapNode) {
     let length = this.content.length;
     for (var i = 0; i < length; i++) {
       if (this.content[i] != node) continue;
@@ -41,7 +42,7 @@ export class BinaryHeap{
 
 
 
-  private bubbleUp(n: number) {
+  bubbleUp(n: number) {
     // Fetch element to be moved
     let element = this.content[n], score = this.scoreFunction(element);
 
@@ -57,8 +58,11 @@ export class BinaryHeap{
     }
   }
 
+  rescoreElement(node:any) {
+    this.bubbleUp(this.content.indexOf(node));
+}
 
-  private sinkDown(n: number) {
+  sinkDown(n: number) {
     // Look up target element and its score
     var length = this.content.length,
       element = this.content[n],

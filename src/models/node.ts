@@ -6,8 +6,8 @@ export class MapNode{
   f: number = 0;
   g: number = 0; // g = cost to this node
   h: number = 0; // h = cost from this node to goal
-  previous: MapNode = undefined;
-  neighbours: MapNode[] = [];
+  previous: MapNode;
+
 
   // Accessors/Mutators for heuristic value (f,g,h)
   setF(newF: number){

@@ -20,6 +20,8 @@ export class Astar {
   start: MapNode;
 
   path: MapNode[] = [];
+  lat_lng: number[] = [];
+  lat_lng_pairs: number[][] = [];
 
   constructor(private nSS: NodeStorageService,
     private eSS: EdgeStorageService) {
@@ -29,13 +31,12 @@ export class Astar {
     this.edges = this.graph.getEdges();
   }
 
-  heap():BinaryHeap {
-    return new BinaryHeap(function(node:MapNode) {
+  heap(): BinaryHeap {
+    return new BinaryHeap(function (node: MapNode) {
       return node.f;
     });
   }
 
-  // 20812 -> 17305
   performAstar(source: string, target: string) {
 
     return new Promise((resolve => {
@@ -45,22 +46,24 @@ export class Astar {
       //add start node to open set
       this.start = this.graph.getNodeByName(source);
       this.end = this.graph.getNodeByName(target);
-      this.start.neighbours = this.eSS.findNeighbours(this.start);
       this.openSet.push(this.start);
 
       //keep running until openset is empty
       let t0 = performance.now(); //performance start
       while (this.openSet.size() > 0) {
 
-        let winner = 0;
-
         let current = this.openSet.pop();
 
-        //find neighours of currentNode
-        current.neighbours = this.eSS.findNeighbours(current);
 
         if (current.nodeId == this.end.nodeId) {
-          console.log("DONE");
+          this.path = [];
+          var temp = current;
+          this.path.push(temp);
+          while (temp.nodeId != this.start.nodeId) {
+            this.path.push(temp.previous);
+            temp = temp.previous;
+          }
+
           break; // found target node
         }
 
@@ -71,25 +74,25 @@ export class Astar {
         this.closedSet.push(current);
 
         // for each neighbour of current
-        let neighbours = current.neighbours;
+        let neighbours = this.eSS.findNeighbours(current);
 
 
         neighbours.forEach(neighbour => {
-          if (!this.includes(neighbour.nodeId, this.closedSet)) {
-            var tempG = current.g + this.getDistance(current, neighbour);
+          var tempG = current.g + this.getDistance(current, neighbour);
+          if (!this.includes(neighbour.nodeId, this.closedSet) || tempG < neighbour.g) {
 
-            if (this.includes(neighbour.nodeId, this.openSet)) {
-              if (tempG < neighbour.g) {
-                neighbour.g = tempG;
-              }
-            } else {
-              neighbour.g = tempG;
+
+            if (!this.includes(neighbour.nodeId, this.closedSet)){
               this.openSet.push(neighbour);
+            }else{
+              this.openSet.rescoreElement(neighbour);
             }
 
             neighbour.h = this.heuristic(neighbour, this.end);
+            neighbour.g = tempG;
             neighbour.f = neighbour.g + neighbour.h;
             neighbour.previous = current;
+            console.log(current.nodeId);
           }
         });
       }
@@ -124,20 +127,12 @@ export class Astar {
     var deglen = 110.25;
     var x = node.lat - end.lat;
     var y = (node.lon - end.lon) * Math.cos((end.lat));
-    return deglen * Math.sqrt(x*x + y*y);
+    return deglen * Math.sqrt(x * x + y * y);
 
   }
 
   toRadians(value) {
     return value * Math.PI / 180;
-  }
-
-  removeCurrent(current: MapNode) {
-    // for (let i = this.openSet.size - 1; i >= 0; i--) {
-    //   if (this.openSet[i].nodeId == current.nodeId) {
-    //     this.openSet.splice(i, 1);
-    //   }
-    // }
   }
 
   // Check for existence of node within a set (array)
@@ -151,12 +146,6 @@ export class Astar {
     return includes;
   }
 
-  getPathFound() {
-    for (let i = 0; i < this.path.length; i++) {
-      console.log(this.path[i].nodeId);
-    }
-  }
-
   getDistance(node: MapNode, target: MapNode): number {
     this.edges.forEach(edge => {
       if (edge.source == node.nodeId && edge.target == target.nodeId) {
@@ -164,6 +153,17 @@ export class Astar {
       }
     });
     return null;
+  }
+
+  getPathAsCoords(): number[][] {
+    this.lat_lng_pairs = [];
+    for (let i = 0; i < this.path.length; i++) {
+      this.lat_lng.push(parseFloat(this.path[i].lat.toString()));
+      this.lat_lng.push(parseFloat(this.path[i].lon.toString()));
+      this.lat_lng_pairs.push(this.lat_lng);
+      this.lat_lng = [];
+    }
+    return this.lat_lng_pairs;
   }
 
 }

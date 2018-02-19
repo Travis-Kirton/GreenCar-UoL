@@ -16,7 +16,7 @@ export class MapService {
   initialise(): void {
 
     this.map = L.map("map", {
-      center: [52.63295, -1.136715],
+      center: [52.633141, -1.136198],
       zoom: 16,
       zoomControl: false,
       maxZoom: 18
@@ -26,8 +26,8 @@ export class MapService {
       maxZoom: 18,
     }).addTo(this.map);
 
-    this.map.locate({ setView: true, maxZoom: 17 });
-    this.map.on('locationfound', (e) => this.onLocationFound(e));
+    //this.map.locate({ setView: true, maxZoom: 17 });
+    //this.map.on('locationfound', (e) => this.onLocationFound(e));
   }
 
   onLocationFound(e) {

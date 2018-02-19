@@ -49,9 +49,11 @@ export class CreateJourneyPage implements OnInit {
   showRouteDijkstra() {
     // e.g. 20812 -> 9657
     //this.edgeStorageService.demoSearchingNode();
-    this.astar.performAstar(this.startingPoint, this.destination).then(() => {
-      this.astar.getPathFound();
-    });
+    // this.astar.performAstar(this.startingPoint, this.destination).then(() => {
+    //   console.log(JSON.stringify(this.astar.getPathAsCoords()));
+    //   this.dijkstraRoute = this.astar.getPathAsCoords();
+    //   this.mapService.drawRoute(this.dijkstraRoute);
+    // });
     let loading = this.loadingCtrl.create({
       content: "Calculating route..."
     });
