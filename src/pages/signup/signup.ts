@@ -3,18 +3,35 @@ import { NgForm } from "@angular/forms";
 import { LoadingController, AlertController, Events } from "ionic-angular";
 import firebase from 'firebase';
 import { AuthService } from "../../services/auth";
+import { UserService } from "../../services/user";
+import { Http, Response } from "@angular/http";
 
 @Component({
   selector: 'page-signup',
   templateUrl: 'signup.html'
 })
 export class SignupPage {
+  
+  type: string = "";
+  rider: boolean = false;
+  driver: boolean = false;
+  admin: boolean = false;
+
+  userType = {
+    rider: this.rider,
+    driver: this.driver,
+    admin: this.admin
+  }
 
   constructor(private authService: AuthService,
+              private userService: UserService,
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController,
-              public events: Events) {
+              public events: Events,
+              private http: Http,) {
   }
+
+
 
   onSignup(form: NgForm) {
     const loading = this.loadingCtrl.create({
@@ -30,8 +47,9 @@ export class SignupPage {
         })
         .then(() => {
           this.events.publish('user:name', firebase.auth().currentUser.displayName);
-        })
-        .catch((err) => {console.log(err)});
+          this.updateUserType();
+          this.userService.addUserType(this.userType);
+        });
       })
       .catch(error => {
         loading.dismiss();
@@ -42,5 +60,24 @@ export class SignupPage {
         });
         alert.present();
       });
+  }
+
+  updateUserType(){
+    console.log(this.type);
+    switch(this.type){
+      case "driver": {
+        this.userType.driver = true;
+        break
+      }
+      case "rider": {
+        this.userType.rider = true;
+        break;
+      }
+      case "admin": {
+        this.userType.admin = true;
+        break;
+      }
+    }
+    console.log(this.userType);
   }
 }

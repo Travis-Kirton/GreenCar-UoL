@@ -3,7 +3,7 @@ const { Pool, Client } = require('pg')
 var app = express();
 
 // connection details (pw will need hiding later)
-connectionString = 'postgresql://postgres:password@localhost:5432/greencar_uol';
+connectionString = 'postgresql://postgres:admin@localhost:5432/greencar_uol';
 
 // create Pool object for connections
 const pool = new Pool({
@@ -12,10 +12,11 @@ const pool = new Pool({
 
 // Allow access via GET/POST methods etc
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Credentials', true);
   next();
 });
 

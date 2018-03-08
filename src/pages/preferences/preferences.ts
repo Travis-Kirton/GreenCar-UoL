@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { UserService } from '../../services/user';
+import { LoadingController, NavController, AlertController } from 'ionic-angular';
+import { AuthService } from './../../services/auth';
 
 @Component({
   selector: 'page-preferences',
@@ -7,11 +9,88 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class PreferencesPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  private preferences = {
+    radius: 0,
+    waitTime: 0,
+    distance: "km"
   }
 
+  constructor(public navCtrl: NavController,
+              private userService: UserService,
+              private loadingCtrl: LoadingController,
+              private alertCtrl: AlertController,
+              private authService: AuthService) {}
+
   ionViewDidLoad() {
-    console.log('ionViewDidLoad PreferencesPage');
+    this.loadPreferences();
+  }
+
+  updateDistance(){
+    if(this.preferences.distance == "miles"){
+      this.preferences.distance = "km";
+    }else{
+    this.preferences.distance = "miles"
+    }
+  }
+
+  savePreferences(){
+    const loading = this.loadingCtrl.create({
+      content: 'Saving...'
+    });
+    loading.present();
+    this.authService.getActiveUser().getToken().then((token => {
+      console.log(this.preferences.waitTime);
+      this.userService.savePreferences(token, this.preferences)
+        .subscribe(
+        () => loading.dismiss(),
+        error => {
+          loading.dismiss();
+        }
+        );
+      this.navCtrl.popToRoot();
+    }));
+  }
+
+  loadPreferences(){
+    const loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
+    loading.present();
+    this.authService.getActiveUser().getIdToken()
+      .then(
+      (token: string) => {
+        this.userService.fetchPreferences(token)
+          .subscribe(
+          (preferences) => {
+            loading.dismiss();
+            if (preferences) {
+              console.log(preferences);
+              this.preferences = preferences
+            } else {
+              
+            }
+          },
+          error => {
+            loading.dismiss();
+            this.handleError(error.json().error);
+          }
+          );
+      });
+  }
+  resetPreferences(){
+    this.preferences.radius = 0;
+    this.preferences.distance = "km";
+    this.preferences.waitTime = 0;
+    this.savePreferences();
+  }
+
+  private handleError(errorMessage: string) {
+    const alert = this.alertCtrl.create({
+      title: 'An error occurred!',
+      message: errorMessage,
+      buttons: ['Ok']
+    });
+    alert.present();
   }
 
 }

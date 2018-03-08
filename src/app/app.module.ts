@@ -44,7 +44,11 @@ import { UserService } from '../services/user';
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {
+      scrollPadding: false,
+      scrollAssist: true,
+      autoFocusAssist:false
+    }),
     AngularOpenlayersModule
   ],
   bootstrap: [IonicApp],

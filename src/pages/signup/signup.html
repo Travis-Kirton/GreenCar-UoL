@@ -25,6 +25,14 @@
         <ion-icon name="lock" item-left></ion-icon>
         <ion-input type="password" ngModel name="password" placeholder="password" required></ion-input>
       </ion-item>
+      <ion-item padding no-lines>
+          <ion-icon name="man" item-left></ion-icon>
+          <ion-label>Rider or Driver</ion-label>
+          <ion-select [(ngModel)]="type" multiple="false" name="userType">
+            <ion-option value="rider">Rider</ion-option>
+            <ion-option value="driver">Driver</ion-option>
+          </ion-select>
+        </ion-item>
     </ion-list>
     <button ion-button id="btnSubmit" block type="submit">
                 Register</button>

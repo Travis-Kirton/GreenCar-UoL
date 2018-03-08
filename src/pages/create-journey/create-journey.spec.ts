@@ -1,7 +1,7 @@
 import { CreateJourneyPage } from './create-journey';
 import { TestBed, inject, ComponentFixture } from '@angular/core/testing';
 import { NavController } from 'ionic-angular';
-
+import {} from 'jasmine';
 
 describe('Routing between 2 Roads', () => {
   let fixture: ComponentFixture<CreateJourneyPage>;

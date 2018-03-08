@@ -75,17 +75,19 @@ export class MyApp {
         this.authService.getActiveUser().getIdToken()
           .then(
           (token: string) => {
-            this.authService.checkUserRoles(token).subscribe(
-              (role) => {
-                if (role.rider == true) {
-                  this.nav.setRoot(TabsPage);
-                  this.userType = 'rider';
-                }else{
-                  this.nav.setRoot(TabsPage);
-                  this.userType = 'driver';
-                }
-              }
-            );
+            // this.authService.checkUserRoles(token).subscribe(
+            //   (role) => {
+            //     if (role.rider == true) {
+            //       this.nav.setRoot(TabsPage);
+            //       this.userType = 'rider';
+            //     }else{
+            //       this.nav.setRoot(TabsPage);
+            //       this.userType = 'driver';
+            //     }
+            //   }
+            // );
+            this.userType = 'rider';
+            this.nav.setRoot(TabsPage);
           });
       }
       else {

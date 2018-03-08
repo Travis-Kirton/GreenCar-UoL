@@ -11,32 +11,39 @@
   <ion-list>
       <ion-list-header>
           Distance
+          <ion-badge item-end>{{preferences.distance}}</ion-badge>
     </ion-list-header>
     <ion-item>
         <ion-label> Units of Distance</ion-label>
-        <ion-toggle></ion-toggle>
+        <ion-toggle (ionChange)="updateDistance()"></ion-toggle>
     </ion-item>
   </ion-list>
   <ion-list>
       <ion-list-header>
          Meeting Area Radius (Km/Miles)
+         <ion-badge item-end>{{preferences.radius}} {{preferences.distance}}</ion-badge>
     </ion-list-header>
       <ion-item>
-          <ion-range min="-200" max="200" [(ngModel)]="radius" color="primary">
-            <ion-label range-left>5</ion-label>
-            <ion-label range-right>25</ion-label>
+          <ion-range min="0" max="15" [(ngModel)]="preferences.radius" color="primary">
+            <ion-label range-left>0</ion-label>
+            <ion-label range-right>15</ion-label>
           </ion-range>
         </ion-item>
   </ion-list>
   <ion-list>
       <ion-list-header>
           Allowed Wait Time (min)
+          <ion-badge item-end>{{preferences.waitTime}} mins</ion-badge>
     </ion-list-header>
       <ion-item>
-          <ion-range min="-200" max="200" [(ngModel)]="waitTime" color="secondary">
-            <ion-label range-left>5</ion-label>
-            <ion-label range-right>25</ion-label>
+          <ion-range min="0" max="30" [(ngModel)]="preferences.waitTime" color="secondary">
+            <ion-label range-left>0</ion-label>
+            <ion-label range-right>30</ion-label>
           </ion-range>
         </ion-item>
   </ion-list>
+  <ion-item padding no-lines text-center>
+      <button default ion-button round outline (click)="savePreferences()">reset</button>
+    <button default ion-button round outline (click)="savePreferences()">save</button>
+  </ion-item>
 </ion-content>

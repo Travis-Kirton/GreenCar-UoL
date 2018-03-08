@@ -11,6 +11,8 @@ export class MapService {
 
   myUuid: string;
   map: L.Map;
+
+  
   currentLocation: any;
 
   initialise(): void {
@@ -60,11 +62,15 @@ export class MapService {
   }
 
   drawRoute(latlngs) {
+    let start = null;
+    let end  = null;
+    
     var polyline = L.polyline(latlngs, { color: 'red' }).addTo(this.map);
     this.map.fitBounds(polyline.getBounds());
 
-    L.marker(latlngs[0], { icon: this.startIcon }).addTo(this.map);
-    L.marker(latlngs[latlngs.length - 1], { icon: this.endIcon }).addTo(this.map);
+    start = L.marker(latlngs[0], { icon: this.startIcon }).addTo(this.map);
+    end = L.marker(latlngs[latlngs.length - 1], { icon: this.endIcon }).addTo(this.map);
+    latlngs = null;
   }
 
 
