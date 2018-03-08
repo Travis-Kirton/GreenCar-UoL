@@ -17,15 +17,13 @@ export class UserService{
 
   }
 
-  addUserType(userType){
+  addUserType(userType, ){
     let userId = firebase.auth().currentUser.uid;
-    this.authService.getActiveUser().getToken().then((token => {
-      this.http.put('https://greencar-uol.firebaseio.com/' + userId + '/roles.json?auth=' + token, userType)
-      .map((response: Response) => {
-        console.log(response.json());
-        return response.json();
-      });
-    }));
+    this.http.put('https://greencar-uol.firebaseio.com/' + userId + '/roles.json?auth=' + token, userType)
+    .map((response: Response) => {
+      console.log(response.json());
+      return response.json();
+    });
   }
 
   savePreferences(token, preferences){
