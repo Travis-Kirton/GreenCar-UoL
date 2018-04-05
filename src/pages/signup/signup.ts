@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { LoadingController, AlertController, Events } from "ionic-angular";
 import firebase from 'firebase';
 import { AuthService } from "../../services/auth";
 import { UserService } from "../../services/user";
 import { Http, Response } from "@angular/http";
+
+import { SigninPage } from '../signin/signin';
 
 @Component({
   selector: 'page-signup',
@@ -40,7 +42,6 @@ export class SignupPage {
     loading.present();
     this.authService.signup(form.value.email, form.value.password)
       .then(data => {
-        loading.dismiss();
         firebase.auth().currentUser.updateProfile({
           displayName: form.value.fullName,
           photoURL: "noPhoto"
@@ -48,7 +49,12 @@ export class SignupPage {
         .then(() => {
           this.events.publish('user:name', firebase.auth().currentUser.displayName);
           this.updateUserType();
-          this.userService.addUserType(this.userType);
+          this.authService.getActiveUser().getToken().then((token => {
+            this.userService.addUserType(token, this.userType)
+              .subscribe(
+               () => loading.dismiss()
+              );
+          }));
         });
       })
       .catch(error => {
@@ -63,7 +69,6 @@ export class SignupPage {
   }
 
   updateUserType(){
-    console.log(this.type);
     switch(this.type){
       case "driver": {
         this.userType.driver = true;
@@ -78,6 +83,5 @@ export class SignupPage {
         break;
       }
     }
-    console.log(this.userType);
   }
 }

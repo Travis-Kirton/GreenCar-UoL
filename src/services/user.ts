@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AuthService} from './auth';
 import { Http, Response } from "@angular/http";
-import firebase from 'firebase';
 
 @Injectable()
 export class UserService{
@@ -17,11 +16,11 @@ export class UserService{
 
   }
 
-  addUserType(userType, ){
-    let userId = firebase.auth().currentUser.uid;
-    this.http.put('https://greencar-uol.firebaseio.com/' + userId + '/roles.json?auth=' + token, userType)
+  addUserType(token, userType){
+    const userId = this.authService.getActiveUser().uid;
+    return this.http.put('https://greencar-uol.firebaseio.com/' + userId + '/roles.json?auth=' + token, userType)
     .map((response: Response) => {
-      console.log(response.json());
+      console.log("type saved");
       return response.json();
     });
   }

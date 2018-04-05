@@ -34,7 +34,7 @@ export class EdgeStorageService {
 
   // Get all edges as JSON
   getAllEdgesFromAPI() {
-    return this.http.get(`http://192.168.1.17:4000/allEdge`)
+    return this.http.get(`http://localhost:4000/allEdge`)
     .map((res: Response) => res.json());
   }
 

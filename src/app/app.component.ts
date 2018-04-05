@@ -4,7 +4,7 @@ import { PreferencesPage } from './../pages/preferences/preferences';
 import { SigninPage } from './../pages/signin/signin';
 import { TabsPage } from './../pages/tabs/tabs';
 import { AuthService } from './../services/auth';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { Platform, NavController, MenuController, Events } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 import firebase from 'firebase';
@@ -13,7 +13,7 @@ import firebase from 'firebase';
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp {
+export class MyApp{
 
   signinPage = SigninPage;
   signupPage = SignupPage;
@@ -22,7 +22,7 @@ export class MyApp {
   isAuthenticated = false;
 
   userName: string;
-  userType: string;
+  userType: string = '';
 
   @ViewChild('nav') nav: NavController;
 
@@ -71,24 +71,7 @@ export class MyApp {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.events.publish('user:name', firebase.auth().currentUser.displayName);
-
-        this.authService.getActiveUser().getIdToken()
-          .then(
-          (token: string) => {
-            // this.authService.checkUserRoles(token).subscribe(
-            //   (role) => {
-            //     if (role.rider == true) {
-            //       this.nav.setRoot(TabsPage);
-            //       this.userType = 'rider';
-            //     }else{
-            //       this.nav.setRoot(TabsPage);
-            //       this.userType = 'driver';
-            //     }
-            //   }
-            // );
-            this.userType = 'rider';
-            this.nav.setRoot(TabsPage);
-          });
+        this.nav.setRoot(TabsPage);
       }
       else {
         this.nav.setRoot(SigninPage);

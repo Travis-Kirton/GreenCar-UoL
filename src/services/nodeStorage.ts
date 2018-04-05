@@ -22,7 +22,7 @@ export class NodeStorageService {
   }
 
   getAllNodesFromAPI() {
-    return this.http.get(`http://192.168.1.17:4000/allNode`)
+    return this.http.get(`http://localhost:4000/allNode`)
     .map((res: Response) => res.json());
   }
 

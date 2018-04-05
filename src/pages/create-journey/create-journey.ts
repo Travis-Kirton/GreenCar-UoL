@@ -11,6 +11,7 @@ import { Edge } from './../../models/edge';
 import { RoutingService } from './../../services/routing';
 import { MapService } from './../../services/map';
 import { Component, OnInit } from '@angular/core';
+import { JourneyViewPage } from '../journey-view/journey-view';
 
 @Component({
   selector: 'page-create-journey',
@@ -31,6 +32,8 @@ export class CreateJourneyPage implements OnInit {
 
   private disableBtns: boolean = false;
   private currentDate: number = Date.now();
+
+  route: Route;
 
 
   constructor(private loadingCtrl: LoadingController,
@@ -94,18 +97,10 @@ export class CreateJourneyPage implements OnInit {
       const loading = this.loadingCtrl.create({
         content: 'Saving...'
       });
-      loading.present();
-      this.authService.getActiveUser().getToken().then((token => {
-        this.routingService.storeRoutes(token)
-          .subscribe(
-          () => loading.dismiss(),
-          error => {
-            loading.dismiss();
-            this.handleError(error.json().error);
-          }
-          );
-        this.navCtrl.popToRoot();
-      }));
+      this.route = new Route(this.currentDate,false,this.startingPoint, this.destination, this.dijkstraRoute);
+
+      this.navCtrl.push(JourneyViewPage, { route: this.route, isSet: true});
+
     }
   }
 

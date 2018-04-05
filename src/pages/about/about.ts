@@ -3,6 +3,7 @@ import { RoutingService } from './../../services/routing';
 import { AuthService } from './../../services/auth';
 import { LoadingController, AlertController } from 'ionic-angular';
 import { CreateJourneyPage } from './../create-journey/create-journey';
+import { JourneyViewPage } from '../journey-view/journey-view';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
@@ -26,7 +27,7 @@ export class AboutPage {
   }
 
   createJourney() {
-    this.navCtrl.push(CreateJourneyPage);
+    this.navCtrl.push(JourneyViewPage);
   }
 
   ionViewDidLoad() {

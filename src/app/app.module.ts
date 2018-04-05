@@ -26,6 +26,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { MessagesPage } from '../pages/messages/messages';
 import { UserService } from '../services/user';
+import { JourneyRetrievalService } from '../services/journeyRetrieval';
+import { JourneyViewPage } from '../pages/journey-view/journey-view';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,7 @@ import { UserService } from '../services/user';
     PreferencesPage,
     StatisticsPage,
     CreateJourneyPage,
+    JourneyViewPage,
     MessagesPage
   ],
   imports: [
@@ -63,6 +66,7 @@ import { UserService } from '../services/user';
     PreferencesPage,
     StatisticsPage,
     CreateJourneyPage,
+    JourneyViewPage,
     MessagesPage
   ],
   providers: [
@@ -78,7 +82,8 @@ import { UserService } from '../services/user';
     MapService,
     RoutingService,
     Astar,
-    Dijkstra
+    Dijkstra,
+    JourneyRetrievalService
   ]
 })
 export class AppModule {}

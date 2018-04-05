@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { UserService } from '../../services/user';
 import { LoadingController, NavController, AlertController } from 'ionic-angular';
 import { AuthService } from './../../services/auth';
+import { JourneyRetrievalService } from './../../services/journeyRetrieval';
 
 @Component({
   selector: 'page-preferences',
@@ -19,7 +20,8 @@ export class PreferencesPage {
               private userService: UserService,
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController,
-              private authService: AuthService) {}
+              private authService: AuthService,
+              private  journeyService: JourneyRetrievalService) {}
 
   ionViewDidLoad() {
     this.loadPreferences();

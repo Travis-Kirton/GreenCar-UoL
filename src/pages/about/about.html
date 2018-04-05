@@ -28,7 +28,7 @@
       <ion-item-sliding *ngFor="let route of routingService.getRoutes(); let i = index">
 
         <ion-item (click)="showRoute(route, i)">
-            <ion-avatar item-start>
+            <ion-avatar item-start style="zoom:1.4;">
                 <img src="../../assets/travatar.png">
               </ion-avatar>
           <p class="dateAdded text-muted">{{route.dateBooked | date:'dd-MMM'}}</p>
@@ -46,7 +46,7 @@
       <button ion-button block (click)="createJourney()">Create Journey</button>
     </ion-list>
 
-    <ion-list *ngSwitchCase="'suggestedJourneys'">
+    <ion-list no-lines *ngSwitchCase="'suggestedJourneys'">
         <ion-item-sliding *ngFor="let route of routingService.getRoutes(); let i = index">
 
             <ion-item (click)="showRoute(route, i)">
