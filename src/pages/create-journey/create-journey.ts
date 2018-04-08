@@ -106,10 +106,7 @@ export class CreateJourneyPage implements OnInit {
       this.startingPoint = event._latlng.lat + ", " + event._latlng.lng;  
       let lat = this.nodeStorageService.findClosestNode(event._latlng.lat, event._latlng.lng)[0];
       let lon = this.nodeStorageService.findClosestNode(event._latlng.lat, event._latlng.lng)[1];
-      //this.mapService.drawTestLine();
-      console.log(lat);
-      console.log(lon);
-      let start = L.marker([lat,lon]).addTo(this.mapService.map);
+      //let start = L.marker([lat,lon]).addTo(this.mapService.map);
     });
     this.mapService.eventEnd.forEach((event) =>{
       this.destination = event._latlng.lat + ", " + event._latlng.lng;  
