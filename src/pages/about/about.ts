@@ -70,8 +70,8 @@ export class AboutPage {
     alert.present();
   }
 
-  showRoute(route: Route, index: number) {
-    this.navCtrl.push(CreateJourneyPage, { route: route, isSet: true, index: index });
+  showRoute(route: Route) {
+    this.navCtrl.push(JourneyViewPage, { route: route, isSet: true});
   }
 
 }

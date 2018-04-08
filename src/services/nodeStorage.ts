@@ -39,4 +39,13 @@ export class NodeStorageService {
     });
     return nodeFound;
   }
+
+  findClosestNode(lat, lon): number[]{
+    let nodes = this.getNodes();
+    let current: number[] = [];
+    nodes.forEach(node => {
+     
+    });
+    return ;
+  }
 }

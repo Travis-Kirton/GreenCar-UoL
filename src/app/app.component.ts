@@ -4,7 +4,7 @@ import { PreferencesPage } from './../pages/preferences/preferences';
 import { SigninPage } from './../pages/signin/signin';
 import { TabsPage } from './../pages/tabs/tabs';
 import { AuthService } from './../services/auth';
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { Platform, NavController, MenuController, Events } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 import firebase from 'firebase';

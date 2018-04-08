@@ -1,19 +1,26 @@
 import { Injectable } from '@angular/core';
 import { ToastController } from 'ionic-angular';
+import { Observable, Subject } from 'rxjs/Rx';
 import * as L from 'leaflet';
 
 
 
 @Injectable()
 export class MapService {
-
-  constructor(private toastCtrl: ToastController) { }
-
   myUuid: string;
   map: L.Map;
 
-  
+  // marker for ensuring counters don't go above 2
+  readonly MARKER_MAX: number = 2;
+  seMarkCounter: number = 0;
   currentLocation: any;
+
+  private startPosition = new Subject<any>();
+  private endPosition = new Subject<any>();
+  startMarker: L.Marker;
+  endMarker: L.Marker
+
+  constructor(private toastCtrl: ToastController) { }
 
   initialise(): void {
 
@@ -28,13 +35,51 @@ export class MapService {
       maxZoom: 18,
     }).addTo(this.map);
 
-    //this.map.locate({ setView: true, maxZoom: 17 });
-    //this.map.on('locationfound', (e) => this.onLocationFound(e));
+    this.map.locate({ setView: true, maxZoom: 17 });
+    this.map.on('locationfound', (e) => this.onLocationFound(e));
+    this.map.on('click', (e) => { this.onMapClick(e) });
   }
 
   onLocationFound(e) {
     this.currentLocation = e;
-    L.marker(e.latlng, {icon: this.startIcon}).addTo(this.map);
+  }
+
+  onMapClick(e) {
+    //check for maximum 2 markers (start+end)
+    if (this.seMarkCounter < this.MARKER_MAX) {
+      if (this.seMarkCounter < 1) {
+        this.startMarker = L.marker(e.latlng, {
+          icon: this.startIcon,
+          draggable: true
+        }).addTo(this.map);
+        this.startPosition.next(this.startMarker);
+      } else {
+        this.endMarker = L.marker(e.latlng, {
+          icon: this.endIcon,
+          draggable: true
+        }).addTo(this.map);
+        this.endPosition.next(this.endMarker);
+      }
+      this.seMarkCounter += 1;
+    }
+    // emit event when marker is dragged
+    this.startMarker.on('dragend', (event) => {
+      this.startPosition.next(this.startMarker);
+    });
+    // if: ensures both markers are in place
+    if (this.seMarkCounter > 1) {
+      this.endMarker.on('dragend', (event) => {
+        this.endPosition.next(this.endMarker);
+      });
+    }
+  }
+
+  get eventStart() {
+    return this.startPosition.asObservable();
+  }
+
+  get eventEnd() {
+    return this.endPosition.asObservable();
   }
 
   locateMe() {
@@ -63,8 +108,8 @@ export class MapService {
 
   drawRoute(latlngs) {
     let start = null;
-    let end  = null;
-    
+    let end = null;
+
     var polyline = L.polyline(latlngs, { color: 'red' }).addTo(this.map);
     this.map.fitBounds(polyline.getBounds());
 
@@ -72,6 +117,8 @@ export class MapService {
     end = L.marker(latlngs[latlngs.length - 1], { icon: this.endIcon }).addTo(this.map);
     latlngs = null;
   }
+
+
 
 
   startIcon = L.icon({

@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, AlertController} from 'ionic-angular';
 import { Route } from '../../models/route';
+import { RoutingService } from './../../services/routing';
 import { CreateJourneyPage } from '../create-journey/create-journey';
+import { AuthService } from '../../services/auth';
 
 
 @Component({
@@ -15,16 +17,23 @@ export class JourneyViewPage {
   end: String = ''
   duration: number = 15;
   routeSet: boolean = false;
+  btnAddTitle = 'Add Route';
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, 
+              public navParams: NavParams, 
+              public authService : AuthService,
+              public routingService: RoutingService,
+              public alertCtrl: AlertController,
+              public loadingCtrl: LoadingController) {
   }
 
   ngOnInit() {
     if (this.navParams.get('isSet')) {
       this.routeSet = true;
-      this.route = this.navParams.get('route');
-      this.start = this.route.getStart();
-      this.end = this.route.getEnd();
+      let route = this.navParams.get('route');
+      this.start = route.start;
+      this.end = route.end;
+      this.btnAddTitle = 'Edit Route'
       console.log(this.route);
     }else{
       this.routeSet = false;
@@ -32,13 +41,43 @@ export class JourneyViewPage {
   }
 
   addRoute(){
+    if(this.routeSet){
+      this.navCtrl.push(CreateJourneyPage, { route: this.navParams.get('route'), isSet: true });
+    }else{
     this.navCtrl.push(CreateJourneyPage);
+    }
+  }
+
+  addJourney(){
+    const loading = this.loadingCtrl.create({
+      content: 'Saving...'
+    });
+    this.routingService.addRoute(this.route);
+    loading.present();
+        this.authService.getActiveUser().getToken().then((token => {
+          this.routingService.storeRoutes(token)
+            .subscribe(
+            () => loading.dismiss(),
+            error => {
+              loading.dismiss();
+              this.handleError(error.json().error);
+            }
+            );
+          this.navCtrl.popToRoot();
+        }));
   }
 
   showRoute(route: Route, index: number) {
-    this.navCtrl.push(CreateJourneyPage, { route: route, isSet: true, index: index });
+    this.navCtrl.push(CreateJourneyPage, { route: route, isSet: true});
   }
 
-
+  private handleError(errorMessage: string) {
+    const alert = this.alertCtrl.create({
+      title: 'An error occurred!',
+      message: errorMessage,
+      buttons: ['Ok']
+    });
+    alert.present();
+  }
 
 }

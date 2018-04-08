@@ -12,6 +12,8 @@ import { RoutingService } from './../../services/routing';
 import { MapService } from './../../services/map';
 import { Component, OnInit } from '@angular/core';
 import { JourneyViewPage } from '../journey-view/journey-view';
+import * as L from 'leaflet';
+
 
 @Component({
   selector: 'page-create-journey',
@@ -33,8 +35,6 @@ export class CreateJourneyPage implements OnInit {
   private disableBtns: boolean = false;
   private currentDate: number = Date.now();
 
-  route: Route;
-
 
   constructor(private loadingCtrl: LoadingController,
     private navParams: NavParams,
@@ -46,9 +46,8 @@ export class CreateJourneyPage implements OnInit {
     private alertCtrl: AlertController,
     public navCtrl: NavController,
     private dijkstra: Dijkstra,
-    private astar: Astar) {
+    private astar: Astar) {}
 
-  }
   showRouteDijkstra() {
     // e.g. 20812 -> 9657
     //this.edgeStorageService.demoSearchingNode();
@@ -93,18 +92,30 @@ export class CreateJourneyPage implements OnInit {
       });
       alert.present();
     } else {
-      this.routingService.addRoute(new Route(this.currentDate,false,this.startingPoint, this.destination, this.dijkstraRoute));
       const loading = this.loadingCtrl.create({
         content: 'Saving...'
       });
-      this.route = new Route(this.currentDate,false,this.startingPoint, this.destination, this.dijkstraRoute);
-
-      this.navCtrl.push(JourneyViewPage, { route: this.route, isSet: true});
+      let route = new Route(this.currentDate,false,this.startingPoint, this.destination, this.dijkstraRoute);
+      this.navCtrl.push(JourneyViewPage, { route: route, isSet: true});
 
     }
   }
 
   ngOnInit() {
+    this.mapService.eventStart.forEach((event) =>{
+      this.startingPoint = event._latlng.lat + ", " + event._latlng.lng;  
+      let lat = this.nodeStorageService.findClosestNode(event._latlng.lat, event._latlng.lng)[0];
+      let lon = this.nodeStorageService.findClosestNode(event._latlng.lat, event._latlng.lng)[1];
+      //this.mapService.drawTestLine();
+      console.log(lat);
+      console.log(lon);
+      let start = L.marker([lat,lon]).addTo(this.mapService.map);
+    });
+    this.mapService.eventEnd.forEach((event) =>{
+      this.destination = event._latlng.lat + ", " + event._latlng.lng;  
+    // console.log(this.nodeStorageService.findClosestNode(event._latlng.lat, event._latlng.lng));
+    });
+
     this.mapService.initialise();
     if (this.navParams.get('isSet')) {
       let route = this.navParams.get('route');
@@ -118,14 +129,5 @@ export class CreateJourneyPage implements OnInit {
 
   onLocateMe() {
     this.mapService.locateMe();
-  }
-
-  private handleError(errorMessage: string) {
-    const alert = this.alertCtrl.create({
-      title: 'An error occurred!',
-      message: errorMessage,
-      buttons: ['Ok']
-    });
-    alert.present();
   }
 }

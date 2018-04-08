@@ -2,7 +2,7 @@ import { SignupPage } from './../signup/signup';
 import { HomePage } from './../home/home';
 import { Component } from '@angular/core';
 import { NgForm } from "@angular/forms";
-import { LoadingController, AlertController, NavController, Events } from "ionic-angular";
+import { LoadingController, AlertController, NavController, Events, MenuController } from "ionic-angular";
 
 import { AuthService } from "../../services/auth";
 import firebase from 'firebase';
@@ -17,7 +17,8 @@ export class SigninPage {
               private authService: AuthService,
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController,
-              private navCtrl: NavController) {
+              private navCtrl: NavController,
+              private menuCtrl: MenuController) {
   }
 
   onSignin(form: NgForm) {
@@ -45,4 +46,12 @@ export class SigninPage {
   onRegister() {
     this.navCtrl.push(SignupPage);
   }
+
+  ionViewDidEnter() {
+    this.menuCtrl.swipeEnable(false);
+  }
+
+  ionViewWillLeave() {
+    this.menuCtrl.swipeEnable(true);
+   }
 }

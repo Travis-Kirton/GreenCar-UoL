@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from "@angular/forms";
-import { LoadingController, AlertController, Events } from "ionic-angular";
+import { LoadingController, AlertController, Events, MenuController } from "ionic-angular";
 import firebase from 'firebase';
 import { AuthService } from "../../services/auth";
 import { UserService } from "../../services/user";
@@ -29,6 +29,7 @@ export class SignupPage {
               private userService: UserService,
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController,
+              private menuCtrl: MenuController,
               public events: Events,
               private http: Http,) {
   }
@@ -84,4 +85,12 @@ export class SignupPage {
       }
     }
   }
+
+  ionViewDidEnter() {
+    this.menuCtrl.swipeEnable(false);
+  }
+
+  ionViewWillLeave() {
+    this.menuCtrl.swipeEnable(true);
+   }
 }
