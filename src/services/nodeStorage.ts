@@ -40,22 +40,25 @@ export class NodeStorageService {
     return nodeFound;
   }
 
-  findClosestNode(lat, lon): number[] {
-    let nodes = this.getNodes();
+  findClosestNode(arr, lat, lon): MapNode {
+    let newNode = arr[0];
+    arr.forEach(node => {
+      if(this.calcDistance(lat,lon, node.lat, node.lon) < this.calcDistance(lat, lon, newNode.lat, newNode.lon)){
+        newNode = node;
+      }
+    });
+    return newNode;
+    
+  }
+
+  findClosestCoords(arr, lat, lon): number[] {
     let currLat = 0;
     let currLon = 0;
-    nodes.forEach(node => {
-      /**
-       * 1) Calculate distance from given coords and current node
-       * 2) if distance less compared to previous node, update distance
-       * 3) After comparing nodes at O(n), output lowest distance node. 
-       **/
-      currLat = node.lat;
-      currLon = node.lon;
-      if(this.calcDistance(lat, lon, currLat, currLon) < this.calcDistance(lat,lon, node.lat, node.lon)){
+    console.log(arr);
+    arr.forEach(node => {
+      if(this.calcDistance(lat,lon, node.lat, node.lon) < this.calcDistance(lat, lon, currLat, currLon)){
         currLat = node.lat;
         currLon = node.lon;
-        console.log("found smaller");
       }
     });
     return [currLat, currLon];
@@ -64,7 +67,7 @@ export class NodeStorageService {
 
 
   // Haversine formula for computing distances
-  // https://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates-shows-wrong
+  //https://rosettacode.org/wiki/Haversine_formula#JavaScript
   calcDistance(lat1, lon1, lat2, lon2){
     let R = 6371;
     let dLat = this.toRad(lat2-lat1);
@@ -79,7 +82,6 @@ export class NodeStorageService {
     let d = R * c;
     return d
    }
-
 
   // convert values to Radians
   toRad(value){

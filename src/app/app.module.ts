@@ -28,6 +28,7 @@ import { MessagesPage } from '../pages/messages/messages';
 import { UserService } from '../services/user';
 import { JourneyRetrievalService } from '../services/journeyRetrieval';
 import { JourneyViewPage } from '../pages/journey-view/journey-view';
+import { JourneyMatchingService } from '../services/journeyMatching';
 
 @NgModule({
   declarations: [
@@ -83,7 +84,8 @@ import { JourneyViewPage } from '../pages/journey-view/journey-view';
     RoutingService,
     Astar,
     Dijkstra,
-    JourneyRetrievalService
+    JourneyRetrievalService,
+    JourneyMatchingService
   ]
 })
 export class AppModule {}

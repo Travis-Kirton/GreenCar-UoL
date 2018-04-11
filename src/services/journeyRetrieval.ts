@@ -7,6 +7,8 @@ export class JourneyRetrievalService{
 
     constructor(){}
 
+    // retrieves all journeys stored in database, including uid, start & end coords
+    // used for matching users based on journeys
     getJourneys(): Promise<Array<Journey>>{
         var query = firebase.database().ref("/").orderByKey();
         return query

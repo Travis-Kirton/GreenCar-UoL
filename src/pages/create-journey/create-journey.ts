@@ -12,8 +12,9 @@ import { RoutingService } from './../../services/routing';
 import { MapService } from './../../services/map';
 import { Component, OnInit } from '@angular/core';
 import { JourneyViewPage } from '../journey-view/journey-view';
+import { JourneyMatchingService } from '../../services/journeyMatching';
 import * as L from 'leaflet';
-
+import { JourneyRetrievalService } from '../../services/journeyRetrieval';
 
 @Component({
   selector: 'page-create-journey',
@@ -46,7 +47,9 @@ export class CreateJourneyPage implements OnInit {
     private alertCtrl: AlertController,
     public navCtrl: NavController,
     private dijkstra: Dijkstra,
-    private astar: Astar) {}
+    private astar: Astar,
+    private journeyMatchingService: JourneyMatchingService,
+    private journeyRetrievalService: JourneyRetrievalService) { }
 
   showRouteDijkstra() {
     // e.g. 20812 -> 9657
@@ -63,7 +66,14 @@ export class CreateJourneyPage implements OnInit {
       this.dijkstra.performDijkstras(this.startingPoint, this.destination).then(() => {
         loading.dismiss();
         this.dijkstraRoute = this.dijkstra.getPathAsCoords();
-        console.log(JSON.stringify(this.dijkstraRoute));
+        //console.log(JSON.stringify(this.dijkstraRoute));
+        
+        let journeys: any;
+        this.journeyRetrievalService.getJourneys()
+          .then(data => {
+            journeys = data;
+            console.log(this.journeyMatchingService.findClosestStartMatch(journeys , this.dijkstraRoute[0][0], this.dijkstraRoute[0][1]));
+          });
         this.mapService.drawRoute(this.dijkstraRoute);
       });
     });
@@ -95,22 +105,24 @@ export class CreateJourneyPage implements OnInit {
       const loading = this.loadingCtrl.create({
         content: 'Saving...'
       });
-      let route = new Route(this.currentDate,false,this.startingPoint, this.destination, this.dijkstraRoute);
-      this.navCtrl.push(JourneyViewPage, { route: route, isSet: true});
-
+      let route = new Route(this.currentDate, false, this.startingPoint, this.destination, this.dijkstraRoute);
+      this.navCtrl.push(JourneyViewPage, { route: route, isSet: true });
     }
   }
 
   ngOnInit() {
-    this.mapService.eventStart.forEach((event) =>{
-      this.startingPoint = event._latlng.lat + ", " + event._latlng.lng;  
-      let lat = this.nodeStorageService.findClosestNode(event._latlng.lat, event._latlng.lng)[0];
-      let lon = this.nodeStorageService.findClosestNode(event._latlng.lat, event._latlng.lng)[1];
-      //let start = L.marker([lat,lon]).addTo(this.mapService.map);
+    // if user sets markers on non-roads 
+    this.mapService.eventStart.forEach((event) => {
+      this.startingPoint = event._latlng.lat + ", " + event._latlng.lng;
+      let node = this.nodeStorageService.findClosestNode(this.nodeStorageService.getNodes(), event._latlng.lat, event._latlng.lng);
+      this.mapService.repositionStartMarker(node.lat, node.lon);
+      this.startingPoint = this.edgeStorageService.getEdgeNameByNodeId(node);
     });
-    this.mapService.eventEnd.forEach((event) =>{
-      this.destination = event._latlng.lat + ", " + event._latlng.lng;  
-    // console.log(this.nodeStorageService.findClosestNode(event._latlng.lat, event._latlng.lng));
+    this.mapService.eventEnd.forEach((event) => {
+      this.destination = event._latlng.lat + ", " + event._latlng.lng;
+      let node = this.nodeStorageService.findClosestNode(this.nodeStorageService.getNodes(), event._latlng.lat, event._latlng.lng);
+      this.mapService.repositionDestinationMarker(node.lat, node.lon);
+      this.destination = this.edgeStorageService.getEdgeNameByNodeId(node);
     });
 
     this.mapService.initialise();
@@ -122,6 +134,7 @@ export class CreateJourneyPage implements OnInit {
       this.disableBtns = true;
       this.mapService.drawRoute(this.dijkstraRoute);
     }
+
   }
 
   onLocateMe() {

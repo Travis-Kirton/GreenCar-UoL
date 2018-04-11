@@ -74,6 +74,15 @@ export class MapService {
     }
   }
 
+  //lock markers to road positions
+  repositionStartMarker(lat, lon){
+    this.startMarker.setLatLng([lat,lon]);
+  }
+
+  repositionDestinationMarker(lat, lon){
+    this.endMarker.setLatLng([lat, lon]);
+  }
+
   get eventStart() {
     return this.startPosition.asObservable();
   }

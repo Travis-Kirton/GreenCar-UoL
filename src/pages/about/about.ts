@@ -6,6 +6,8 @@ import { CreateJourneyPage } from './../create-journey/create-journey';
 import { JourneyViewPage } from '../journey-view/journey-view';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { JourneyRetrievalService } from '../../services/journeyRetrieval';
+import { JourneyMatchingService } from '../../services/journeyMatching';
 
 @Component({
   selector: 'page-about',
@@ -22,7 +24,10 @@ export class AboutPage {
     private authService: AuthService,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
-    private routingService: RoutingService) {
+    private routingService: RoutingService,
+    private journeyRetrieval: JourneyRetrievalService,
+    private journeyMatching: JourneyMatchingService
+  ) {
 
   }
 
@@ -33,6 +38,17 @@ export class AboutPage {
   ionViewDidLoad() {
     // check role and load specific lists
     this.loadRoutes();
+
+
+    let t0 = performance.now();
+    this.journeyRetrieval.getJourneys()
+      .then((journeys) => {
+        let t1 = performance.now();
+        console.log(`Journeys retrieved in: ${(t1 - t0)}ms`);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   loadRoutes() {

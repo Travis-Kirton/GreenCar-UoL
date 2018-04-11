@@ -33,8 +33,7 @@ export class JourneyViewPage {
       let route = this.navParams.get('route');
       this.start = route.start;
       this.end = route.end;
-      this.btnAddTitle = 'Edit Route'
-      console.log(this.route);
+      this.btnAddTitle = 'Edit Route';
     }else{
       this.routeSet = false;
     }
@@ -52,8 +51,7 @@ export class JourneyViewPage {
     const loading = this.loadingCtrl.create({
       content: 'Saving...'
     });
-    this.routingService.addRoute(this.route);
-    loading.present();
+    this.routingService.addRoute(this.navParams.get('route'));
         this.authService.getActiveUser().getToken().then((token => {
           this.routingService.storeRoutes(token)
             .subscribe(

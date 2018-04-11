@@ -32,7 +32,6 @@ export class RoutingService {
 
   storeRoutes(token: string){
     const userId = this.authService.getActiveUser().uid;
-
     return this.http.put('https://greencar-uol.firebaseio.com/' + userId + '/routes.json?auth=' + token, this.routes)
     .map((response: Response) => {
       return response.json();

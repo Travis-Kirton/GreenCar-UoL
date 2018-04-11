@@ -25,7 +25,7 @@
 
   <div [ngSwitch]="journeys">
     <ion-list no-lines *ngSwitchCase="'createdJourneys'">
-      <ion-item-sliding *ngFor="let route of routingService.getRoutes(); let i = index">
+      <ion-item-sliding *ngFor="let route of routes; let i = index">
 
         <ion-item (click)="showRoute(route, i)">
             <ion-avatar item-start style="zoom:1.4;">

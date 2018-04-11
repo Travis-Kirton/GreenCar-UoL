@@ -1,5 +1,8 @@
-export class Journey{
+export class Journey {
+
+
     constructor(uid: string,
-                start: number [],
-                end: number []){}
+        start: number[],
+        end: number[]) {
+    }
 }
