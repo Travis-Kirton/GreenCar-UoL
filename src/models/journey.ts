@@ -1,8 +1,8 @@
 export class Journey {
 
 
-    constructor(uid: string,
-        start: number[],
-        end: number[]) {
+    constructor(public uid: string,
+        public start: number[],
+        public end: number[]) {
     }
 }

@@ -2,6 +2,7 @@ import { RoutingService } from './routing';
 import { MapNode } from './../models/node';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
+import { Journey } from '../models/journey';
 
 @Injectable()
 export class NodeStorageService {
@@ -15,10 +16,6 @@ export class NodeStorageService {
         () => { console.log("complete"); }
     });
 
-  }
-
-  printAllNodes() {
-    console.log(this.nodes.length);
   }
 
   getAllNodesFromAPI() {
@@ -51,14 +48,14 @@ export class NodeStorageService {
     
   }
 
-  findClosestCoords(arr, lat, lon): number[] {
+  findClosestCoords(arr: Journey[], lat, lon): number[] {
     let currLat = 0;
     let currLon = 0;
-    console.log(arr);
-    arr.forEach(node => {
-      if(this.calcDistance(lat,lon, node.lat, node.lon) < this.calcDistance(lat, lon, currLat, currLon)){
-        currLat = node.lat;
-        currLon = node.lon;
+    arr.forEach(journey => {
+      let coords = journey.start;
+      if(this.calcDistance(lat,lon, coords[0], coords[1]) < this.calcDistance(lat, lon, currLat, currLon)){
+        currLat = coords[0];
+        currLon = coords[1];
       }
     });
     return [currLat, currLon];

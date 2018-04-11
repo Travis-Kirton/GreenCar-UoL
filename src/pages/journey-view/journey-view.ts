@@ -65,6 +65,10 @@ export class JourneyViewPage {
         }));
   }
 
+  cancelJourney(){
+    this.navCtrl.popToRoot();
+  }
+
   showRoute(route: Route, index: number) {
     this.navCtrl.push(CreateJourneyPage, { route: route, isSet: true});
   }

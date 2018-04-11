@@ -63,10 +63,10 @@ export class CreateJourneyPage implements OnInit {
       content: "Calculating route..."
     });
     loading.present().then(() => {
-      this.dijkstra.performDijkstras(this.startingPoint, this.destination).then(() => {
+      this.dijkstra.performDijkstras(this.startingPoint.toLowerCase(), this.destination.toLowerCase()).then(() => {
         loading.dismiss();
         this.dijkstraRoute = this.dijkstra.getPathAsCoords();
-        //console.log(JSON.stringify(this.dijkstraRoute));
+        console.log(JSON.stringify(this.dijkstraRoute));
         
         let journeys: any;
         this.journeyRetrievalService.getJourneys()
