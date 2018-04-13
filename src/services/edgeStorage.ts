@@ -9,6 +9,8 @@ import { Http, Response } from '@angular/http';
 export class EdgeStorageService {
   edges: Edge[] = [];
 
+  roadNames: Set<string> = null;
+
   constructor(private http: Http,
     private nodeSS: NodeStorageService) {
     this.getAllEdgesFromAPI().subscribe(nodes => {
@@ -16,6 +18,7 @@ export class EdgeStorageService {
         this.edges.push(new Edge(node.source, node.target, node.name, node.cost, node.reverse_cost));
       })
     });
+    this.populateRoadNames();
 
   }
 
@@ -82,5 +85,11 @@ export class EdgeStorageService {
       }
     });
     return neighbours;
+  }
+
+  populateRoadNames(){
+    // loop through edges & add names to set
+    // used for searching road names in input fields
+    // and erroring if road names not found
   }
 }

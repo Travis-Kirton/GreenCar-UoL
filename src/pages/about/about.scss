@@ -13,10 +13,11 @@
 
     .dateAdded{
       border-bottom: 1px solid #a1a1a1;
+      margin-top:5px;
     }
 
     ion-item-sliding {
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       width: 100%;
       margin-left: 2%;
       margin-right: 2%;
@@ -24,8 +25,7 @@
   }
 
   ion-item {
-      padding-bottom: 10px;
-      height:85px;
+      height:90px;
 
       h4 {
           font-weight: bold;

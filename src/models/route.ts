@@ -4,7 +4,8 @@ export class Route{
                 private matchedWithDriver: boolean,
                 private start:string,
                 private end: string,
-                private coords: number[][]){}
+                private coords: number[][],
+                private username: string){}
 
 
 
@@ -30,6 +31,14 @@ export class Route{
 
   setCoords(newCoords: number[][]){
     this.coords = newCoords;
+  }
+
+  setUserName(username: string){
+    this.username = username;
+  }
+
+  getUserName(): string{
+    return this.username;
   }
 
 

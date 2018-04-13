@@ -43,6 +43,7 @@ export class MyApp{
     this.checkIfVerified();
     events.subscribe('user:name', (username) => {
       this.userName = username;
+      this.authService.setUserName(this.userName);
     });
 
     platform.ready().then(() => {

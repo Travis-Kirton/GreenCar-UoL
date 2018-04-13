@@ -6,11 +6,10 @@ import firebase from 'firebase';
 @Injectable()
 export class AuthService {
   private userToken: string;
+  private username: string;
   private roles: Roles;
 
-  constructor(private http: Http){
-
-  }
+  constructor(private http: Http){}
 
   signup(email: string, password: string) {
     return firebase.auth().createUserWithEmailAndPassword(email, password);
@@ -30,6 +29,15 @@ export class AuthService {
 
   getUserRoles(){
     return this.roles;
+  }
+
+  setUserName(username: string){
+    console.log(username);
+    this.username = username;
+  }
+
+  getUsername(){
+    return this.username;
   }
 
   checkUserRoles(token: string){

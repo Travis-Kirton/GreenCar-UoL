@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase';
 import { Journey } from '../models/journey';
+import { Route } from '../models/route';
 
 @Injectable()
 export class JourneyRetrievalService{
@@ -22,7 +23,9 @@ export class JourneyRetrievalService{
                     journeys.push({
                         uid: snap.key,
                         start: route.coords[0],
-                        end: route.coords[route.coords.length-1]
+                        end: route.coords[route.coords.length-1],
+                        timestamp: route.dateBooked,
+                        username: route.username
                     });
                 });
             }
@@ -30,6 +33,12 @@ export class JourneyRetrievalService{
           });
           return journeys;
       });
+    }
+
+    findRouteViaUser(uid, timestamp): Route{
+        let route: Route;
+        
+        return route;
     }
 
 

@@ -19,12 +19,11 @@ export class JourneyMatchingService {
             .catch(error => {
                 console.log(error);
             });     
-    
         }
 
-    findClosestStartMatch(journeys: Journey[], lat: number, lon: number){
-        let match = this.nodeStorageService.findClosestCoords(journeys, lat, lon);
-        console.log(match);
+    findClosestStartMatch(lat: number, lon: number): Journey{
+        let match = this.nodeStorageService.findClosestJourneyCoords(this.journeys, lat, lon);
+        return match;
     }
 
 

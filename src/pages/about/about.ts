@@ -39,7 +39,6 @@ export class AboutPage {
     // check role and load specific lists
     this.loadRoutes();
 
-
     let t0 = performance.now();
     this.journeyRetrieval.getJourneys()
       .then((journeys) => {

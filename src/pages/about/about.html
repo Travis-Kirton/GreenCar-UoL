@@ -28,9 +28,9 @@
       <ion-item-sliding *ngFor="let route of routes; let i = index">
 
         <ion-item (click)="showRoute(route, i)">
-            <ion-avatar item-start style="zoom:1.4;">
-                <img src="../../assets/travatar.png">
-              </ion-avatar>
+          <ion-avatar item-start style="zoom:1.4;">
+            <img src="../../assets/travatar.png">
+          </ion-avatar>
           <p class="dateAdded text-muted">{{route.dateBooked | date:'dd-MMM'}}</p>
           <h4>Route Details</h4>
           <p>From: {{route.start}}</p>
@@ -38,7 +38,7 @@
         </ion-item>
 
         <ion-item-options side="right">
-          <button color="danger" ion-button icon-only (click)="routingService.removeRoute(routine)">
+          <button color="danger" ion-button icon-only (click)="routingService.removeRoute(i)">
             <ion-icon name="trash"></ion-icon>
           </button>
         </ion-item-options>
@@ -47,24 +47,24 @@
     </ion-list>
 
     <ion-list no-lines *ngSwitchCase="'suggestedJourneys'">
-        <ion-item-sliding *ngFor="let route of routingService.getRoutes(); let i = index">
+      <ion-item-sliding *ngFor="let route of routes; let i = index">
 
-            <ion-item (click)="showRoute(route, i)">
-                <ion-avatar item-start>
-                    <img src="../../assets/img/avatar-leia.png">
-                  </ion-avatar>
-              <p class="dateAdded text-muted">{{route.dateBooked | date:'dd-MMM'}}</p>
-              <h4>Route Details</h4>
-              <p>From: Friar Lane</p>
-              <p>To: Lorne Road</p>
-            </ion-item>
+        <ion-item (click)="showRoute(route, i)">
+          <ion-avatar item-start>
+            <img src="../../assets/img/avatar-leia.png">
+          </ion-avatar>
+          <p class="dateAdded text-muted">{{route.dateBooked | date:'dd-MMM'}}</p>
+          <h4>Route Details</h4>
+          <p>From: {{route.start}}</p>
+          <p>To: {{route.end}}</p>
+        </ion-item>
 
-            <ion-item-options side="right">
-              <button color="danger" ion-button icon-only (click)="routingService.removeRoute(routine)">
-                <ion-icon name="trash"></ion-icon>
-              </button>
-            </ion-item-options>
-          </ion-item-sliding>
+        <ion-item-options side="right">
+          <button color="danger" ion-button icon-only (click)="routingService.removeRoute(i)">
+            <ion-icon name="trash"></ion-icon>
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
     </ion-list>
   </div>
 

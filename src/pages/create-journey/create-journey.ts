@@ -15,6 +15,8 @@ import { JourneyViewPage } from '../journey-view/journey-view';
 import { JourneyMatchingService } from '../../services/journeyMatching';
 import * as L from 'leaflet';
 import { JourneyRetrievalService } from '../../services/journeyRetrieval';
+import firebase from 'firebase';
+
 
 @Component({
   selector: 'page-create-journey',
@@ -105,7 +107,9 @@ export class CreateJourneyPage implements OnInit {
       const loading = this.loadingCtrl.create({
         content: 'Saving...'
       });
-      let route = new Route(this.currentDate, false, this.startingPoint, this.destination, this.dijkstraRoute);
+
+      let route = new Route(this.currentDate, false, this.startingPoint, this.destination, this.dijkstraRoute, this.authService.getUsername());
+      console.log(route);
       this.navCtrl.push(JourneyViewPage, { route: route, isSet: true });
     }
   }
