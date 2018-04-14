@@ -19,7 +19,11 @@
       <button default ion-button round outline (click)="addRoute()">{{btnAddTitle}}</button>
   </ion-item>
 
-  <ion-list *ngIf="currentDriver">
+  <ion-list>
+    <ion-list-header text-align="center" *ngIf="suggestedDrivers?.length < 1">You have 0 suggested drivers</ion-list-header>
+  </ion-list>
+
+  <ion-list *ngIf="currentDriver?.length > 0">
     <ion-list-header>
         Current Driver
     </ion-list-header>
@@ -30,11 +34,11 @@
     </ion-item>
   </ion-list>
 
-    <ion-list  *ngIf="suggestedDrivers">
+    <ion-list  *ngIf="suggestedDrivers?.length > 0">
     <ion-list-header>
         Suggested Drivers
     </ion-list-header>
-    <ion-item *ngFor="let driver of suggestedDriver; let i = index">
+    <ion-item *ngFor="let driver of suggestedDrivers; let i = index">
       <ion-avatar item-start style="zoom:1.4;">
         <img src="../../assets/img/avatar-han.png">
         {{driver.username}}

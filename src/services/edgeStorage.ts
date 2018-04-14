@@ -9,17 +9,15 @@ import { Http, Response } from '@angular/http';
 export class EdgeStorageService {
   edges: Edge[] = [];
 
-  roadNames: Set<string> = null;
+  roadNames: Set<string>;
 
   constructor(private http: Http,
     private nodeSS: NodeStorageService) {
     this.getAllEdgesFromAPI().subscribe(nodes => {
       nodes.forEach(node => {
         this.edges.push(new Edge(node.source, node.target, node.name, node.cost, node.reverse_cost));
-      })
+      });
     });
-    this.populateRoadNames();
-
   }
 
   // demonstrate time taken to search edges
@@ -59,14 +57,13 @@ export class EdgeStorageService {
   }
 
   getEdgeNameByNodeId(node: MapNode): string {
-    let edgeName = "temp";
+    let edgeName = "Point Not Found";
     this.edges.forEach(edge => {
+      // console.log(edge.name);
       if (edge.name != null) {
         if (node.nodeId == edge.source) {
-          console.log("found: " + edge.name);
           edgeName = edge.name;
         } else if (node.nodeId == edge.target) {
-          console.log("found: " + edge.name);
           edgeName = edge.name;
         }
       }
@@ -87,9 +84,16 @@ export class EdgeStorageService {
     return neighbours;
   }
 
-  populateRoadNames(){
-    // loop through edges & add names to set
-    // used for searching road names in input fields
-    // and erroring if road names not found
+  populateRoadNames() {
+    this.roadNames = new Set<string>();
+    this.edges.forEach((edge) => {
+      if (edge.name != null) {
+        this.roadNames.add(edge.name);
+      }
+    });
+  }
+
+  getRoadNames(): string[]{
+    return Array.from(this.roadNames);
   }
 }

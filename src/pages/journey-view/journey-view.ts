@@ -14,15 +14,14 @@ import { JourneyMatchingService } from '../../services/journeyMatching';
 })
 export class JourneyViewPage {
 
-  route:Route;
   start: String = '';
   end: String = ''
   duration: number = 15;
   routeSet: boolean = false;
   btnAddTitle = 'Add Route';
 
-  suggestedDrivers: Journey[] = null;
-  currentDriver: Journey[] = null;
+  suggestedDrivers: Journey[] = [];
+  currentDriver: Journey[] = [];
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams, 
@@ -36,12 +35,14 @@ export class JourneyViewPage {
   ngOnInit() {
     if (this.navParams.get('isSet')) {
       this.routeSet = true;
-      this.route = this.navParams.get('route');
-      this.start = this.route.getStart();
-      this.end = this.route.getEnd();
+      let route = this.navParams.get('route');
+      this.start = route.start;
+      this.end = route.end;
       this.btnAddTitle = 'Edit Route';
-      let match  = this.jmService.findClosestStartMatch(this.route.getCoords()[0][0],this.route.getCoords()[0][1])
-      console.log(match);
+      let suggestedRoute = this.jmService.findClosestStartMatch(route.coords[0][0], route.coords[0][1]);
+      //console.log(suggestedRoute);
+     this.suggestedDrivers.push(suggestedRoute);
+    // console.log(this.suggestedDrivers);
     }else{
       this.routeSet = false;
     }
@@ -49,7 +50,7 @@ export class JourneyViewPage {
 
   addRoute(){
     if(this.routeSet){
-      this.navCtrl.push(CreateJourneyPage,  { route: this.route, isSet: true });
+      this.navCtrl.push(CreateJourneyPage,  { route: this.navParams.get('route'), isSet: true });
     }else{
     this.navCtrl.push(CreateJourneyPage);
     }

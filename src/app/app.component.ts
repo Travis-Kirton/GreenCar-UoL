@@ -8,6 +8,7 @@ import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { Platform, NavController, MenuController, Events } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 import firebase from 'firebase';
+import { EdgeStorageService } from '../services/edgeStorage';
 
 
 @Component({
@@ -29,7 +30,8 @@ export class MyApp{
   constructor(platform: Platform,
     private menuCtrl: MenuController,
     private authService: AuthService,
-    private events: Events) {
+    private events: Events,
+    private eSS: EdgeStorageService) {
     var config = {
       apiKey: "AIzaSyD3J_qrrKO3avQltX5mgtbA4ZY9QHbway4",
       authDomain: "greencar-uol.firebaseapp.com",

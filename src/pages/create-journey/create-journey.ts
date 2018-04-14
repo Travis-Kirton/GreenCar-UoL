@@ -38,6 +38,8 @@ export class CreateJourneyPage implements OnInit {
   private disableBtns: boolean = false;
   private currentDate: number = Date.now();
 
+  private suggestedRoads: string[] = [];
+  private showList: boolean = false;
 
   constructor(private loadingCtrl: LoadingController,
     private navParams: NavParams,
@@ -69,12 +71,12 @@ export class CreateJourneyPage implements OnInit {
         loading.dismiss();
         this.dijkstraRoute = this.dijkstra.getPathAsCoords();
         console.log(JSON.stringify(this.dijkstraRoute));
-        
+
         let journeys: any;
         this.journeyRetrievalService.getJourneys()
           .then(data => {
             journeys = data;
-            console.log(this.journeyMatchingService.findClosestStartMatch(journeys , this.dijkstraRoute[0][0], this.dijkstraRoute[0][1]));
+            console.log(this.journeyMatchingService.findClosestStartMatch(this.dijkstraRoute[0][0], this.dijkstraRoute[0][1]));
           });
         this.mapService.drawRoute(this.dijkstraRoute);
       });
@@ -109,7 +111,6 @@ export class CreateJourneyPage implements OnInit {
       });
 
       let route = new Route(this.currentDate, false, this.startingPoint, this.destination, this.dijkstraRoute, this.authService.getUsername());
-      console.log(route);
       this.navCtrl.push(JourneyViewPage, { route: route, isSet: true });
     }
   }
@@ -129,6 +130,12 @@ export class CreateJourneyPage implements OnInit {
       this.destination = this.edgeStorageService.getEdgeNameByNodeId(node);
     });
 
+    if (this.startingPoint == "Point Not Found" || this.destination == "Point Not Found") {
+      this.disableBtns = true;
+    } else {
+      this.disableBtns = false;
+    }
+
     this.mapService.initialise();
     if (this.navParams.get('isSet')) {
       let route = this.navParams.get('route');
@@ -138,10 +145,31 @@ export class CreateJourneyPage implements OnInit {
       this.disableBtns = true;
       this.mapService.drawRoute(this.dijkstraRoute);
     }
-
+    this.edgeStorageService.populateRoadNames();
   }
 
   onLocateMe() {
     this.mapService.locateMe();
+  }
+
+  onSearchChange(searchValue: string) {
+    this.suggestedRoads = this.edgeStorageService.getRoadNames();
+    // if(searchValue.length > 3){
+    //   this.suggestedRoads = [];
+    //   this.edgeStorageService.getRoadNames().forEach(name => {
+    //     if(name.startsWith(searchValue)){
+    //       console.log("Suggesting:..." + name);
+    //       this.suggestedRoads.push(name);
+    //     }
+    //   });
+
+    if (searchValue && searchValue.trim() != '') {
+      this.suggestedRoads = this.suggestedRoads.filter((item) => {
+        return (item.toLocaleLowerCase().indexOf(searchValue.toLocaleLowerCase()) > -1);
+      });
+      this.showList = true;
+    } else {
+      this.showList = false;
+    }
   }
 }

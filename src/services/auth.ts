@@ -32,7 +32,6 @@ export class AuthService {
   }
 
   setUserName(username: string){
-    console.log(username);
     this.username = username;
   }
 

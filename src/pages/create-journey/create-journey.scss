@@ -18,6 +18,14 @@
     .header-md {
        display: none;
       }
+
+      #searchbars{
+          margin-top:40px;
+      }
+      ion-searchbar {
+        background: transparent;
+      }
+
       #map {
           width:100%;
           height:75%;

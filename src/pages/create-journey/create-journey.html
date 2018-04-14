@@ -7,21 +7,48 @@
 
 
 <ion-content>
+    <div id="searchbars">
+    <ion-searchbar (ionInput)="onSearchChange($event.target.value)" [(ngModel)]="startingPoint" name="starting" placeholder="Starting point..." required [disabled]="disableBtns"></ion-searchbar>
+    <ion-searchbar (ionInput)="onSearchChange($event.target.value)"  [(ngModel)]="destination" name="destination" placeholder="Destination..." required [disabled]="disableBtns"></ion-searchbar>
+    <ion-list *ngIf="showList">
+      <ion-item *ngFor="let name of suggestedRoads">
+        {{ name }}
+      </ion-item>
+    </ion-list>
+    </div>
+
   <div id="map" class="map">
     <ion-fab bottom right>
       <button ion-fab mini (click)="onLocateMe()">
         <ion-icon name="compass" large></ion-icon>
       </button>
     </ion-fab>
+    <ion-fab bottom right>
+        <button ion-fab mini (click)="showRouteDijkstra()" [disabled]="disableBtns">
+          <ion-icon name="compass" large></ion-icon>
+        </button>
+      </ion-fab>
+      <ion-fab bottom right>
+          <button ion-fab mini (click)="saveRoute()" [disabled]="disableBtns">
+            <ion-icon name="compass" large></ion-icon>
+          </button>
+        </ion-fab>
   </div>
 
-  <ion-list>
+  <!-- 
+
+   <ion-list>
     <ion-item>
-      <ion-input type="text" [(ngModel)]="startingPoint" name="starting" placeholder="Starting point..." required [disabled]="disableBtns"></ion-input>
+      <ion-input type="text"  [(ngModel)]="startingPoint" name="starting" placeholder="Starting point..." required [disabled]="disableBtns"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-input type="text" [(ngModel)]="destination" name="destination" placeholder="Destination..." required [disabled]="disableBtns"></ion-input>
+      <ion-input type="text"  [(ngModel)]="destination" name="destination" placeholder="Destination..." required [disabled]="disableBtns"></ion-input>
     </ion-item>
   </ion-list>
+
+-->
+
+  
+
   <button ion-button block (click)="showRouteDijkstra()" [disabled]="disableBtns">Route</button>
   <button ion-button block (click)="saveRoute()" [disabled]="disableBtns">Save</button></ion-content>
