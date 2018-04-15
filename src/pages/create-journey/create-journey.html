@@ -8,31 +8,41 @@
 
 <ion-content>
     <div id="searchbars">
-    <ion-searchbar (ionInput)="onSearchChange($event.target.value)" [(ngModel)]="startingPoint" name="starting" placeholder="Starting point..." required [disabled]="disableBtns"></ion-searchbar>
-    <ion-searchbar (ionInput)="onSearchChange($event.target.value)"  [(ngModel)]="destination" name="destination" placeholder="Destination..." required [disabled]="disableBtns"></ion-searchbar>
+    <ion-searchbar 
+      (ionFocus)="onSearchBar('start')" 
+      (ionInput)="onSearchChange($event.target.value)" 
+      [(ngModel)]="startingPoint" 
+      name="starting" 
+      class="searchbar"
+      placeholder="Starting point..." 
+      required [disabled]="disableBtns"
+      (ionCancel)="onCancel($event)">
+    </ion-searchbar>
+    <ion-searchbar #searchbar 
+      (ionFocus)="onSearchBar('end')" 
+      (ionInput)="onSearchChange($event.target.value)"  
+      [(ngModel)]="destination" 
+      name="destination" 
+      class="searchbar"
+      placeholder="Destination..." 
+      required [disabled]="disableBtns">
+    </ion-searchbar>
+    </div>
     <ion-list *ngIf="showList">
-      <ion-item *ngFor="let name of suggestedRoads">
+      <ion-item *ngFor="let name of (suggestedRoads ? suggestedRoads.slice(0,3): []);" (click)="roadNameClicked(name)">
         {{ name }}
       </ion-item>
     </ion-list>
-    </div>
+    
+
 
   <div id="map" class="map">
     <ion-fab bottom right>
-      <button ion-fab mini (click)="onLocateMe()">
-        <ion-icon name="compass" large></ion-icon>
+      <button ion-fab mini  (click)="saveRoute()" [disabled]="disableBtns">
+        <ion-icon name="checkmark-circle" large></ion-icon>
       </button>
     </ion-fab>
-    <ion-fab bottom right>
-        <button ion-fab mini (click)="showRouteDijkstra()" [disabled]="disableBtns">
-          <ion-icon name="compass" large></ion-icon>
-        </button>
-      </ion-fab>
-      <ion-fab bottom right>
-          <button ion-fab mini (click)="saveRoute()" [disabled]="disableBtns">
-            <ion-icon name="compass" large></ion-icon>
-          </button>
-        </ion-fab>
+    <button ion-button block>Save</button>
   </div>
 
   <!-- 
@@ -50,5 +60,4 @@
 
   
 
-  <button ion-button block (click)="showRouteDijkstra()" [disabled]="disableBtns">Route</button>
-  <button ion-button block (click)="saveRoute()" [disabled]="disableBtns">Save</button></ion-content>
+</ion-content>

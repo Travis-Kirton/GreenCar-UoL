@@ -42,6 +42,20 @@ export class MapService {
 
   onLocationFound(e) {
     this.currentLocation = e;
+    if (this.currentLocation == undefined) {
+      let toast = this.toastCtrl.create({
+        message: 'Failed to get Location data',
+        duration: 3000,
+        position: 'bottom'
+      });
+      toast.present();
+    } else {
+      let currLoc = L.marker(this.currentLocation.latlng, { icon: this.currentLocIcon }).addTo(this.map);
+      this.map.panTo(this.currentLocation.latlng, {
+        animate: true,
+        duration: 0.5
+      });
+    }
   }
 
   onMapClick(e) {
@@ -91,22 +105,6 @@ export class MapService {
     return this.endPosition.asObservable();
   }
 
-  locateMe() {
-    if (this.currentLocation == undefined) {
-      let toast = this.toastCtrl.create({
-        message: 'Failed to get Location data',
-        duration: 3000,
-        position: 'bottom'
-      });
-      toast.present();
-    } else {
-      this.map.panTo(this.currentLocation.latlng, {
-        animate: true,
-        duration: 0.5
-      });
-    }
-  }
-
   getMap() {
     return this.map;
   }
@@ -141,6 +139,14 @@ export class MapService {
   endIcon = L.icon({
     iconUrl: '../assets/icon/end.png',
     iconSize: [38, 42],
+    iconAnchor: [20, 42],
+    popupAnchor: [-3, -76],
+    shadowSize: [68, 95],
+  });
+
+  currentLocIcon = L.icon({
+    iconUrl: '../assets/icon/pulse_dot.gif',
+    iconSize: [30, 30],
     iconAnchor: [20, 42],
     popupAnchor: [-3, -76],
     shadowSize: [68, 95],

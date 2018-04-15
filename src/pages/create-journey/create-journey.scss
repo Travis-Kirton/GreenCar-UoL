@@ -21,9 +21,29 @@
 
       #searchbars{
           margin-top:40px;
+          height:85px;
       }
+      ion-list{
+        max-height: 100px;
+
+        ion-item.item:hover{
+            background-color: rgb(72, 141, 101);
+            color:white;
+          }
+
+        ion-item.item:focus{
+            background-color: rgb(72, 141, 101);
+            color:white;
+        }
+      }
+
       ion-searchbar {
         background: transparent;
+        height:25px;
+      }
+
+      ion-searchbar:focus{
+          background: #25811F;
       }
 
       #map {

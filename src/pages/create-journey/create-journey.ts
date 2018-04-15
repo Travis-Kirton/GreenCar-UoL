@@ -1,5 +1,5 @@
 import { Route } from './../../models/route';
-import { AlertController, NavController, NavParams } from 'ionic-angular';
+import { AlertController, NavController, NavParams, Searchbar } from 'ionic-angular';
 import { AuthService } from './../../services/auth';
 import { LoadingController } from 'ionic-angular';
 import { Dijkstra } from './../../services/dijkstra';
@@ -10,7 +10,7 @@ import { Astar } from './../../services/astar';
 import { Edge } from './../../models/edge';
 import { RoutingService } from './../../services/routing';
 import { MapService } from './../../services/map';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { JourneyViewPage } from '../journey-view/journey-view';
 import { JourneyMatchingService } from '../../services/journeyMatching';
 import * as L from 'leaflet';
@@ -41,6 +41,10 @@ export class CreateJourneyPage implements OnInit {
   private suggestedRoads: string[] = [];
   private showList: boolean = false;
 
+  private searchbarName: string = "";
+
+  @ViewChild('searchbar') searchbar:Searchbar;
+
   constructor(private loadingCtrl: LoadingController,
     private navParams: NavParams,
     private routingService: RoutingService,
@@ -63,6 +67,16 @@ export class CreateJourneyPage implements OnInit {
     //   this.dijkstraRoute = this.astar.getPathAsCoords();
     //   this.mapService.drawRoute(this.dijkstraRoute);
     // });
+
+    if(this.startingPoint == "Point Not Found" || this.destination == "Point Not Found"){
+      const alert = this.alertCtrl.create({
+        title: 'Unknown Points',
+        message: 'Please Pick a Known Point',
+        buttons: ['Ok']
+      });
+      alert.present();
+    }else{
+
     let loading = this.loadingCtrl.create({
       content: "Calculating route..."
     });
@@ -82,6 +96,7 @@ export class CreateJourneyPage implements OnInit {
       });
     });
   }
+  }
 
   saveLatLng(data) {
     this.lat_lng_pairs = [];
@@ -98,21 +113,22 @@ export class CreateJourneyPage implements OnInit {
   }
 
   saveRoute() {
-    if (this.dijkstraRoute == []) {
-      const alert = this.alertCtrl.create({
-        title: 'Missing Route',
-        message: 'Please Pick a Route',
-        buttons: ['Ok']
-      });
-      alert.present();
-    } else {
-      const loading = this.loadingCtrl.create({
-        content: 'Saving...'
-      });
+    this.showRouteDijkstra();
+    // if (this.dijkstraRoute == []) {
+    //   const alert = this.alertCtrl.create({
+    //     title: 'Missing Route',
+    //     message: 'Please Pick a Route',
+    //     buttons: ['Ok']
+    //   });
+    //   alert.present();
+    // } else {
+    //   const loading = this.loadingCtrl.create({
+    //     content: 'Saving...'
+    //   });
 
-      let route = new Route(this.currentDate, false, this.startingPoint, this.destination, this.dijkstraRoute, this.authService.getUsername());
-      this.navCtrl.push(JourneyViewPage, { route: route, isSet: true });
-    }
+    //   let route = new Route(this.currentDate, false, this.startingPoint, this.destination, this.dijkstraRoute, this.authService.getUsername());
+    //   this.navCtrl.push(JourneyViewPage, { route: route, isSet: true });
+    // }
   }
 
   ngOnInit() {
@@ -130,12 +146,6 @@ export class CreateJourneyPage implements OnInit {
       this.destination = this.edgeStorageService.getEdgeNameByNodeId(node);
     });
 
-    if (this.startingPoint == "Point Not Found" || this.destination == "Point Not Found") {
-      this.disableBtns = true;
-    } else {
-      this.disableBtns = false;
-    }
-
     this.mapService.initialise();
     if (this.navParams.get('isSet')) {
       let route = this.navParams.get('route');
@@ -148,21 +158,8 @@ export class CreateJourneyPage implements OnInit {
     this.edgeStorageService.populateRoadNames();
   }
 
-  onLocateMe() {
-    this.mapService.locateMe();
-  }
-
   onSearchChange(searchValue: string) {
     this.suggestedRoads = this.edgeStorageService.getRoadNames();
-    // if(searchValue.length > 3){
-    //   this.suggestedRoads = [];
-    //   this.edgeStorageService.getRoadNames().forEach(name => {
-    //     if(name.startsWith(searchValue)){
-    //       console.log("Suggesting:..." + name);
-    //       this.suggestedRoads.push(name);
-    //     }
-    //   });
-
     if (searchValue && searchValue.trim() != '') {
       this.suggestedRoads = this.suggestedRoads.filter((item) => {
         return (item.toLocaleLowerCase().indexOf(searchValue.toLocaleLowerCase()) > -1);
@@ -170,6 +167,23 @@ export class CreateJourneyPage implements OnInit {
       this.showList = true;
     } else {
       this.showList = false;
+    }
+  }
+
+  onSearchBar(searchbar){
+    this.searchbarName = searchbar;
+  }
+
+  roadNameClicked(roadname) {
+    if (this.searchbarName == "start") {
+      this.startingPoint = roadname;
+      this.searchbar.setFocus();
+      this.showList = false;
+
+    } else if (this.searchbarName == "end") {
+      this.destination = roadname;
+      this.showList = false;
+
     }
   }
 }
