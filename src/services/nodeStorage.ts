@@ -2,7 +2,7 @@ import { RoutingService } from './routing';
 import { MapNode } from './../models/node';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Journey } from '../models/journey';
+import { Route } from '../models/route';
 
 @Injectable()
 export class NodeStorageService {
@@ -48,22 +48,20 @@ export class NodeStorageService {
     
   }
 
-  // findClosestJourneyCoords(arr: Journey[], lat, lon): Journey {
-  //   let currLat = 0;
-  //   let currLon = 0;
-  //   let matchedJourney: Journey;
-  //   arr.forEach(journey => {
-  //     let coords = journey.start;
-  //     if(this.calcDistance(lat,lon, coords[0], coords[1]) < this.calcDistance(lat, lon, currLat, currLon)){
-  //       currLat = coords[0];
-  //       currLon = coords[1];
-  //       matchedJourney = journey;
-  //     }
-  //   });
-  //   //console.log(matchedJourney.userName);
-  //   return matchedJourney;
-    
-  // }
+  findClosestJourneyCoords(arr: Route[], lat, lon): Route {
+    let currLat = 0;
+    let currLon = 0;
+    let matchedRoute: Route;
+    arr.forEach(route => {
+      let coords = route.getCoords()[0];
+      if(this.calcDistance(lat,lon, coords[0], coords[1]) < this.calcDistance(lat, lon, currLat, currLon)){
+        currLat = coords[0];
+        currLon = coords[1];
+        matchedRoute = route;
+      }
+    });
+    return matchedRoute;
+  }
 
 
   // Haversine formula for computing distances

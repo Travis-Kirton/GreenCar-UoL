@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { JourneyRetrievalService } from '../services/journeyRetrieval';
-import { Journey } from '../models/journey';
+import { Route } from '../models/route';
 import { NodeStorageService } from '../services/nodeStorage';
 import { MapNode } from '../models/node';
 
 @Injectable()
 export class JourneyMatchingService {
 
-    journeys: Journey[] = [];
+    routes: Route[] = [];
 
     constructor(private jrService: JourneyRetrievalService,
                 private nodeStorageService: NodeStorageService) {

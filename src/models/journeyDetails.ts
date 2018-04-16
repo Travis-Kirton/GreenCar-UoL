@@ -1,5 +1,0 @@
-export class JourneyDetails{
-    constructor(){
-        
-    }
-}

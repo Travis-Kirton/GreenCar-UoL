@@ -4,7 +4,6 @@ import { Route } from '../../models/route';
 import { RoutingService } from './../../services/routing';
 import { CreateJourneyPage } from '../create-journey/create-journey';
 import { AuthService } from '../../services/auth';
-import { Journey } from '../../models/journey';
 import { JourneyMatchingService } from '../../services/journeyMatching';
 import { AboutPage } from '../about/about';
 import { UserService } from '../../services/user';
@@ -32,8 +31,8 @@ export class JourneyViewPage {
   seatsAvailable: number;
   comment: string;
 
-  suggestedDrivers: Journey[] = [];
-  currentDriver: Journey[] = [];
+  suggestedDrivers: Route[] = [];
+  currentDriver: Route[] = [];
 
   daysOfWeek = {
     Mon: false,
