@@ -19,6 +19,7 @@ export class Route{
                   Sat: false,
                   Sun: false
                 },
+                private comment: string,
                 private luggageWeight?: number,
                 private seatsAvailable?: number){}
 
@@ -78,6 +79,14 @@ export class Route{
 
   getDisabled(): boolean{
     return this.disabled;
+  }
+
+  setComment(comment){
+    this.comment = comment;
+  }
+
+  getComment(): string{
+    return this.comment;
   }
 
 

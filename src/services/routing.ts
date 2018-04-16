@@ -22,7 +22,7 @@ export class RoutingService {
   disableRoute(index: number){
     this.routes[index].disabled = !this.routes[index].disabled;
     let toast = this.toastCtrl.create({
-      message: 'Disabled Route, click again to enable',
+      message: 'Disabled/Enabled Route',
       duration: 3000,
       position: 'bottom'
     });

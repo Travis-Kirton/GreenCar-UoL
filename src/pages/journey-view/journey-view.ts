@@ -30,6 +30,7 @@ export class JourneyViewPage {
   userName = this.authService.getUsername();
   luggageWeight: number;
   seatsAvailable: number;
+  comment: string;
 
   suggestedDrivers: Journey[] = [];
   currentDriver: Journey[] = [];
@@ -45,6 +46,7 @@ export class JourneyViewPage {
   }
 
   userRole: any;
+  private journeys: string = "journeys";
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -63,8 +65,8 @@ export class JourneyViewPage {
       this.end = this.navParams.get('destination')
       this.route = this.navParams.get('route')
       this.btnAddTitle = 'Edit Route';
-      let suggestedRoute = this.jmService.findClosestStartMatch(this.route[0][0], this.route[0][1]);
-      this.suggestedDrivers.push(suggestedRoute);
+      //let suggestedRoute = this.jmService.findClosestStartMatch(this.route[0][0], this.route[0][1]);
+      //this.suggestedDrivers.push(suggestedRoute);
     } else if (this.navParams.get('showRoute')) {
       let route = this.navParams.get('route');
       this.routeSet = true;
@@ -77,6 +79,7 @@ export class JourneyViewPage {
       this.daysOfWeek = route.daysOfWeek;
       this.luggageWeight = route.luggageWeight;
       this.seatsAvailable = route.seatsAvailable;
+      this.comment = route.comment;
     } else {
       this.routeSet = false;
     }
@@ -108,10 +111,10 @@ export class JourneyViewPage {
     }
 
     if (this.userRole.rider) {
-      let journey = new Route('unmatched', false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek, this.luggageWeight);
+      let journey = new Route('unmatched', false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek,this.comment, this.luggageWeight);
       this.routingService.addRoute(journey);
     }else if (this.userRole.driver){
-      let journey = new Route('unmatched',false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek, this.seatsAvailable);
+      let journey = new Route('unmatched',false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek,this.comment, this.seatsAvailable);
       this.routingService.addRoute(journey);
     }
 

@@ -94,12 +94,12 @@ export class CreateJourneyPage implements OnInit {
         this.dijkstraRoute = this.dijkstra.getPathAsCoords();
         console.log(JSON.stringify(this.dijkstraRoute));
 
-        let journeys: any;
-        this.journeyRetrievalService.getJourneys()
-          .then(data => {
-            journeys = data;
-            console.log(this.journeyMatchingService.findClosestStartMatch(this.dijkstraRoute[0][0], this.dijkstraRoute[0][1]));
-          });
+        // let journeys: any;
+        // this.journeyRetrievalService.getJourneys()
+        //   .then(data => {
+        //     journeys = data;
+        //     console.log(this.journeyMatchingService.findClosestStartMatch(this.dijkstraRoute[0][0], this.dijkstraRoute[0][1]));
+        //   });
         this.mapService.drawRoute(this.dijkstraRoute);
 
         if (this.dijkstraRoute == []) {

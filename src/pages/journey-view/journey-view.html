@@ -11,6 +11,22 @@
 </ion-header>
 
 <ion-content padding>
+
+    <div padding>
+        <ion-segment [(ngModel)]="journeys">
+          <ion-segment-button value="journeys">
+            Journey
+          </ion-segment-button>
+          <ion-segment-button value="allocation">
+            Allocation
+          </ion-segment-button>
+        </ion-segment>
+      </div>
+
+      <div [ngSwitch]="journeys">
+
+
+  <ion-list no-lines *ngSwitchCase="'journeys'">
   <p align="center" class="text-muted"> {{ routeSet == true ? 'Route Details:' : 'route missing. Add route below...' }}</p>
   <p class="journeyPara" *ngIf="routeSet">Start:
     <span>{{ start }}</span>
@@ -95,40 +111,59 @@
         </div>
       </ion-list>
 
-  <!-- 
-  <ion-list>
-    <ion-list-header text-align="center" *ngIf="suggestedDrivers?.length < 1">You have 0 suggested drivers</ion-list-header>
-  </ion-list>
-  -->
-
-  <ion-list *ngIf="currentDriver?.length > 0">
-    <ion-list-header>
-      Current Driver
-    </ion-list-header>
-    <ion-item>
-      <ion-avatar item-start style="zoom:1.4;">
-        <img src="../../assets/img/avatar-yoda.png">
-      </ion-avatar>
-    </ion-item>
-  </ion-list>
-
-  <!-- 
-  <ion-list *ngIf="suggestedDrivers?.length > 0">
-    <ion-list-header>
-      Suggested Drivers
-    </ion-list-header>
-    <ion-item *ngFor="let driver of suggestedDrivers; let i = index">
-      <ion-avatar item-start style="zoom:1.4;">
-        <img src="../../assets/img/avatar-han.png"> {{driver.username}}
-      </ion-avatar>
-    </ion-item>
-  </ion-list>
-
-  -->
+      <ion-item id="commentBox">
+          <ion-label>Journey Comment</ion-label>
+          <ion-textarea [(ngModel)]="comment" name="description" rows="3" columns="25" maxLength="500"></ion-textarea>
+      </ion-item>
 
   <ion-item no-lines text-center>
     <button default ion-button round outline color="danger" (click)="cancelJourney()">Cancel</button>
     <button default ion-button round outline (click)="addJourney()">Confirm</button>
   </ion-item>
+  </ion-list>
+
+
+  <ion-list no-lines *ngSwitchCase="'allocation'">
+
+    <p id="muted" align="center">please confirm journey for journey allocation</p>
+
+
+    <ion-card>
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="../../assets/img/avatar-poe.png">
+          </ion-avatar>
+          <h2>John Doe</h2>
+          <p>Posted: 15/04/2018</p>
+        </ion-item>
+
+        <ion-card-content>
+          <p>{{comment}}</p>
+          <br />
+          <h4>Route Details</h4>
+          <p>From: <span>{{start}}</span></p>
+          <p>To: <span>{{end}}</span></p>
+          <p>pick up: <span>{{myTime}}</span></p>
+        </ion-card-content>
+      
+        <ion-row>
+          <ion-col>
+            <button ion-button icon-left clear small>
+              <ion-icon name="star"></ion-icon>
+              <div>4 stars</div>
+            </button>   
+          </ion-col>
+          <ion-col>
+            <button id="joinBtn" ion-button outline small right>
+             request to join
+            </button>
+          </ion-col>
+        </ion-row>
+      
+      </ion-card>
+
+
+  </ion-list>
+  </div>
 
 </ion-content>

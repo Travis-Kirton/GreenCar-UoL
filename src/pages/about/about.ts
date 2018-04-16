@@ -41,17 +41,8 @@ export class AboutPage {
   }
 
   ionViewDidLoad() {
-    // check role and load specific lists
+    //load specific lists
     this.loadRoutes();
-    let t0 = performance.now();
-    this.journeyRetrieval.getJourneys()
-      .then((journeys) => {
-        let t1 = performance.now();
-        console.log(`Journeys retrieved in: ${(t1 - t0)}ms`);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   }
 
   private loadRoutes() {

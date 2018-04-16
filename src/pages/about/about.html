@@ -11,20 +11,8 @@
 </ion-header>
 
 <ion-content padding>
-
-  <div padding>
-    <ion-segment [(ngModel)]="journeys">
-      <ion-segment-button value="createdJourneys">
-        Created Journeys
-      </ion-segment-button>
-      <ion-segment-button value="suggestedJourneys">
-        Suggested Journeys
-      </ion-segment-button>
-    </ion-segment>
-  </div>
-
-  <div [ngSwitch]="journeys">
-    <ion-list no-lines *ngSwitchCase="'createdJourneys'">
+      <ion-list-header align="center">journeys</ion-list-header>
+      <ion-list>
       <ion-item-sliding *ngFor="let route of routes; let i = index">
 
         <ion-item (click)="showRoute(route, i)">
@@ -35,8 +23,6 @@
           <h4>Route Details</h4>
           <p>From: {{route.start}}</p>
           <p>To: {{route.end}}</p>
-
-          
           <ion-icon [style.color]="changeCheckColour(route.status, route.disabled)" name="checkmark-circle" item-right></ion-icon>
         </ion-item>
 
@@ -49,29 +35,9 @@
             </button>
         </ion-item-options>
       </ion-item-sliding>
+      </ion-list>
       <button ion-button block (click)="createJourney()">Create Journey</button>
-    </ion-list>
 
-    <ion-list no-lines *ngSwitchCase="'suggestedJourneys'">
-      <ion-item-sliding *ngFor="let route of routes; let i = index">
 
-        <ion-item (click)="showRoute(route, i)">
-          <ion-avatar item-start>
-            <img src="../../assets/img/avatar-leia.png">
-          </ion-avatar>
-          <p class="dateAdded text-muted">{{route.dateBooked | date:'dd-MMM'}}</p>
-          <h4>Route Details</h4>
-          <p>From: {{route.start}}</p>
-          <p>To: {{route.end}}</p>   
-        </ion-item>
-
-        <ion-item-options side="right">
-          <button color="danger" ion-button icon-only (click)="routingService.removeRoute(i)">
-            <ion-icon name="trash"></ion-icon>
-          </button>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
-  </div>
-
+      
 </ion-content>
