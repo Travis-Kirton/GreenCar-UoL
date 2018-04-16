@@ -3,8 +3,8 @@
     <ion-title>Journey Details</ion-title>
     <ion-buttons left>
       <button ion-button icon-only menuToggle>
-          <ion-icon name="menu"></ion-icon>
-        </button>
+        <ion-icon name="menu"></ion-icon>
+      </button>
     </ion-buttons>
   </ion-navbar>
 
@@ -12,20 +12,71 @@
 
 <ion-content padding>
   <p align="center" class="text-muted"> {{ routeSet == true ? 'Route Details:' : 'route missing. Add route below...' }}</p>
+  <p class="journeyPara" *ngIf="routeSet">Start:
+    <span>{{ start }}</span>
+  </p>
+  <p class="journeyPara" *ngIf="routeSet">Destination:
+    <span>{{ end }}</span>
+  </p>
 
-  <p>{{ start }}</p>
-  <p>{{ end }}</p>
   <ion-item no-lines text-center>
-      <button default ion-button round outline (click)="addRoute()">{{btnAddTitle}}</button>
+    <button default ion-button round outline (click)="addRoute()">{{btnAddTitle}}</button>
   </ion-item>
 
+  <ion-item>
+    <ion-label class="datetime">Start Date</ion-label>
+    <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="myDate"></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label class="datetime">Pick Up Time</ion-label>
+    <ion-datetime displayFormat="HH:mm" [(ngModel)]="myTime"></ion-datetime>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Repeating Journey</ion-label>
+    <ion-toggle [(ngModel)]="repeating"></ion-toggle>
+  </ion-item>
+
+  <ion-list id="daysOfWeek" *ngIf="repeating">
+    <ion-item>
+      <ion-checkbox [(ngModel)]="daysOfWeek.Mon"></ion-checkbox>
+      <ion-label>Monday</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-checkbox [(ngModel)]="daysOfWeek.Tue"></ion-checkbox>
+      <ion-label>Tuesday</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-checkbox [(ngModel)]="daysOfWeek.Wed"></ion-checkbox>
+      <ion-label>Wednesday</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-checkbox [(ngModel)]="daysOfWeek.Thu"></ion-checkbox>
+      <ion-label>Thursday</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-checkbox [(ngModel)]="daysOfWeek.Fri"></ion-checkbox>
+      <ion-label>Friday</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-checkbox [(ngModel)]="daysOfWeek.Sat"></ion-checkbox>
+      <ion-label>Saturday</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-checkbox [(ngModel)]="daysOfWeek.Sun"></ion-checkbox>
+      <ion-label>Sunday</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- 
   <ion-list>
     <ion-list-header text-align="center" *ngIf="suggestedDrivers?.length < 1">You have 0 suggested drivers</ion-list-header>
   </ion-list>
+  -->
 
   <ion-list *ngIf="currentDriver?.length > 0">
     <ion-list-header>
-        Current Driver
+      Current Driver
     </ion-list-header>
     <ion-item>
       <ion-avatar item-start style="zoom:1.4;">
@@ -34,20 +85,22 @@
     </ion-item>
   </ion-list>
 
-    <ion-list  *ngIf="suggestedDrivers?.length > 0">
+  <!-- 
+  <ion-list *ngIf="suggestedDrivers?.length > 0">
     <ion-list-header>
-        Suggested Drivers
+      Suggested Drivers
     </ion-list-header>
     <ion-item *ngFor="let driver of suggestedDrivers; let i = index">
       <ion-avatar item-start style="zoom:1.4;">
-        <img src="../../assets/img/avatar-han.png">
-        {{driver.username}}
+        <img src="../../assets/img/avatar-han.png"> {{driver.username}}
       </ion-avatar>
     </ion-item>
   </ion-list>
 
+  -->
+
   <ion-item no-lines text-center>
-    <button default ion-button round outline color="danger"(click)="cancelJourney()">Cancel</button>
+    <button default ion-button round outline color="danger" (click)="cancelJourney()">Cancel</button>
     <button default ion-button round outline (click)="addJourney()">Confirm</button>
   </ion-item>
 

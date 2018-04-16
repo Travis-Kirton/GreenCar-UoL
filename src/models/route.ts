@@ -1,11 +1,22 @@
 export class Route{
 
     constructor(private dateBooked: number,
+                private startDate: number,
+                private pickUpTime: number,
                 private matchedWithDriver: boolean,
                 private start:string,
                 private end: string,
                 private coords: number[][],
-                private username: string){}
+                private username: string,
+                private daysOfWeek = {
+                  Mon: false,
+                  Tue: false,
+                  Wed: false,
+                  Thu: false,
+                  Fri: false,
+                  Sat: false,
+                  Sun: false
+                }){}
 
 
 
@@ -39,6 +50,18 @@ export class Route{
 
   getUserName(): string{
     return this.username;
+  }
+
+  getstartDate(): number{
+    return this.startDate
+  }
+
+  getPickUpTime(): number{
+    return this.pickUpTime;
+  }
+
+  getdaysOfWeek(): object{
+    return this.daysOfWeek;
   }
 
 

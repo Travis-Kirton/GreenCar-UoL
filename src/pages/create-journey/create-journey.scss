@@ -13,6 +13,7 @@
     ion-header span.back-button-text.back-button-text-ios {
        color: #25811F;
        font-weight:350px;
+       padding:0;
     }
 
     .header-md {
@@ -20,7 +21,6 @@
       }
 
       #searchbars{
-          margin-top:40px;
           height:85px;
       }
       ion-list{
@@ -40,10 +40,6 @@
       ion-searchbar {
         background: transparent;
         height:25px;
-      }
-
-      ion-searchbar:focus{
-          background: #25811F;
       }
 
       #map {

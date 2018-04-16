@@ -28,8 +28,8 @@ export class CreateJourneyPage implements OnInit {
   public opacity = 1.0;
   public width = 3;
 
-  startingPoint: string;
-  destination: string;
+  private startingPoint: string;
+  private destination: string;
 
   lat_lng: number[] = [];
   lat_lng_pairs: number[][] = [];
@@ -42,6 +42,7 @@ export class CreateJourneyPage implements OnInit {
   private showList: boolean = false;
 
   private searchbarName: string = "";
+  
 
   @ViewChild('searchbar') searchbar:Searchbar;
 
@@ -59,7 +60,7 @@ export class CreateJourneyPage implements OnInit {
     private journeyMatchingService: JourneyMatchingService,
     private journeyRetrievalService: JourneyRetrievalService) { }
 
-  showRouteDijkstra() {
+  saveRoute() {
     // e.g. 20812 -> 9657
     //this.edgeStorageService.demoSearchingNode();
     // this.astar.performAstar(this.startingPoint, this.destination).then(() => {
@@ -71,7 +72,14 @@ export class CreateJourneyPage implements OnInit {
     if(this.startingPoint == "Point Not Found" || this.destination == "Point Not Found"){
       const alert = this.alertCtrl.create({
         title: 'Unknown Points',
-        message: 'Please Pick a Known Point',
+        message: 'Please Pick 2 Known Roads',
+        buttons: ['Ok']
+      });
+      alert.present();
+    }else if(this.startingPoint.toLowerCase() == this.destination.toLowerCase()){
+      const alert = this.alertCtrl.create({
+        title: 'Incorrect Destination',
+        message: 'Start & End cannot be the same',
         buttons: ['Ok']
       });
       alert.present();
@@ -93,6 +101,26 @@ export class CreateJourneyPage implements OnInit {
             console.log(this.journeyMatchingService.findClosestStartMatch(this.dijkstraRoute[0][0], this.dijkstraRoute[0][1]));
           });
         this.mapService.drawRoute(this.dijkstraRoute);
+
+        if (this.dijkstraRoute == []) {
+          const alert = this.alertCtrl.create({
+            title: 'Missing Route',
+            message: 'Please Pick a Route',
+            buttons: ['Ok']
+          });
+          alert.present();
+        } else {
+          const loading = this.loadingCtrl.create({
+            content: 'Saving...'
+          });
+    
+          let start = this.startingPoint;
+          let destination = this.destination;
+          let route = this.dijkstraRoute;
+          let userName = this.authService.getUsername();
+          //let route = new Route(this.currentDate, false, this.startingPoint, this.destination, this.dijkstraRoute, this.authService.getUsername());
+          this.navCtrl.setRoot(JourneyViewPage, { start: this.startingPoint, destination: this.destination, route: this.dijkstraRoute, isSet: true });
+        }
       });
     });
   }
@@ -112,23 +140,8 @@ export class CreateJourneyPage implements OnInit {
     });
   }
 
-  saveRoute() {
-    this.showRouteDijkstra();
-    // if (this.dijkstraRoute == []) {
-    //   const alert = this.alertCtrl.create({
-    //     title: 'Missing Route',
-    //     message: 'Please Pick a Route',
-    //     buttons: ['Ok']
-    //   });
-    //   alert.present();
-    // } else {
-    //   const loading = this.loadingCtrl.create({
-    //     content: 'Saving...'
-    //   });
-
-    //   let route = new Route(this.currentDate, false, this.startingPoint, this.destination, this.dijkstraRoute, this.authService.getUsername());
-    //   this.navCtrl.push(JourneyViewPage, { route: route, isSet: true });
-    // }
+  cancel(){
+    this.navCtrl.pop();
   }
 
   ngOnInit() {

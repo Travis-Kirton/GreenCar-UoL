@@ -6,6 +6,7 @@ import { CreateJourneyPage } from '../create-journey/create-journey';
 import { AuthService } from '../../services/auth';
 import { Journey } from '../../models/journey';
 import { JourneyMatchingService } from '../../services/journeyMatching';
+import { AboutPage } from '../about/about';
 
 
 @Component({
@@ -14,14 +15,29 @@ import { JourneyMatchingService } from '../../services/journeyMatching';
 })
 export class JourneyViewPage {
 
-  start: String = '';
-  end: String = ''
+  start: string = '';
+  end: string = ''
   duration: number = 15;
   routeSet: boolean = false;
   btnAddTitle = 'Add Route';
+  myDate: number;
+  myTime: number;
+  repeating: boolean = false;
+  route: number[][] = [];
+  userName = this.authService.getUsername();
 
   suggestedDrivers: Journey[] = [];
   currentDriver: Journey[] = [];
+
+  daysOfWeek = {
+    Mon: false,
+    Tue: false,
+    Wed: false,
+    Thu: false,
+    Fri: false,
+    Sat: false,
+    Sun: false
+  }
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams, 
@@ -35,22 +51,24 @@ export class JourneyViewPage {
   ngOnInit() {
     if (this.navParams.get('isSet')) {
       this.routeSet = true;
-      let route = this.navParams.get('route');
-      this.start = route.start;
-      this.end = route.end;
+      this.start = this.navParams.get('start');
+      this.end = this.navParams.get('destination');
+      this.route = this.navParams.get('route');
       this.btnAddTitle = 'Edit Route';
-      let suggestedRoute = this.jmService.findClosestStartMatch(route.coords[0][0], route.coords[0][1]);
-      //console.log(suggestedRoute);
+      let suggestedRoute = this.jmService.findClosestStartMatch(this.route[0][0], this.route[0][1]);
+
      this.suggestedDrivers.push(suggestedRoute);
-    // console.log(this.suggestedDrivers);
     }else{
       this.routeSet = false;
     }
+
+    console.log(this.myDate);
   }
 
   addRoute(){
     if(this.routeSet){
-      this.navCtrl.push(CreateJourneyPage,  { route: this.navParams.get('route'), isSet: true });
+      let journey = new Route(Date.now(), this.myDate, this.myTime, false, this.start, this.end, this.route, this.userName, this.daysOfWeek)
+      this.navCtrl.push(CreateJourneyPage,  { journey: journey, isSet: true });
     }else{
     this.navCtrl.push(CreateJourneyPage);
     }
@@ -76,7 +94,7 @@ export class JourneyViewPage {
   }
 
   cancelJourney(){
-    this.navCtrl.popToRoot();
+    this.navCtrl.setRoot(AboutPage);
   }
 
   showRoute(route: Route, index: number) {

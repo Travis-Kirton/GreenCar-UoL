@@ -1,3 +1,52 @@
-page-journey-view {
+.ios, .md {
+    page-journey-view {
 
+        .journeyPara{
+            font-weight: 250;
+            text-decoration: underline;
+            padding-left: 5%;
+        }
+        .journeyPara span{
+            background-color:rgb(234, 247, 234);
+            color: #64bb64;
+            padding:4px;
+            border-radius:3px;
+            border:1px solid #64bb64;
+            float:right;
+        }
+
+        ion-label{
+            font-size: 13px;
+        }
+
+        #daysOfWeek ion-item{
+            background-color:rgb(234, 247, 234);
+            color: #64bb64;
+            padding:4px;
+            border-radius:3px;
+
+            opacity: 1;
+            animation-name: fadeInOpacity;
+            animation-iteration-count: 1;
+            animation-timing-function: ease-in-out;
+            animation-duration: 0.2s;
+        }
+
+        ion-datetime{
+            background-color:rgb(234, 247, 234);
+            color: #64bb64;
+            padding:4px;
+            border-radius:3px;
+            border:1px solid #64bb64;
+        }
+    }
+
+    @keyframes fadeInOpacity {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
 }
