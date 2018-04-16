@@ -19,6 +19,14 @@
             font-size: 13px;
         }
 
+        ion-list-header{
+            font-size: 13px;
+        }
+
+        #repeatingToggle{
+            margin-bottom:2%;
+        }
+
         #daysOfWeek ion-item{
             background-color:rgb(234, 247, 234);
             color: #64bb64;
@@ -31,6 +39,21 @@
             animation-timing-function: ease-in-out;
             animation-duration: 0.2s;
         }
+
+        #luggageWeight{
+            background-color:rgb(234, 247, 234);
+            color: #64bb64;
+            padding:4px;
+            border-radius:3px;
+            width:90%;
+            margin: 0 auto;
+
+            ion-label{
+                margin-left:5%;
+            }
+        }
+
+
 
         ion-datetime{
             background-color:rgb(234, 247, 234);

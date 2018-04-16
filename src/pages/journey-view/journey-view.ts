@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, LoadingController, AlertController} from 'ionic-angular';
+import { NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { Route } from '../../models/route';
 import { RoutingService } from './../../services/routing';
 import { CreateJourneyPage } from '../create-journey/create-journey';
@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth';
 import { Journey } from '../../models/journey';
 import { JourneyMatchingService } from '../../services/journeyMatching';
 import { AboutPage } from '../about/about';
+import { UserService } from '../../services/user';
 
 
 @Component({
@@ -14,6 +15,8 @@ import { AboutPage } from '../about/about';
   templateUrl: 'journey-view.html',
 })
 export class JourneyViewPage {
+
+  userType: any;
 
   start: string = '';
   end: string = ''
@@ -25,6 +28,8 @@ export class JourneyViewPage {
   repeating: boolean = false;
   route: number[][] = [];
   userName = this.authService.getUsername();
+  luggageWeight: number;
+  seatsAvailable: number;
 
   suggestedDrivers: Journey[] = [];
   currentDriver: Journey[] = [];
@@ -39,66 +44,94 @@ export class JourneyViewPage {
     Sun: false
   }
 
-  constructor(public navCtrl: NavController, 
-              public navParams: NavParams, 
-              public authService : AuthService,
-              public routingService: RoutingService,
-              public alertCtrl: AlertController,
-              public loadingCtrl: LoadingController,
-              public jmService: JourneyMatchingService) {
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    public authService: AuthService,
+    public routingService: RoutingService,
+    public userService: UserService,
+    public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController,
+    public jmService: JourneyMatchingService) {
   }
 
   ngOnInit() {
     if (this.navParams.get('isSet')) {
       this.routeSet = true;
       this.start = this.navParams.get('start');
-      this.end = this.navParams.get('destination');
-      this.route = this.navParams.get('route');
+      this.end = this.navParams.get('destination')
+      this.route = this.navParams.get('route')
       this.btnAddTitle = 'Edit Route';
       let suggestedRoute = this.jmService.findClosestStartMatch(this.route[0][0], this.route[0][1]);
-
-     this.suggestedDrivers.push(suggestedRoute);
-    }else{
+      this.suggestedDrivers.push(suggestedRoute);
+    } else if (this.navParams.get('showRoute')) {
+      let route = this.navParams.get('route');
+      this.routeSet = true;
+      this.start = route.start;
+      this.end = route.end;
+      this.route = route.coords;
+      this.myDate = route.startDate;
+      this.myTime = route.pickUpTime;
+      this.repeating = route.repeating;
+      this.daysOfWeek = route.daysOfWeek;
+      this.luggageWeight = route.luggageWeight;
+      this.seatsAvailable = route.seatsAvailable;
+    } else {
       this.routeSet = false;
     }
-
-    console.log(this.myDate);
   }
 
-  addRoute(){
-    if(this.routeSet){
-      let journey = new Route(Date.now(), this.myDate, this.myTime, false, this.start, this.end, this.route, this.userName, this.daysOfWeek)
-      this.navCtrl.push(CreateJourneyPage,  { journey: journey, isSet: true });
-    }else{
-    this.navCtrl.push(CreateJourneyPage);
+  addRoute() {
+    if (this.routeSet) {
+      this.navCtrl.push(CreateJourneyPage, { route: this.route, start: this.start, end: this.end, isSet: true });
+    } else {
+      this.navCtrl.push(CreateJourneyPage);
     }
   }
 
-  addJourney(){
+  addJourney() {
     const loading = this.loadingCtrl.create({
       content: 'Saving...'
     });
-    console.log(this.navParams.get('route'));
-    this.routingService.addRoute(this.navParams.get('route'));
-        this.authService.getActiveUser().getToken().then((token => {
-          this.routingService.storeRoutes(token)
-            .subscribe(
-            () => loading.dismiss(),
-            error => {
-              loading.dismiss();
-              this.handleError(error.json().error);
-            }
-            );
-          this.navCtrl.popToRoot();
-        }));
+
+    if (!this.repeating) {
+      this.daysOfWeek.Mon = false;
+      this.daysOfWeek.Tue = false;
+      this.daysOfWeek.Wed = false;
+      this.daysOfWeek.Thu = false;
+      this.daysOfWeek.Fri = false;
+      this.daysOfWeek.Sat = false;
+      this.daysOfWeek.Sun = false;
+    }
+
+    if (this.userService.getUserRole().rider) {
+      let journey = new Route(Date.now(), this.myDate, this.myTime, false, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek, this.luggageWeight);
+      this.routingService.addRoute(journey);
+    }else if (this.userService.getUserRole().driver){
+      let journey = new Route(Date.now(), this.myDate, this.myTime, false, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek, this.seatsAvailable);
+      this.routingService.addRoute(journey);
+    }
+
+    this.authService.getActiveUser().getToken().then((token => {
+      this.routingService.storeRoutes(token)
+        .subscribe(
+          () => {
+            loading.dismiss()
+            this.navCtrl.setRoot(AboutPage);
+          },
+          error => {
+            loading.dismiss();
+            this.handleError(error.json().error);
+          }
+        );
+    }));
   }
 
-  cancelJourney(){
+  cancelJourney() {
     this.navCtrl.setRoot(AboutPage);
   }
 
   showRoute(route: Route, index: number) {
-    this.navCtrl.push(CreateJourneyPage, { route: route, isSet: true});
+    this.navCtrl.push(CreateJourneyPage, { route: route, isSet: true });
   }
 
   private handleError(errorMessage: string) {

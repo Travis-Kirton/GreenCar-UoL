@@ -23,7 +23,7 @@ describe('Routing between 2 Roads', () => {
 
   describe('Routing between 2 roads performance', () => {
     it('should return a time-taken value in ms', () => {
-      component.showRouteDijkstra();
+      component.saveRoute();
     })
   })
 });

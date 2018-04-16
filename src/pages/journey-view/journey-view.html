@@ -32,7 +32,7 @@
     <ion-datetime displayFormat="HH:mm" [(ngModel)]="myTime"></ion-datetime>
   </ion-item>
 
-  <ion-item>
+  <ion-item id="repeatingToggle">
     <ion-label>Repeating Journey</ion-label>
     <ion-toggle [(ngModel)]="repeating"></ion-toggle>
   </ion-item>
@@ -67,6 +67,33 @@
       <ion-label>Sunday</ion-label>
     </ion-item>
   </ion-list>
+
+  <ion-list id="luggageWeight">
+      <div *ngIf="this.userService.getUserRole().rider">
+      <ion-label>
+          Luggage Weight (kg)
+          <ion-badge item-end>{{luggageWeight}} kg</ion-badge>
+    </ion-label>
+      <ion-item>
+          <ion-range min="0" max="10" [(ngModel)]="luggageWeight" color="secondary">
+            <ion-label range-left>0</ion-label>
+            <ion-label range-right>10</ion-label>
+          </ion-range>
+        </ion-item>
+        </div>
+        <div *ngIf="this.userService.getUserRole().driver">
+        <ion-label>
+            Seats Available
+            <ion-badge item-end>{{seatsAvailable}}</ion-badge>
+      </ion-label>
+        <ion-item>
+            <ion-range min="0" max="7" [(ngModel)]="seatsAvailable" color="secondary">
+              <ion-label range-left>0</ion-label>
+              <ion-label range-right>7</ion-label>
+            </ion-range>
+          </ion-item>
+        </div>
+      </ion-list>
 
   <!-- 
   <ion-list>

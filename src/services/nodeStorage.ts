@@ -69,7 +69,7 @@ export class NodeStorageService {
   // Haversine formula for computing distances
   //https://rosettacode.org/wiki/Haversine_formula#JavaScript
   calcDistance(lat1, lon1, lat2, lon2){
-    let R = 6371;
+    let R = 3958.75; // Miles = 3958.75, KM = 6372.8
     let dLat = this.toRad(lat2-lat1);
     let dLon = this.toRad(lon2-lon1);
     lat1 = this.toRad(lat1);

@@ -5,16 +5,17 @@ import { SigninPage } from './../pages/signin/signin';
 import { TabsPage } from './../pages/tabs/tabs';
 import { AuthService } from './../services/auth';
 import { Component, OnInit, Injector, ViewChild } from '@angular/core';
-import { Platform, NavController, MenuController, Events } from 'ionic-angular';
+import { Platform, NavController, MenuController, Events, AlertController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 import firebase from 'firebase';
 import { EdgeStorageService } from '../services/edgeStorage';
+import { UserService } from '../services/user';
 
 
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp{
+export class MyApp {
 
   signinPage = SigninPage;
   signupPage = SignupPage;
@@ -23,14 +24,15 @@ export class MyApp{
   isAuthenticated = false;
 
   userName: string;
-  userType: string = '';
 
   @ViewChild('nav') nav: NavController;
 
   constructor(platform: Platform,
     private menuCtrl: MenuController,
+    private alertCtrl: AlertController,
     private authService: AuthService,
     private events: Events,
+    private userService: UserService,
     private eSS: EdgeStorageService) {
     var config = {
       apiKey: "AIzaSyD3J_qrrKO3avQltX5mgtbA4ZY9QHbway4",

@@ -117,7 +117,6 @@ export class CreateJourneyPage implements OnInit {
           let start = this.startingPoint;
           let destination = this.destination;
           let route = this.dijkstraRoute;
-          let userName = this.authService.getUsername();
           //let route = new Route(this.currentDate, false, this.startingPoint, this.destination, this.dijkstraRoute, this.authService.getUsername());
           this.navCtrl.setRoot(JourneyViewPage, { start: this.startingPoint, destination: this.destination, route: this.dijkstraRoute, isSet: true });
         }
@@ -161,10 +160,9 @@ export class CreateJourneyPage implements OnInit {
 
     this.mapService.initialise();
     if (this.navParams.get('isSet')) {
-      let route = this.navParams.get('route');
-      this.dijkstraRoute = route.coords;
-      this.startingPoint = route.start;
-      this.destination = route.end;
+      this.dijkstraRoute = this.navParams.get('route');
+      this.startingPoint = this.navParams.get('start')
+      this.destination = this.navParams.get('end')
       this.disableBtns = true;
       this.mapService.drawRoute(this.dijkstraRoute);
     }

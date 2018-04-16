@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { JourneyRetrievalService } from '../../services/journeyRetrieval';
 import { JourneyMatchingService } from '../../services/journeyMatching';
+import { UserService } from '../../services/user';
 
 @Component({
   selector: 'page-about',
@@ -16,12 +17,14 @@ import { JourneyMatchingService } from '../../services/journeyMatching';
 export class AboutPage {
 
   routes: Route[];
+  userRole: any;
 
   private journeys: string = "createdJourneys";
 
 
   constructor(public navCtrl: NavController,
     private authService: AuthService,
+    private userService: UserService,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private routingService: RoutingService,
@@ -31,14 +34,13 @@ export class AboutPage {
 
   }
 
-  createJourney() {
+  private createJourney() {
     this.navCtrl.push(JourneyViewPage);
   }
 
   ionViewDidLoad() {
     // check role and load specific lists
     this.loadRoutes();
-
     let t0 = performance.now();
     this.journeyRetrieval.getJourneys()
       .then((journeys) => {
@@ -47,10 +49,10 @@ export class AboutPage {
       })
       .catch((error) => {
         console.log(error);
-      })
+      });
   }
 
-  loadRoutes() {
+  private loadRoutes(){
     const loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
@@ -76,6 +78,8 @@ export class AboutPage {
       });
   }
 
+  
+
   private handleError(errorMessage: string) {
     const alert = this.alertCtrl.create({
       title: 'An error occurred!',
@@ -85,8 +89,8 @@ export class AboutPage {
     alert.present();
   }
 
-  showRoute(route: Route) {
-    this.navCtrl.push(JourneyViewPage, { route: route, isSet: true});
+  private showRoute(route: Route) {
+    this.navCtrl.push(JourneyViewPage, { route: route, showRoute: true});
   }
 
 }

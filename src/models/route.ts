@@ -8,6 +8,7 @@ export class Route{
                 private end: string,
                 private coords: number[][],
                 private username: string,
+                private repeating: boolean,
                 private daysOfWeek = {
                   Mon: false,
                   Tue: false,
@@ -16,7 +17,9 @@ export class Route{
                   Fri: false,
                   Sat: false,
                   Sun: false
-                }){}
+                },
+                private luggageWeight?: number,
+                private seatsAvailable?: number){}
 
 
 
@@ -62,6 +65,10 @@ export class Route{
 
   getdaysOfWeek(): object{
     return this.daysOfWeek;
+  }
+
+  getLuggageWeight(): number{
+    return this.luggageWeight;
   }
 
 
