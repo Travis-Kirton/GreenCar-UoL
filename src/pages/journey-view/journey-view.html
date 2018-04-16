@@ -69,7 +69,7 @@
   </ion-list>
 
   <ion-list id="luggageWeight">
-      <div *ngIf="this.userService.getUserRole().rider">
+      <div  *ngIf="userRole.rider">
       <ion-label>
           Luggage Weight (kg)
           <ion-badge item-end>{{luggageWeight}} kg</ion-badge>
@@ -81,7 +81,7 @@
           </ion-range>
         </ion-item>
         </div>
-        <div *ngIf="this.userService.getUserRole().driver">
+        <div *ngIf="userRole.driver">
         <ion-label>
             Seats Available
             <ion-badge item-end>{{seatsAvailable}}</ion-badge>

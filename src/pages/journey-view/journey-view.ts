@@ -44,6 +44,8 @@ export class JourneyViewPage {
     Sun: false
   }
 
+  userRole: any;
+
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public authService: AuthService,
@@ -78,6 +80,8 @@ export class JourneyViewPage {
     } else {
       this.routeSet = false;
     }
+
+    this.userRole = this.userService.getUserRole();
   }
 
   addRoute() {
@@ -103,11 +107,11 @@ export class JourneyViewPage {
       this.daysOfWeek.Sun = false;
     }
 
-    if (this.userService.getUserRole().rider) {
-      let journey = new Route(Date.now(), this.myDate, this.myTime, false, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek, this.luggageWeight);
+    if (this.userRole.rider) {
+      let journey = new Route('unmatched', false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek, this.luggageWeight);
       this.routingService.addRoute(journey);
-    }else if (this.userService.getUserRole().driver){
-      let journey = new Route(Date.now(), this.myDate, this.myTime, false, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek, this.seatsAvailable);
+    }else if (this.userRole.driver){
+      let journey = new Route('unmatched',false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek, this.seatsAvailable);
       this.routingService.addRoute(journey);
     }
 

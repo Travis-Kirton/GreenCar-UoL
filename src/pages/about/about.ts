@@ -19,6 +19,8 @@ export class AboutPage {
   routes: Route[];
   userRole: any;
 
+  matchedColour = '#000';
+
   private journeys: string = "createdJourneys";
 
 
@@ -52,33 +54,33 @@ export class AboutPage {
       });
   }
 
-  private loadRoutes(){
+  private loadRoutes() {
     const loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
     loading.present();
     this.authService.getActiveUser().getIdToken()
       .then(
-      (token: string) => {
-        this.routingService.fetchRoutes(token)
-          .subscribe(
-          (route: Route[]) => {
-            loading.dismiss();
-            if (route) {
-              this.routes = route;
-            } else {
-              this.routes = [];
-            }
-          },
-          error => {
-            loading.dismiss();
-            this.handleError(error.json().error);
-          }
-          );
-      });
+        (token: string) => {
+          this.routingService.fetchRoutes(token)
+            .subscribe(
+              (route: Route[]) => {
+                loading.dismiss();
+                if (route) {
+                  this.routes = route;
+                } else {
+                  this.routes = [];
+                }
+              },
+              error => {
+                loading.dismiss();
+                this.handleError(error.json().error);
+              }
+            );
+        });
   }
 
-  
+
 
   private handleError(errorMessage: string) {
     const alert = this.alertCtrl.create({
@@ -90,7 +92,22 @@ export class AboutPage {
   }
 
   private showRoute(route: Route) {
-    this.navCtrl.push(JourneyViewPage, { route: route, showRoute: true});
+    this.navCtrl.push(JourneyViewPage, { route: route, showRoute: true });
+  }
+
+  private changeCheckColour(status, disabled): string {
+    if (disabled == true) {
+      return 'gray'
+    } else {
+      switch (status) {
+        case 'unmatched':
+          return '#f15959';
+        case 'matched':
+          return '#64bb64';
+        case 'pending':
+          return '#f3aa6f';
+      }
+    }
   }
 
 }

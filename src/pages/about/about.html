@@ -35,12 +35,18 @@
           <h4>Route Details</h4>
           <p>From: {{route.start}}</p>
           <p>To: {{route.end}}</p>
+
+          
+          <ion-icon [style.color]="changeCheckColour(route.status, route.disabled)" name="checkmark-circle" item-right></ion-icon>
         </ion-item>
 
         <ion-item-options side="right">
           <button color="danger" ion-button icon-only (click)="routingService.removeRoute(i)">
             <ion-icon name="trash"></ion-icon>
           </button>
+          <button color="dark" ion-button icon-only (click)="routingService.disableRoute(i)">
+              <ion-icon name="eye-off"></ion-icon>
+            </button>
         </ion-item-options>
       </ion-item-sliding>
       <button ion-button block (click)="createJourney()">Create Journey</button>
@@ -56,7 +62,7 @@
           <p class="dateAdded text-muted">{{route.dateBooked | date:'dd-MMM'}}</p>
           <h4>Route Details</h4>
           <p>From: {{route.start}}</p>
-          <p>To: {{route.end}}</p>
+          <p>To: {{route.end}}</p>   
         </ion-item>
 
         <ion-item-options side="right">

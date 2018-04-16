@@ -1,9 +1,10 @@
 export class Route{
 
-    constructor(private dateBooked: number,
+    constructor(public status: string,
+                public disabled: boolean,
+                private dateBooked: number,
                 private startDate: number,
                 private pickUpTime: number,
-                private matchedWithDriver: boolean,
                 private start:string,
                 private end: string,
                 private coords: number[][],
@@ -69,6 +70,14 @@ export class Route{
 
   getLuggageWeight(): number{
     return this.luggageWeight;
+  }
+
+  getStatus(): string{
+    return this.status;
+  }
+
+  getDisabled(): boolean{
+    return this.disabled;
   }
 
 
