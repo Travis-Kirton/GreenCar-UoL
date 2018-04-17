@@ -29,7 +29,8 @@ export class JourneyViewPage {
   userName = this.authService.getUsername();
   luggageWeight: number;
   seatsAvailable: number;
-  comment: string;
+  description: string;
+  comments: string[] = [];
 
   suggestedDrivers: Route[] = [];
   currentDriver: Route[] = [];
@@ -78,7 +79,9 @@ export class JourneyViewPage {
       this.daysOfWeek = route.daysOfWeek;
       this.luggageWeight = route.luggageWeight;
       this.seatsAvailable = route.seatsAvailable;
-      this.comment = route.comment;
+      this.description = route.description;
+      this.comments = route.comments;
+      console.log(this.description);
     } else {
       this.routeSet = false;
     }
@@ -110,10 +113,10 @@ export class JourneyViewPage {
     }
 
     if (this.userRole.rider) {
-      let journey = new Route('unmatched', false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek,this.comment, this.luggageWeight);
+      let journey = new Route('unmatched', false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek,this.description,this.comments, this.luggageWeight);
       this.routingService.addRoute(journey);
     }else if (this.userRole.driver){
-      let journey = new Route('unmatched',false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek,this.comment, this.seatsAvailable);
+      let journey = new Route('unmatched',false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek,this.description,this.comments, this.seatsAvailable);
       this.routingService.addRoute(journey);
     }
 

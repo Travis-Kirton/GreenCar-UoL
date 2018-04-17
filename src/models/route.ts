@@ -19,9 +19,13 @@ export class Route{
                   Sat: false,
                   Sun: false
                 },
-                private comment: string,
+                private description: string,
+                private comments: string[],
                 private luggageWeight?: number,
-                private seatsAvailable?: number){}
+                private seatsAvailable?: number,
+                private users?: string[]){}
+
+    
 
 
 
@@ -81,12 +85,16 @@ export class Route{
     return this.disabled;
   }
 
-  setComment(comment){
-    this.comment = comment;
+  setDescription(desc){
+    this.description = desc;
   }
 
-  getComment(): string{
-    return this.comment;
+  getDescription(): string{
+    return this.description;
+  }
+
+  getComments(): string[]{
+    return this.comments;
   }
 
 

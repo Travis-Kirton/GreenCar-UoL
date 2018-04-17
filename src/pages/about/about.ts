@@ -43,6 +43,7 @@ export class AboutPage {
   ionViewDidLoad() {
     //load specific lists
     this.loadRoutes();
+    this.journeyRetrieval.getJourneys();
   }
 
   private loadRoutes() {

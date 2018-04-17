@@ -48,18 +48,19 @@ export class NodeStorageService {
     
   }
 
-  findClosestJourneyCoords(arr: Route[], lat, lon): Route {
+  findClosestJourneyCoords(journeys, lat, lon): object {
     let currLat = 0;
     let currLon = 0;
-    let matchedRoute: Route;
-    arr.forEach(route => {
-      let coords = route.getCoords()[0];
+    let matchedRoute: object;
+    journeys.forEach(journey => {
+      let coords = journey.journey.coords[0];
       if(this.calcDistance(lat,lon, coords[0], coords[1]) < this.calcDistance(lat, lon, currLat, currLon)){
         currLat = coords[0];
         currLon = coords[1];
-        matchedRoute = route;
+        matchedRoute = journey;
       }
     });
+    console.log(matchedRoute);
     return matchedRoute;
   }
 

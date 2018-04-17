@@ -61,14 +61,6 @@ export class CreateJourneyPage implements OnInit {
     private journeyRetrievalService: JourneyRetrievalService) { }
 
   saveRoute() {
-    // e.g. 20812 -> 9657
-    //this.edgeStorageService.demoSearchingNode();
-    // this.astar.performAstar(this.startingPoint, this.destination).then(() => {
-    //   console.log(JSON.stringify(this.astar.getPathAsCoords()));
-    //   this.dijkstraRoute = this.astar.getPathAsCoords();
-    //   this.mapService.drawRoute(this.dijkstraRoute);
-    // });
-
     if(this.startingPoint == "Point Not Found" || this.destination == "Point Not Found"){
       const alert = this.alertCtrl.create({
         title: 'Unknown Points',
@@ -117,7 +109,13 @@ export class CreateJourneyPage implements OnInit {
           let start = this.startingPoint;
           let destination = this.destination;
           let route = this.dijkstraRoute;
-          //let route = new Route(this.currentDate, false, this.startingPoint, this.destination, this.dijkstraRoute, this.authService.getUsername());
+
+          //this.journeyMatchingService.findClosestStartMatch(this.dijkstra[0][0], this.dijkstraRoute[0][1]);
+          let lat = this.dijkstraRoute[0][0];
+          let lon = this.dijkstraRoute[0][1];
+
+          this.journeyMatchingService.findClosestStartMatch(lat, lon);
+
           this.navCtrl.setRoot(JourneyViewPage, { start: this.startingPoint, destination: this.destination, route: this.dijkstraRoute, isSet: true });
         }
       });
