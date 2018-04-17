@@ -2,15 +2,17 @@ import { Injectable } from '@angular/core';
 import { JourneyRetrievalService } from '../services/journeyRetrieval';
 import { Route } from '../models/route';
 import { MapNode } from '../models/node';
+import { UserService } from './user';
 
 @Injectable()
 export class JourneyMatchingService {
 
     journeys: object[] = [];
-    distance: number;
-    distanceType: string;
+    distance = this.userService.getPreferences().radius;
+    distanceType = this.userService.getPreferences().distance;
 
-    constructor(private jrService: JourneyRetrievalService) {
+    constructor(private jrService: JourneyRetrievalService,
+                private userService: UserService) {
         this.jrService.getJourneys()
             .then(journeys => {
                 this.journeys = journeys;
@@ -19,11 +21,17 @@ export class JourneyMatchingService {
             .catch(error => {
                 console.log(error);
             });
+            console.log(this.userService.getPreferences().radius);
     }
 
-    findClosestStartMatch(lat: number, lon: number) {
-        let match = this.findClosestJourneyCoords(this.journeys, lat, lon);
-        return match;
+    findClosestStartMatch(lat: number, lon: number): object[] {
+        let matches = this.findClosestJourneyCoords(this.journeys, lat, lon);
+        return matches;
+    }
+
+    matchBasedOnTimeAndPref(suggestedMatches, journey): object[]{
+        
+        return 
     }
 
 
@@ -40,12 +48,10 @@ export class JourneyMatchingService {
     findClosestJourneyCoords(journeys, lat, lon): object[] {
         let currLat = 0;
         let currLon = 0;
-        let matchedRoutes: object[];
+        let matchedRoutes: object[] = [];
         journeys.forEach(journey => {
             let coords = journey.journey.coords[0];
-            if (this.calcDistance(lat, lon, coords[0], coords[1]) < this.calcDistance(lat, lon, currLat, currLon)) {
-                currLat = coords[0];
-                currLon = coords[1];
+            if (this.calcDistance(lat, lon, coords[0], coords[1]) < this.distance) {
                 matchedRoutes.push(journey);
             }
         });
@@ -55,7 +61,13 @@ export class JourneyMatchingService {
     // Haversine formula for computing distances
     //https://rosettacode.org/wiki/Haversine_formula#JavaScript
     calcDistance(lat1, lon1, lat2, lon2) {
-        let R = 3958.75; // Miles = 3958.75, KM = 6372.8
+        let R = 0;
+        if(this.distanceType == "km"){
+            R = 3958.75;  // calculating for kilometers
+        }else if(this.distanceType == "miles"){
+            R = 6372.8;   // calculating for miles
+        }
+
         let dLat = this.toRad(lat2 - lat1);
         let dLon = this.toRad(lon2 - lon1);
         lat1 = this.toRad(lat1);

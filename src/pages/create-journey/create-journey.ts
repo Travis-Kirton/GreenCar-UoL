@@ -85,13 +85,6 @@ export class CreateJourneyPage implements OnInit {
         loading.dismiss();
         this.dijkstraRoute = this.dijkstra.getPathAsCoords();
         console.log(JSON.stringify(this.dijkstraRoute));
-
-        // let journeys: any;
-        // this.journeyRetrievalService.getJourneys()
-        //   .then(data => {
-        //     journeys = data;
-        //     console.log(this.journeyMatchingService.findClosestStartMatch(this.dijkstraRoute[0][0], this.dijkstraRoute[0][1]));
-        //   });
         this.mapService.drawRoute(this.dijkstraRoute);
 
         if (this.dijkstraRoute == []) {
@@ -110,12 +103,11 @@ export class CreateJourneyPage implements OnInit {
           let destination = this.destination;
           let route = this.dijkstraRoute;
 
-          //this.journeyMatchingService.findClosestStartMatch(this.dijkstra[0][0], this.dijkstraRoute[0][1]);
+          // get start-point latitude & longitude of calculated routes
           let lat = this.dijkstraRoute[0][0];
           let lon = this.dijkstraRoute[0][1];
 
-          this.journeyMatchingService.findClosestStartMatch(lat, lon);
-
+          console.log(this.journeyMatchingService.findClosestStartMatch(lat, lon));
           this.navCtrl.setRoot(JourneyViewPage, { start: this.startingPoint, destination: this.destination, route: this.dijkstraRoute, isSet: true });
         }
       });
@@ -145,13 +137,13 @@ export class CreateJourneyPage implements OnInit {
     // if user sets markers on non-roads 
     this.mapService.eventStart.forEach((event) => {
       this.startingPoint = event._latlng.lat + ", " + event._latlng.lng;
-      let node = this.nodeStorageService.findClosestNode(this.nodeStorageService.getNodes(), event._latlng.lat, event._latlng.lng);
+      let node = this.journeyMatchingService.findClosestNode(this.nodeStorageService.getNodes(), event._latlng.lat, event._latlng.lng);
       this.mapService.repositionStartMarker(node.lat, node.lon);
       this.startingPoint = this.edgeStorageService.getEdgeNameByNodeId(node);
     });
     this.mapService.eventEnd.forEach((event) => {
       this.destination = event._latlng.lat + ", " + event._latlng.lng;
-      let node = this.nodeStorageService.findClosestNode(this.nodeStorageService.getNodes(), event._latlng.lat, event._latlng.lng);
+      let node = this.journeyMatchingService.findClosestNode(this.nodeStorageService.getNodes(), event._latlng.lat, event._latlng.lng);
       this.mapService.repositionDestinationMarker(node.lat, node.lon);
       this.destination = this.edgeStorageService.getEdgeNameByNodeId(node);
     });

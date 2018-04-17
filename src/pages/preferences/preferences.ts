@@ -41,7 +41,7 @@ export class PreferencesPage {
     });
     loading.present();
     this.authService.getActiveUser().getToken().then((token => {
-      console.log(this.preferences.waitTime);
+      this.userService.setPreferences(this.preferences);
       this.userService.savePreferences(token, this.preferences)
         .subscribe(
         () => loading.dismiss(),
@@ -68,6 +68,7 @@ export class PreferencesPage {
             if (preferences) {
               console.log(preferences);
               this.preferences = preferences
+              this.userService.setPreferences(this.preferences);
             } else {
               
             }

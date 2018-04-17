@@ -5,11 +5,15 @@ import { Http, Response } from "@angular/http";
 @Injectable()
 export class UserService {
 
-  private userRole: any;
+  private userRole: object;
+  private preferences = {
+    radius: 10,
+    waitTime: 30,
+    distance: "km"
+  }
 
   constructor(private http: Http,
-    private authService: AuthService) {
-  }
+    private authService: AuthService) {}
 
   addProfilePicture() {
 
@@ -44,6 +48,15 @@ export class UserService {
       });
   }
 
+  fetchRoles(token: string){
+    const userId = this.authService.getActiveUser().uid;
+    return this.http.get('https://greencar-uol.firebaseio.com/' + userId + '/roles.json?auth=' + token)
+      .map((response: Response) => {
+        return response.json();
+      });
+  }
+
+
   setUserRole(role){
     this.userRole = role;
   }
@@ -52,11 +65,13 @@ export class UserService {
     return this.userRole;
   }
 
-  fetchRoles(token: string){
-    const userId = this.authService.getActiveUser().uid;
-    return this.http.get('https://greencar-uol.firebaseio.com/' + userId + '/roles.json?auth=' + token)
-      .map((response: Response) => {
-        return response.json();
-      });
+  setPreferences(preferences){
+    this.preferences = preferences;
   }
+
+  getPreferences(): any{
+    return this.preferences;
+  }
+
+
 }
