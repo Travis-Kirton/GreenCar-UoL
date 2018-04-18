@@ -22,8 +22,8 @@ export class JourneyViewPage {
   duration: number = 15;
   routeSet: boolean = false;
   btnAddTitle = 'Add Route';
-  myDate: number;
-  myTime: number;
+  myDate: string;
+  myTime: string;
   repeating: boolean = false;
   route: number[][] = [];
   userName = this.authService.getUsername();
@@ -32,7 +32,7 @@ export class JourneyViewPage {
   description: string;
   comments: string[] = [];
 
-  suggestedDrivers: Route[] = [];
+  suggestedRoutes: Route[] = [];
   currentDriver: Route[] = [];
 
   daysOfWeek = {
@@ -46,6 +46,8 @@ export class JourneyViewPage {
   }
 
   userRole: any;
+
+  private journey: Route;
   private journeys: string = "journeys";
 
   constructor(public navCtrl: NavController,
@@ -69,6 +71,8 @@ export class JourneyViewPage {
       //this.suggestedDrivers.push(suggestedRoute);
     } else if (this.navParams.get('showRoute')) {
       let route = this.navParams.get('route');
+
+      console.log(route);
       this.routeSet = true;
       this.start = route.start;
       this.end = route.end;
@@ -81,7 +85,9 @@ export class JourneyViewPage {
       this.seatsAvailable = route.seatsAvailable;
       this.description = route.description;
       this.comments = route.comments;
-      console.log(this.description);
+      this.suggestedRoutes = route.suggestedRoutes;
+
+      console.log(this.suggestedRoutes);
     } else {
       this.routeSet = false;
     }
@@ -113,12 +119,20 @@ export class JourneyViewPage {
     }
 
     if (this.userRole.rider) {
-      let journey = new Route('unmatched', false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek,this.description,this.comments, this.luggageWeight);
-      this.routingService.addRoute(journey);
-    }else if (this.userRole.driver){
-      let journey = new Route('unmatched',false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek,this.description,this.comments, this.seatsAvailable);
-      this.routingService.addRoute(journey);
+      this.journey = new Route('unmatched', false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek, this.description, this.comments, this.luggageWeight);
+
+    } else if (this.userRole.driver) {
+      this.journey = new Route('unmatched', false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek, this.description, this.comments, this.seatsAvailable);
     }
+
+    let matches = this.jmService.findClosestStartMatch(this.route[0][0], this.route[0][1]);
+    this.suggestedRoutes = this.jmService.matchBasedOnTimeAndPref(matches, this.journey);
+    this.journey.setSuggestedRoutes(this.suggestedRoutes);
+
+    console.log(this.suggestedRoutes);
+
+    this.routingService.addRoute(this.journey);
+
 
     this.authService.getActiveUser().getToken().then((token => {
       this.routingService.storeRoutes(token)

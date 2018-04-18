@@ -15,7 +15,7 @@ export class EdgeStorageService {
     private nodeSS: NodeStorageService) {
     this.getAllEdgesFromAPI().subscribe(nodes => {
       nodes.forEach(node => {
-        this.edges.push(new Edge(node.source, node.target, node.name, node.cost, node.reverse_cost));
+        this.edges.push(new Edge(node.source, node.target, node.name, node.cost, node.cost_s, node.reverse_cost, node.maxspeed_forward));
       });
     });
   }

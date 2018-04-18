@@ -8,8 +8,7 @@ import { UserService } from './user';
 export class JourneyMatchingService {
 
     journeys: object[] = [];
-    distance = this.userService.getPreferences().radius;
-    distanceType = this.userService.getPreferences().distance;
+    preferences = this.userService.getPreferences();
 
     constructor(private jrService: JourneyRetrievalService,
                 private userService: UserService) {
@@ -21,7 +20,6 @@ export class JourneyMatchingService {
             .catch(error => {
                 console.log(error);
             });
-            console.log(this.userService.getPreferences().radius);
     }
 
     findClosestStartMatch(lat: number, lon: number): object[] {
@@ -29,9 +27,36 @@ export class JourneyMatchingService {
         return matches;
     }
 
-    matchBasedOnTimeAndPref(suggestedMatches, journey): object[]{
-        
-        return 
+    matchBasedOnTimeAndPref(suggestedMatches: any[], journey: Route): any[]{
+        let matches: object[] = [];
+
+        suggestedMatches.forEach((match) => {
+            let suggestedDate = new Date(match.journey.startDate);
+            let journeyDate = new Date(journey.getstartDate());
+
+            let suggestedPickUp = match.journey.pickUpTime.split(':');
+            suggestedDate.setHours(+suggestedPickUp[0]);
+            suggestedDate.setMinutes(+suggestedPickUp[1]);
+
+            let journeyPickUp = journey.getPickUpTime().split(':');
+            journeyDate.setHours(+journeyPickUp[0]);
+            journeyDate.setMinutes(+journeyPickUp[1]);
+
+            // check if route is disabled (don't match if enabled)
+            if(!match.journey.disabled){
+            // find matches that are starting on/after the same date
+            if(suggestedDate.getDate() - journeyDate.getDate() >= 0){        
+               let suggestedMinutes = (suggestedDate.getHours() * 60) + suggestedDate.getMinutes();
+               let journeyMinutes = (journeyDate.getHours() * 60) + journeyDate.getMinutes();
+                //check pick-up time & user waiting allowance is compatible
+                let timeDiff = ((suggestedMinutes + this.preferences.waitTime) - journeyMinutes);
+                if(timeDiff >= 0 && timeDiff <= this.preferences.waitTime){
+                    matches.push(match);
+                }
+            }
+        }
+        });
+        return matches;
     }
 
 
@@ -51,7 +76,7 @@ export class JourneyMatchingService {
         let matchedRoutes: object[] = [];
         journeys.forEach(journey => {
             let coords = journey.journey.coords[0];
-            if (this.calcDistance(lat, lon, coords[0], coords[1]) < this.distance) {
+            if (this.calcDistance(lat, lon, coords[0], coords[1]) < this.preferences.waitTime) {
                 matchedRoutes.push(journey);
             }
         });
@@ -62,9 +87,9 @@ export class JourneyMatchingService {
     //https://rosettacode.org/wiki/Haversine_formula#JavaScript
     calcDistance(lat1, lon1, lat2, lon2) {
         let R = 0;
-        if(this.distanceType == "km"){
+        if(this.preferences.distanceType == "km"){
             R = 3958.75;  // calculating for kilometers
-        }else if(this.distanceType == "miles"){
+        }else if(this.preferences.distanceType == "miles"){
             R = 6372.8;   // calculating for miles
         }
 

@@ -28,6 +28,7 @@
 
   <ion-list no-lines *ngSwitchCase="'journeys'">
   <p align="center" class="text-muted"> {{ routeSet == true ? 'Route Details:' : 'route missing. Add route below...' }}</p>
+
   <p class="journeyPara" *ngIf="routeSet">Start:
     <span>{{ start }}</span>
   </p>
@@ -128,44 +129,44 @@
     <p id="muted" align="center">suggested journeys</p>
 
 
-    <ion-card>
+    <ion-card *ngFor="let route of suggestedRoutes; let i = index">
 
         <ion-item>
             <ion-avatar item-start>
               <img src="../../assets/img/avatar-leia.png">
             </ion-avatar>
-            <h2>Leia McFly</h2>
-            <p>November 5, 1955</p>
+            <h2>{{route.journey.username}}</h2>
+            <p>Start Date: {{route.journey.startDate}}</p>
           </ion-item>
       
         <ion-item>
           <ion-icon name="pin" item-start large></ion-icon>
-          <h2>{{start}}</h2>
+          <h2>{{route.journey.start}}</h2>
         </ion-item>
       
         <ion-item>
           <ion-icon name="pin" item-left large ></ion-icon>
-          <h2>{{end}}</h2>
+          <h2>{{route.journey.end}}</h2>
         </ion-item>
       
         <ion-item id="suggestedJourneyInfo">
           <span item-left> <ion-icon name="car"></ion-icon>18 min</span>
           <span item-left>(2.6 mi)</span>
           <span item-left> <ion-icon name="people"></ion-icon>3</span>
-          <button ion-button icon-left outline item-end>
+          <button ion-button icon-left outline item-end (click)="routingService.joinRoute(route, i)">
             <ion-icon name="navigate"></ion-icon>
             join
           </button>
         </ion-item>
 
         <ion-item id="suggestedJourneyDays">
-          <span class="day" [style.background-color]="daysOfWeek.Mon === true ? '#64bb64' : '#aca9a9'">M</span>
-          <span class="day" [style.background-color]="daysOfWeek.Tue === true ? '#64bb64' : '#aca9a9'">T</span>
-          <span class="day" [style.background-color]="daysOfWeek.Wed === true ? '#64bb64' : '#aca9a9'">W</span>
-          <span class="day" [style.background-color]="daysOfWeek.Thu === true ? '#64bb64' : '#aca9a9'">T</span>
-          <span class="day" [style.background-color]="daysOfWeek.Fri === true ? '#64bb64' : '#aca9a9'">F</span>
-          <span class="day" [style.background-color]="daysOfWeek.Sat === true ? '#64bb64' : '#aca9a9'">S</span>
-          <span class="day" [style.background-color]="daysOfWeek.Sun === true ? '#64bb64' : '#aca9a9'">S</span>
+          <span class="day" [style.background-color]="route.journey.daysOfWeek.Mon === true ? '#64bb64' : '#aca9a9'">M</span>
+          <span class="day" [style.background-color]="route.journey.daysOfWeek.Tue === true ? '#64bb64' : '#aca9a9'">T</span>
+          <span class="day" [style.background-color]="route.journey.daysOfWeek.Wed === true ? '#64bb64' : '#aca9a9'">W</span>
+          <span class="day" [style.background-color]="route.journey.daysOfWeek.Thu === true ? '#64bb64' : '#aca9a9'">T</span>
+          <span class="day" [style.background-color]="route.journey.daysOfWeek.Fri === true ? '#64bb64' : '#aca9a9'">F</span>
+          <span class="day" [style.background-color]="route.journey.daysOfWeek.Sat === true ? '#64bb64' : '#aca9a9'">S</span>
+          <span class="day" [style.background-color]="route.journey.daysOfWeek.Sun === true ? '#64bb64' : '#aca9a9'">S</span>
         </ion-item>
       
       </ion-card>

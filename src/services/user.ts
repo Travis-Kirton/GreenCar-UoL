@@ -8,7 +8,7 @@ export class UserService {
   private userRole: object;
   private preferences = {
     radius: 10,
-    waitTime: 30,
+    waitTime: 20,
     distance: "km"
   }
 

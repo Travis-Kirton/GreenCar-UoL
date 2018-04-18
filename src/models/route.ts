@@ -3,8 +3,8 @@ export class Route{
     constructor(public status: string,
                 public disabled: boolean,
                 private dateBooked: number,
-                private startDate: number,
-                private pickUpTime: number,
+                private startDate: string,
+                private pickUpTime: string,
                 private start:string,
                 private end: string,
                 private coords: number[][],
@@ -23,7 +23,9 @@ export class Route{
                 private comments: string[],
                 private luggageWeight?: number,
                 private seatsAvailable?: number,
-                private users?: string[]){}
+                private users?: string[],
+                private matchedRoute?: Route,
+                private suggestedRoutes?: Route[]){}
 
     
 
@@ -61,11 +63,11 @@ export class Route{
     return this.username;
   }
 
-  getstartDate(): number{
+  getstartDate(): string{
     return this.startDate
   }
 
-  getPickUpTime(): number{
+  getPickUpTime(): string{
     return this.pickUpTime;
   }
 
@@ -95,6 +97,22 @@ export class Route{
 
   getComments(): string[]{
     return this.comments;
+  }
+
+  setSuggestedRoutes(routes: Route[]){
+    this.suggestedRoutes = routes;
+  }
+
+  getSuggestedRoutes(){
+    return this.suggestedRoutes;
+  }
+
+  setMatchedRoute(route: Route){
+    this.matchedRoute = route;
+  }
+
+  getMatchedRoute(){
+    return this.matchedRoute;
   }
 
 

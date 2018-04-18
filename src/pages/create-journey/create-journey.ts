@@ -103,11 +103,6 @@ export class CreateJourneyPage implements OnInit {
           let destination = this.destination;
           let route = this.dijkstraRoute;
 
-          // get start-point latitude & longitude of calculated routes
-          let lat = this.dijkstraRoute[0][0];
-          let lon = this.dijkstraRoute[0][1];
-
-          console.log(this.journeyMatchingService.findClosestStartMatch(lat, lon));
           this.navCtrl.setRoot(JourneyViewPage, { start: this.startingPoint, destination: this.destination, route: this.dijkstraRoute, isSet: true });
         }
       });

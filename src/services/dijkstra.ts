@@ -24,6 +24,8 @@ export class Dijkstra {
   predecessors: Map<MapNode, MapNode>;
   distance: Map<MapNode, number>;
 
+  timeTaken: number = 0;
+
   lat_lng: number[] = [];
   lat_lng_pairs: number[][] = [];
 
@@ -41,33 +43,34 @@ export class Dijkstra {
       console.log(`Routing from ${source} to ${target}`);
       this.source = this.graph.getNodeByName(source);
       this.target = this.graph.getNodeByName(target);
-      this.execute(this.source).then(() =>{
+      this.execute(this.source).then(() => {
         resolve();
       });
-      }));
+    }));
   }
 
   execute(source: MapNode) {
     return new Promise((resolve) => {
-    this.settledNodes = new Set<MapNode>();
-    this.unsettledNodes = new Set<MapNode>();
+      this.settledNodes = new Set<MapNode>();
+      this.unsettledNodes = new Set<MapNode>();
 
-    this.distance = new Map<MapNode, number>();
-    this.predecessors = new Map<MapNode, MapNode>();
+      this.distance = new Map<MapNode, number>();
+      this.predecessors = new Map<MapNode, MapNode>();
 
-    this.distance.set(source, 0);
-    this.unsettledNodes.add(source)
-    let t0 = performance.now();
-    while (this.unsettledNodes.size > 0) {
-      let node = this.getMinimum(this.unsettledNodes);
-      this.settledNodes.add(node);
-      this.unsettledNodes.delete(node);
-      this.findMinimalDistances(node);
-      if (node.nodeId == this.target.nodeId) break; //found target node
-    }
-    let t1 = performance.now();
-    console.log(`Dijkstra Completed in: ${(t1 - t0)}ms`);
-    resolve(true);
+      this.distance.set(source, 0);
+      this.unsettledNodes.add(source)
+      let t0 = performance.now();
+      while (this.unsettledNodes.size > 0) {
+        let node = this.getMinimum(this.unsettledNodes);
+        this.settledNodes.add(node);
+        this.unsettledNodes.delete(node);
+        this.findMinimalDistances(node);
+        if (node.nodeId == this.target.nodeId) break; //found target node
+      }
+      let t1 = performance.now();
+      console.log(this.target);
+      console.log(`Dijkstra Completed in: ${(t1 - t0)}ms`);
+      resolve(true);
     });
   }
 
@@ -165,4 +168,21 @@ export class Dijkstra {
     return this.lat_lng_pairs;
   }
 
+  calculateTimeTaken(){
+    let path = this.getPath(this.target);
+    let totalTimeTaken = 0;
+    let totalDistance = 0;
+
+    for (let i = 0; i < path.length-1; i++) {
+      for (let j = 0; j < this.edges.length; j++) {
+        if(this.edges[j].source == path[i].nodeId && this.edges[j].target == path[i+1].nodeId){
+          totalTimeTaken+=(this.edges[j].cost / this.edges[j].max_speed);
+          totalDistance+=this.edges[j].cost;
+          break;
+        }
+      }
+    }
+    console.log("Duration (minutes):" + (totalDistance));
+    console.log(totalTimeTaken * 1000);
+  }
 }

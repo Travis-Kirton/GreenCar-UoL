@@ -4,7 +4,9 @@ export class Edge{
               public target: number,
               public name: string,
               public cost: number,
-              public r_Cost: number){
+              public cost_s: number,
+              public r_Cost: number,
+              public max_speed: number){
 
   }
 }
