@@ -2,7 +2,7 @@ export class Route{
 
     constructor(public status: string,
                 public disabled: boolean,
-                private dateBooked: number,
+                public dateBooked: number,
                 private startDate: string,
                 private pickUpTime: string,
                 private start:string,
@@ -115,6 +115,14 @@ export class Route{
 
   getMatchedRoute(){
     return this.matchedRoute;
+  }
+
+  setDateBooked(date: number){
+    this.dateBooked = date;
+  }
+
+  getDateBooked(): number{
+    return this.dateBooked;
   }
 
 

@@ -169,9 +169,26 @@
           <span class="day" [style.background-color]="route.journey.daysOfWeek.Sat === true ? '#64bb64' : '#aca9a9'">S</span>
           <span class="day" [style.background-color]="route.journey.daysOfWeek.Sun === true ? '#64bb64' : '#aca9a9'">S</span>
         </ion-item>
-      
       </ion-card>
 
+      <ion-card *ngFor="let rider of suggestedRiders; let i = index">
+
+        <ion-item>
+            <ion-avatar item-start>
+              <img src="../../assets/img/avatar-leia.png">
+            </ion-avatar>
+            <h2>{{rider.user}}</h2>
+            <p>Request type: {{rider.request}}</p>
+            <p>Request for: {{rider.journeyDate | date}}</p>
+          </ion-item>
+
+          <ion-item id="suggestedJourneyInfo">
+            <button ion-button icon-left outline item-end>
+              <ion-icon name="navigate"></ion-icon>
+             accept
+            </button>
+          </ion-item>
+      </ion-card>
 
   </ion-list>
   </div>

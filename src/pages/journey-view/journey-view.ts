@@ -24,6 +24,7 @@ export class JourneyViewPage {
   duration: number = 15;
   routeSet: boolean = false;
   btnAddTitle = 'Add Route';
+  dateBooked: number;
   myDate: string;
   myTime: string;
   repeating: boolean = false;
@@ -35,6 +36,7 @@ export class JourneyViewPage {
   comments: string[] = [];
 
   suggestedRoutes: Route[] = [];
+  suggestedRiders: object[] = [];
   currentDriver: Route[] = [];
 
   daysOfWeek = {
@@ -66,6 +68,10 @@ export class JourneyViewPage {
     public notifService: NotificationsService) {
   }
 
+  ionViewDidLoad(){
+    this.checkPendingNotifications();
+  }
+
   ngOnInit() {
     if (this.navParams.get('isSet')) {
       this.routeSet = true;
@@ -78,8 +84,8 @@ export class JourneyViewPage {
     } else if (this.navParams.get('showRoute')) {
       this.journey = this.navParams.get('route');
 
-      console.log(this.journey);
       this.routeSet = true;
+      this.dateBooked = this.journey.dateBooked;
       this.start = this.journey.start;
       this.end = this.journey.end;
       this.route = this.journey.coords;
@@ -92,8 +98,6 @@ export class JourneyViewPage {
       this.description = this.journey.description;
       this.comments = this.journey.comments;
       this.suggestedRoutes = this.journey.suggestedRoutes;
-
-      console.log(this.suggestedRoutes);
     } else {
       this.routeSet = false;
     }
@@ -196,7 +200,16 @@ export class JourneyViewPage {
     }));
 
 
-
+  }
+  checkPendingNotifications() {
+    for(let i = 0; i < this.notifService.getNotifications().length; i++){
+      let notif: any =  this.notifService.getNotifications()[i];
+        if(notif.journeyDate == this.journey.dateBooked){
+          console.log("found:" + notif.user);
+          this.suggestedRiders.push(notif);
+          break;
+        }
+    }
   }
 
 }
