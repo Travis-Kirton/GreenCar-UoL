@@ -45,7 +45,6 @@ export class AboutPage {
   ionViewDidLoad() {
     //load specific lists
     this.loadRoutes();
-    this.loadNotifications();
     this.journeyRetrieval.getJourneys();
   }
 
@@ -73,27 +72,6 @@ export class AboutPage {
             );
         });
   }
-
-  private loadNotifications(){
-    this.authService.getActiveUser().getIdToken()
-      .then((token: string) => {
-        let uid = this.authService.getActiveUser().uid;
-        this.notificationService.fetchNotifications(token, uid)
-          .subscribe((notifications: object[]) => {
-            if(notifications){
-              console.log(notifications);
-              this.notificationService.setNotifications(notifications);
-            }else{
-              console.log(notifications);
-            }
-          },
-          error => {
-            this.handleError(error.json().error);
-          });
-      });
-  }
-
-
 
   private handleError(errorMessage: string) {
     const alert = this.alertCtrl.create({

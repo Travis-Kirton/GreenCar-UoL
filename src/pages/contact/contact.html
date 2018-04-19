@@ -7,7 +7,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-list-header>You have 0 Notifications</ion-list-header>
+  <ion-list *ngFor="let notif of notifications">
+    <ion-list-header>from {{notif.username}}, {{notif.request}} journey</ion-list-header>
   </ion-list>
 </ion-content>

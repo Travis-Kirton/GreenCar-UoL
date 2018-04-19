@@ -16,6 +16,7 @@ export class RoutingService {
   }
 
   addRoute(route: Route){
+    console.log(route);
     this.routes.push(route);
   }
 

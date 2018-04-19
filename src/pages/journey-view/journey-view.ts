@@ -141,21 +141,7 @@ export class JourneyViewPage {
     this.journey.setSuggestedRoutes(this.suggestedRoutes);
     this.journey.getSuggestedRoutes();
     this.routingService.addRoute(this.journey);
-
-
-    this.authService.getActiveUser().getToken().then((token => {
-      this.routingService.storeRoutes(token)
-        .subscribe(
-          () => {
-            loading.dismiss()
-            this.navCtrl.setRoot(AboutPage);
-          },
-          error => {
-            loading.dismiss();
-            this.handleError(error.json().error);
-          }
-        );
-    }));
+    this.storeRoutes(true);
   }
 
   cancelJourney() {
@@ -183,13 +169,69 @@ export class JourneyViewPage {
       this.notifService.pushNotificationToUser(userUID, route.journey.dateBooked, "joining", route.uid, token)
         .subscribe();
 
-      const loading = this.loadingCtrl.create({
-        content: 'Requesting...'
-      });
+      this.storeRoutes(false);
+    }));
+
+
+  }
+  checkPendingNotifications() {
+
+    let notifications = this.notifService.getNotifications();
+    notifications.forEach(notification => {
+      console.log(notification);
+
+      if (notification.request == "joining") {
+        if (notification.journeyDate == this.journey.dateBooked) {
+          this.suggestedRiders.push(notification);
+        }
+      } else if (notification.request == "accepting") {
+        this.suggestedRoutes.forEach((route: any) => {
+          if (route.journey.dateBooked == notification.journeyDate) {
+            if (this.journey.status == "pending") {
+              this.journey.status = "matched";
+              this.storeRoutes(false);
+              const alert = this.alertCtrl.create({
+                title: 'Matched! :)',
+                message: 'This journey has been accepted by ' +  notification.username,
+                buttons: ['Ok']
+              });
+              alert.present();
+            }
+          }
+        });
+      }
+    });
+  }
+
+  acceptRiderRequest(rider) {
+    // send notification to user with accept
+    // & include journeyDate
+    this.authService.getActiveUser().getIdToken().then((token => {
+      let userUID = this.authService.getActiveUser().uid;
+      this.notifService.pushNotificationToUser(userUID, rider.journeyDate, "accepting", rider.userID, token)
+        .subscribe();
+    }));
+
+    // remove notification & push suggestedRiders back to FB
+
+    // add user into current journey & push to FB
+
+    // change view to include riders, & comment section
+
+  }
+
+  storeRoutes(setRoot: boolean) {
+    const loading = this.loadingCtrl.create({
+      content: 'Requesting...'
+    });
+    this.authService.getActiveUser().getToken().then((token => {
       this.routingService.storeRoutes(token)
         .subscribe(
           () => {
             loading.dismiss()
+            if (setRoot) {
+              this.navCtrl.setRoot(AboutPage);
+            }
           },
           error => {
             loading.dismiss();
@@ -197,23 +239,6 @@ export class JourneyViewPage {
           }
         );
     }));
-
-
-  }
-  checkPendingNotifications() {
-    let notifications = Object.keys(this.notifService.getNotifications()).map(key => {
-      return this.notifService.getNotifications()[key];
-    });
-
-    notifications.forEach(notification => {
-      if (notification.journeyDate == this.journey.dateBooked) {
-        this.suggestedRiders.push(notification);
-      }
-    });
-  }
-
-  acceptRiderRequest(rider){
-    
   }
 
 }

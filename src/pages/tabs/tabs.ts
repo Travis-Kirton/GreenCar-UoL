@@ -7,6 +7,7 @@ import { HomePage } from '../home/home';
 import { AuthService } from '../../services/auth';
 import { UserService } from '../../services/user';
 import { AlertController } from 'ionic-angular';
+import { NotificationsService } from '../../services/notifications';
 
 @Component({
   templateUrl: 'tabs.html'
@@ -20,12 +21,19 @@ export class TabsPage {
 
   userRole: any;
 
+  tab1BadgeCount: number;
+
   constructor(private authService: AuthService,
     private userService: UserService,
-    private alertCtrl: AlertController) {
+    private alertCtrl: AlertController,
+    private notificationService: NotificationsService) {
 
     this.setUserType();
 
+  }
+
+  ionViewDidLoad(){
+    this.loadNotifications();
   }
 
   setUserType() {
@@ -45,6 +53,28 @@ export class TabsPage {
               }
             );
         });
+  }
+
+  private loadNotifications(){
+    this.authService.getActiveUser().getIdToken()
+      .then((token: string) => {
+        let uid = this.authService.getActiveUser().uid;
+        this.notificationService.fetchNotifications(token, uid)
+          .subscribe((notifications: object[]) => {
+            if(notifications){
+              let ArrNotifications = notifications = Object.keys(notifications).map(key => {
+                return notifications[key];
+            });
+              this.tab1BadgeCount = ArrNotifications.length;
+              this.notificationService.setNotifications(ArrNotifications);
+            }else{
+              console.log(notifications);
+            }
+          },
+          error => {
+            this.handleError(error.json().error);
+          });
+      });
   }
 
   private handleError(errorMessage: string) {

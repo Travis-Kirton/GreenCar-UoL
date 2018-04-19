@@ -11,8 +11,8 @@ export class NotificationsService {
     notifications: any[] = [];
 
     pushNotificationToUser(userID, datestamp, request, uid, token) {
-        let notification = { username: this.authService.getUsername(),userID: userID, journeyDate: datestamp, request: request };
-        return this.http.put('https://greencar-uol.firebaseio.com/' + uid + '/notification/' + (userID + '-'+ datestamp) + '.json?auth=' + token, notification)
+        let notification = { username: this.authService.getUsername(), userID: userID, journeyDate: datestamp, request: request };
+        return this.http.put('https://greencar-uol.firebaseio.com/' + uid + '/notification/' + (userID + '-' + datestamp) + '.json?auth=' + token, notification)
             .map((response: Response) => {
                 return response.json();
             });
@@ -33,7 +33,7 @@ export class NotificationsService {
             });
     }
 
-    setNotifications(notifications: Notification[]) {
+    setNotifications(notifications: object[]) {
         this.notifications = notifications;
     }
 
