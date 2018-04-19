@@ -7,6 +7,8 @@ export class JourneyRetrievalService {
 
     constructor() { }
 
+    routes: object[] = [];
+
     // retrieves all journeys stored in database, including uid, start & end coords
     // used for matching users based on journeys
     getJourneys(): Promise<Array<object>> {
@@ -14,21 +16,23 @@ export class JourneyRetrievalService {
         return query
             .once("value")
             .then(snapshot => {
-                const routes: object[] = [];
                 snapshot.forEach(snap => {
                     if (snap.val().routes != undefined) {
                         snap.val().routes.forEach((route) => {
-                            routes.push({uid: snap.key, journey: route});
+                            this.routes.push({uid: snap.key, journey: route});
                         });
                     }
                     return false;
                 });
-                return routes;
+                return this.routes;
             });
     }
 
-    findRouteViaUser(uid, timestamp): Route {
-        let route: Route;
-        return route;
-    }
+    // findRouteViaUser(uid, timestamp): Route {
+    //     let route_return: Route;
+    //     this.routes.forEach(route)
+    //     return route;
+    // }
+
+
 }

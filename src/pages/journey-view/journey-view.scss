@@ -100,10 +100,7 @@
         font-size: 0.91em;
     }
 
-    #joinBtn{
-        float:right;
-        margin-right:10%;
-    }
+    #joinBtn{}
 
     p span{
         background-color:rgb(234, 247, 234);
@@ -114,7 +111,9 @@
     }
 
     #suggestedJourneyInfo{
-        font-size: 1em;
+        font-size: 0.85em;
+        padding:0;
+        margin-left:3%;
     }
 
     #suggestedJourneyDays{

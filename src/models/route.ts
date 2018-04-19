@@ -28,7 +28,13 @@ export class Route{
                 private suggestedRoutes?: Route[]){}
 
     
+  setStatus(status: string){
+    this.status = status;
+  }
 
+  getStatus(): string{
+    return this.status;
+  }
 
 
   getStart(): string{
@@ -77,10 +83,6 @@ export class Route{
 
   getLuggageWeight(): number{
     return this.luggageWeight;
-  }
-
-  getStatus(): string{
-    return this.status;
   }
 
   getDisabled(): boolean{

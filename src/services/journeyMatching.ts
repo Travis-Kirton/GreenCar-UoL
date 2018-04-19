@@ -43,7 +43,7 @@ export class JourneyMatchingService {
             journeyDate.setMinutes(+journeyPickUp[1]);
 
             // check if route is disabled (don't match if enabled)
-            if(!match.journey.disabled){
+            if(match.journey.disabled == false){
             // find matches that are starting on/after the same date
             if(suggestedDate.getDate() - journeyDate.getDate() >= 0){        
                let suggestedMinutes = (suggestedDate.getHours() * 60) + suggestedDate.getMinutes();
@@ -52,6 +52,7 @@ export class JourneyMatchingService {
                 let timeDiff = ((suggestedMinutes + this.preferences.waitTime) - journeyMinutes);
                 if(timeDiff >= 0 && timeDiff <= this.preferences.waitTime){
                     matches.push(match);
+                    console.log(match);
                 }
             }
         }

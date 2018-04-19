@@ -7,6 +7,8 @@ import { AuthService } from '../../services/auth';
 import { JourneyMatchingService } from '../../services/journeyMatching';
 import { AboutPage } from '../about/about';
 import { UserService } from '../../services/user';
+import { JourneyJoiningService } from '../../services/journeyJoining';
+import { NotificationsService } from '../../services/notifications';
 
 
 @Component({
@@ -47,8 +49,10 @@ export class JourneyViewPage {
 
   userRole: any;
 
-  private journey: Route;
+  private journey: any;
   private journeys: string = "journeys";
+
+  private joinBtn: string = "join";
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -57,7 +61,9 @@ export class JourneyViewPage {
     public userService: UserService,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
-    public jmService: JourneyMatchingService) {
+    public jmService: JourneyMatchingService,
+    public jjService: JourneyJoiningService,
+    public notifService: NotificationsService) {
   }
 
   ngOnInit() {
@@ -70,22 +76,22 @@ export class JourneyViewPage {
       //let suggestedRoute = this.jmService.findClosestStartMatch(this.route[0][0], this.route[0][1]);
       //this.suggestedDrivers.push(suggestedRoute);
     } else if (this.navParams.get('showRoute')) {
-      let route = this.navParams.get('route');
+      this.journey = this.navParams.get('route');
 
-      console.log(route);
+      console.log(this.journey);
       this.routeSet = true;
-      this.start = route.start;
-      this.end = route.end;
-      this.route = route.coords;
-      this.myDate = route.startDate;
-      this.myTime = route.pickUpTime;
-      this.repeating = route.repeating;
-      this.daysOfWeek = route.daysOfWeek;
-      this.luggageWeight = route.luggageWeight;
-      this.seatsAvailable = route.seatsAvailable;
-      this.description = route.description;
-      this.comments = route.comments;
-      this.suggestedRoutes = route.suggestedRoutes;
+      this.start = this.journey.start;
+      this.end = this.journey.end;
+      this.route = this.journey.coords;
+      this.myDate = this.journey.startDate;
+      this.myTime = this.journey.pickUpTime;
+      this.repeating = this.journey.repeating;
+      this.daysOfWeek = this.journey.daysOfWeek;
+      this.luggageWeight = this.journey.luggageWeight;
+      this.seatsAvailable = this.journey.seatsAvailable;
+      this.description = this.journey.description;
+      this.comments = this.journey.comments;
+      this.suggestedRoutes = this.journey.suggestedRoutes;
 
       console.log(this.suggestedRoutes);
     } else {
@@ -126,11 +132,10 @@ export class JourneyViewPage {
     }
 
     let matches = this.jmService.findClosestStartMatch(this.route[0][0], this.route[0][1]);
+
     this.suggestedRoutes = this.jmService.matchBasedOnTimeAndPref(matches, this.journey);
     this.journey.setSuggestedRoutes(this.suggestedRoutes);
-
-    console.log(this.suggestedRoutes);
-
+    this.journey.getSuggestedRoutes();
     this.routingService.addRoute(this.journey);
 
 
@@ -164,6 +169,17 @@ export class JourneyViewPage {
       buttons: ['Ok']
     });
     alert.present();
+  }
+
+  joinJourney(route){
+    this.journey.status = "pending";
+    let userUID = this.authService.getActiveUser().uid;
+
+    this.authService.getActiveUser().getIdToken().then((token => {
+      this.notifService.pushNotificationToUser(token, route.uid, route.journey.dateBooked, "joining")
+        .subscribe();
+    }));
+
   }
 
 }

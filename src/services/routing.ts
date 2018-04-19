@@ -19,12 +19,6 @@ export class RoutingService {
     this.routes.push(route);
   }
 
-  joinRoute(route: Route, index: number){
-    console.log("Request to join route")
-    console.log(route);
-    console.log(index);
-  }
-
   disableRoute(index: number){
     this.routes[index].disabled = !this.routes[index].disabled;
     let toast = this.toastCtrl.create({
@@ -33,6 +27,10 @@ export class RoutingService {
       position: 'bottom'
     });
     toast.present();
+    this.authService.getActiveUser().getIdToken().then((token => {
+      this.storeRoutes(token)
+        .subscribe();
+    }));
   }
 
   getRoutes(){
