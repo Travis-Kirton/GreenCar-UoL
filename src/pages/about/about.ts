@@ -75,13 +75,14 @@ export class AboutPage {
   }
 
   private loadNotifications(){
-    console.log("notifications");
     this.authService.getActiveUser().getIdToken()
       .then((token: string) => {
-        this.notificationService.fetchNotifications(token)
+        let uid = this.authService.getActiveUser().uid;
+        this.notificationService.fetchNotifications(token, uid)
           .subscribe((notifications: object[]) => {
             if(notifications){
               console.log(notifications);
+              this.notificationService.setNotifications(notifications);
             }else{
               console.log(notifications);
             }
@@ -89,7 +90,7 @@ export class AboutPage {
           error => {
             this.handleError(error.json().error);
           });
-      })
+      });
   }
 
 

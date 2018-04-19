@@ -8,26 +8,23 @@ export class NotificationsService {
     constructor(private authService: AuthService,
         private http: Http) { }
 
-    notifications: object[] = []
+    notifications: any[] = [];
 
-    pushNotificationToUser(token, uid, timestamp, request) {
-        console.log("pushing to: " + uid);
-
-        const userId = this.authService.getActiveUser().uid;
-        this.notifications.push({user: userId, journeyDate: timestamp, request: request, seen: false});
-        return this.http.put('https://greencar-uol.firebaseio.com/' + uid + '/notifications.json?auth=' + token, this.notifications)
+    pushNotificationToUser(userID, datestamp, request, uid, token) {
+        let notification = { username: this.authService.getUsername(),userID: userID, journeyDate: datestamp, request: request };
+        return this.http.put('https://greencar-uol.firebaseio.com/' + uid + '/notification/' + (userID + '-'+ datestamp) + '.json?auth=' + token, notification)
             .map((response: Response) => {
                 return response.json();
             });
     }
 
-    fetchNotifications(token) {
+    fetchNotifications(token, uid) {
         const userId = this.authService.getActiveUser().uid;
-        return this.http.get('https://greencar-uol.firebaseio.com/' + userId + '/notifications.json?auth=' + token)
+        return this.http.get('https://greencar-uol.firebaseio.com/' + uid + '/notification.json?auth=' + token)
             .map((response: Response) => {
                 return response.json();
             })
-            .do((notifications: Notification[]) => {
+            .do((notifications: any[]) => {
                 if (notifications) {
                     this.notifications = notifications;
                 } else {
@@ -36,11 +33,11 @@ export class NotificationsService {
             });
     }
 
-    setNotifications(notifications: object[]){
+    setNotifications(notifications: Notification[]) {
         this.notifications = notifications;
     }
 
-    getNotifications(): object[]{
+    getNotifications(): any[] {
         return this.notifications;
     }
 

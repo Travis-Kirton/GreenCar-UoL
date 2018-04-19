@@ -68,7 +68,7 @@ export class JourneyViewPage {
     public notifService: NotificationsService) {
   }
 
-  ionViewDidLoad(){
+  ionViewDidLoad() {
     this.checkPendingNotifications();
   }
 
@@ -179,9 +179,8 @@ export class JourneyViewPage {
     this.journey.status = "pending";
     route.journey.status = "pending";
     let userUID = this.authService.getActiveUser().uid;
-
     this.authService.getActiveUser().getIdToken().then((token => {
-      this.notifService.pushNotificationToUser(token, route.uid, route.journey.dateBooked, "joining")
+      this.notifService.pushNotificationToUser(userUID, route.journey.dateBooked, "joining", route.uid, token)
         .subscribe();
 
       const loading = this.loadingCtrl.create({
@@ -202,14 +201,19 @@ export class JourneyViewPage {
 
   }
   checkPendingNotifications() {
-    for(let i = 0; i < this.notifService.getNotifications().length; i++){
-      let notif: any =  this.notifService.getNotifications()[i];
-        if(notif.journeyDate == this.journey.dateBooked){
-          console.log("found:" + notif.user);
-          this.suggestedRiders.push(notif);
-          break;
-        }
-    }
+    let notifications = Object.keys(this.notifService.getNotifications()).map(key => {
+      return this.notifService.getNotifications()[key];
+    });
+
+    notifications.forEach(notification => {
+      if (notification.journeyDate == this.journey.dateBooked) {
+        this.suggestedRiders.push(notification);
+      }
+    });
+  }
+
+  acceptRiderRequest(rider){
+    
   }
 
 }
