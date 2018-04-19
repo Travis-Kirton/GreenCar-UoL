@@ -36,4 +36,14 @@ export class NotificationsService {
             });
     }
 
+    setNotifications(notifications: object[]){
+        this.notifications = notifications;
+    }
+
+    getNotifications(): object[]{
+        return this.notifications;
+    }
+
+
+
 }

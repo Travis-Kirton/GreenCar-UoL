@@ -42,7 +42,7 @@ export class JourneyMatchingService {
             journeyDate.setHours(+journeyPickUp[0]);
             journeyDate.setMinutes(+journeyPickUp[1]);
 
-            // check if route is disabled (don't match if enabled)
+            // check if route is disabled (don't match if true)
             if(match.journey.disabled == false){
             // find matches that are starting on/after the same date
             if(suggestedDate.getDate() - journeyDate.getDate() >= 0){        

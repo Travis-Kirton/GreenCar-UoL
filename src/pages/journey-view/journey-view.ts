@@ -171,14 +171,31 @@ export class JourneyViewPage {
     alert.present();
   }
 
-  joinJourney(route){
+  joinJourney(route) {
     this.journey.status = "pending";
+    route.journey.status = "pending";
     let userUID = this.authService.getActiveUser().uid;
 
     this.authService.getActiveUser().getIdToken().then((token => {
       this.notifService.pushNotificationToUser(token, route.uid, route.journey.dateBooked, "joining")
         .subscribe();
+
+      const loading = this.loadingCtrl.create({
+        content: 'Requesting...'
+      });
+      this.routingService.storeRoutes(token)
+        .subscribe(
+          () => {
+            loading.dismiss()
+          },
+          error => {
+            loading.dismiss();
+            this.handleError(error.json().error);
+          }
+        );
     }));
+
+
 
   }
 

@@ -9,6 +9,7 @@ import { NavController } from 'ionic-angular';
 import { JourneyRetrievalService } from '../../services/journeyRetrieval';
 import { JourneyMatchingService } from '../../services/journeyMatching';
 import { UserService } from '../../services/user';
+import { NotificationsService } from '../../services/notifications';
 
 @Component({
   selector: 'page-about',
@@ -31,7 +32,8 @@ export class AboutPage {
     private alertCtrl: AlertController,
     private routingService: RoutingService,
     private journeyRetrieval: JourneyRetrievalService,
-    private journeyMatching: JourneyMatchingService
+    private journeyMatching: JourneyMatchingService,
+    private notificationService: NotificationsService
   ) {
 
   }
@@ -43,6 +45,7 @@ export class AboutPage {
   ionViewDidLoad() {
     //load specific lists
     this.loadRoutes();
+    this.loadNotifications();
     this.journeyRetrieval.getJourneys();
   }
 
@@ -52,8 +55,7 @@ export class AboutPage {
     });
     loading.present();
     this.authService.getActiveUser().getIdToken()
-      .then(
-        (token: string) => {
+      .then((token: string) => {
           this.routingService.fetchRoutes(token)
             .subscribe(
               (route: Route[]) => {
@@ -70,6 +72,24 @@ export class AboutPage {
               }
             );
         });
+  }
+
+  private loadNotifications(){
+    console.log("notifications");
+    this.authService.getActiveUser().getIdToken()
+      .then((token: string) => {
+        this.notificationService.fetchNotifications(token)
+          .subscribe((notifications: object[]) => {
+            if(notifications){
+              console.log(notifications);
+            }else{
+              console.log(notifications);
+            }
+          },
+          error => {
+            this.handleError(error.json().error);
+          });
+      })
   }
 
 

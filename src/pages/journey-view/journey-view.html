@@ -153,10 +153,10 @@
           <span item-left> <ion-icon name="car"></ion-icon>18 min</span>
           <span item-left>(2.6 mi)</span>
           <span item-left> <ion-icon name="people"></ion-icon>3</span>
-          <button ion-button icon-left outline item-end (click)="joinJourney(route)" [style.color]="journey.status === 'pending' ? '#f3aa6f' : '#aca9a9'"
-          [style.border-color]="journey.status === 'pending' ? '#f3aa6f' : '#aca9a9'">
+          <button ion-button icon-left outline item-end (click)="joinJourney(route)" [style.color]="route.journey.status === 'pending' ? '#f3aa6f' : '#64bb64'"
+          [style.border-color]="route.journey.status === 'pending' ? '#f3aa6f' : '#64bb64'">
             <ion-icon name="navigate"></ion-icon>
-            {{journey.status}}
+            {{route.journey.status == 'unmatched' ? 'join' : 'pending'}}
           </button>
         </ion-item>
 
