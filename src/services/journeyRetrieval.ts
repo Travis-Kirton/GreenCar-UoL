@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase';
 import { Route } from '../models/route';
+import { Http, Response } from "@angular/http";
+import { AuthService } from './auth';
+
 
 @Injectable()
 export class JourneyRetrievalService {
 
-    constructor() { }
+    constructor(private http: Http,
+                private authService: AuthService) { }
 
     routes: object[] = [];
 
@@ -28,11 +32,13 @@ export class JourneyRetrievalService {
             });
     }
 
-    // findRouteViaUser(uid, timestamp): Route {
-    //     let route_return: Route;
-    //     this.routes.forEach(route)
-    //     return route;
-    // }
+    getSpecificJourney(token, uid){
+    let route_toReturn: Route;
+    return this.http.get('https://greencar-uol.firebaseio.com/' + uid + '/routes.json?auth=' + token)
+      .map((response: Response) => {
+        return response.json();
+      });
+    }
 
 
 }

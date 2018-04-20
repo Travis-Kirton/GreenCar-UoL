@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, AlertController, PopoverController } from 'ionic-angular';
 import { Route } from '../../models/route';
 import { RoutingService } from './../../services/routing';
 import { CreateJourneyPage } from '../create-journey/create-journey';
@@ -9,6 +9,8 @@ import { AboutPage } from '../about/about';
 import { UserService } from '../../services/user';
 import { JourneyJoiningService } from '../../services/journeyJoining';
 import { NotificationsService } from '../../services/notifications';
+import { MatchedJourneyPage } from '../matched-journey/matched-journey';
+import { PopoverHomePage } from '../popover-home/popover-home';
 
 
 @Component({
@@ -21,7 +23,6 @@ export class JourneyViewPage {
 
   start: string = '';
   end: string = ''
-  duration: number = 15;
   routeSet: boolean = false;
   btnAddTitle = 'Add Route';
   dateBooked: number;
@@ -34,6 +35,7 @@ export class JourneyViewPage {
   seatsAvailable: number;
   description: string;
   comments: string[] = [];
+  users: object[] = [];
 
   suggestedRoutes: Route[] = [];
   suggestedRiders: object[] = [];
@@ -51,7 +53,7 @@ export class JourneyViewPage {
 
   userRole: any;
 
-  private journey: any;
+  private journey: Route;
   private journeys: string = "journeys";
 
   private joinBtn: string = "join";
@@ -65,7 +67,8 @@ export class JourneyViewPage {
     public loadingCtrl: LoadingController,
     public jmService: JourneyMatchingService,
     public jjService: JourneyJoiningService,
-    public notifService: NotificationsService) {
+    public notifService: NotificationsService,
+    public popCtrl: PopoverController) {
   }
 
   ionViewDidLoad() {
@@ -79,11 +82,9 @@ export class JourneyViewPage {
       this.end = this.navParams.get('destination')
       this.route = this.navParams.get('route')
       this.btnAddTitle = 'Edit Route';
-      //let suggestedRoute = this.jmService.findClosestStartMatch(this.route[0][0], this.route[0][1]);
-      //this.suggestedDrivers.push(suggestedRoute);
     } else if (this.navParams.get('showRoute')) {
       this.journey = this.navParams.get('route');
-
+      console.log(this.journey);
       this.routeSet = true;
       this.dateBooked = this.journey.dateBooked;
       this.start = this.journey.start;
@@ -98,6 +99,7 @@ export class JourneyViewPage {
       this.description = this.journey.description;
       this.comments = this.journey.comments;
       this.suggestedRoutes = this.journey.suggestedRoutes;
+      this.users = this.journey.users;
     } else {
       this.routeSet = false;
     }
@@ -132,7 +134,8 @@ export class JourneyViewPage {
       this.journey = new Route('unmatched', false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek, this.description, this.comments, this.luggageWeight);
 
     } else if (this.userRole.driver) {
-      this.journey = new Route('unmatched', false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek, this.description, this.comments, this.seatsAvailable);
+      let riders:object[] = []
+      this.journey = new Route('unmatched', false, Date.now(), this.myDate, this.myTime, this.start, this.end, this.route, this.userName, this.repeating, this.daysOfWeek, this.description, this.comments, 0 ,this.seatsAvailable, riders);
     }
 
     let matches = this.jmService.findClosestStartMatch(this.route[0][0], this.route[0][1]);
@@ -166,7 +169,7 @@ export class JourneyViewPage {
     route.journey.status = "pending";
     let userUID = this.authService.getActiveUser().uid;
     this.authService.getActiveUser().getIdToken().then((token => {
-      this.notifService.pushNotificationToUser(userUID, route.journey.dateBooked, "joining", route.uid, token)
+      this.notifService.pushNotificationToUser(userUID, route.journey.dateBooked, "joining", route.uid, token, this.journey)
         .subscribe();
 
       this.storeRoutes(false);
@@ -175,7 +178,6 @@ export class JourneyViewPage {
 
   }
   checkPendingNotifications() {
-
     let notifications = this.notifService.getNotifications();
     notifications.forEach(notification => {
       console.log(notification);
@@ -189,6 +191,7 @@ export class JourneyViewPage {
           if (route.journey.dateBooked == notification.journeyDate) {
             if (this.journey.status == "pending") {
               this.journey.status = "matched";
+              this.journey.matchedRoute = route;
               this.storeRoutes(false);
               const alert = this.alertCtrl.create({
                 title: 'Matched! :)',
@@ -196,6 +199,8 @@ export class JourneyViewPage {
                 buttons: ['Ok']
               });
               alert.present();
+              this.navCtrl.pop();
+              this.navCtrl.push(MatchedJourneyPage, { route: this.journey });
             }
           }
         });
@@ -203,18 +208,28 @@ export class JourneyViewPage {
     });
   }
 
-  acceptRiderRequest(rider) {
+  acceptRiderRequest(rider: any, index) {
     // send notification to user with accept
     // & include journeyDate
     this.authService.getActiveUser().getIdToken().then((token => {
       let userUID = this.authService.getActiveUser().uid;
       this.notifService.pushNotificationToUser(userUID, rider.journeyDate, "accepting", rider.userID, token)
         .subscribe();
+
+    // remove notification
+    this.notifService.removeNotification(rider);
+    this.storeNotifications();
     }));
 
-    // remove notification & push suggestedRiders back to FB
 
-    // add user into current journey & push to FB
+     // add user into current journey 
+     this.journey.users.push(rider);
+   
+    //remove rider from suggested riders
+    this.suggestedRiders.splice(index);
+   
+    //push back to Firebase
+    this.storeRoutes(false);
 
     // change view to include riders, & comment section
 
@@ -239,6 +254,29 @@ export class JourneyViewPage {
           }
         );
     }));
+  }
+
+  storeNotifications() {
+    const loading = this.loadingCtrl.create({
+      content: 'Requesting...'
+    });
+    this.authService.getActiveUser().getToken().then((token => {
+      this.notifService.storeNotications(token)
+        .subscribe(
+          () => {
+            loading.dismiss()
+          },
+          error => {
+            loading.dismiss();
+            this.handleError(error.json().error);
+          }
+        );
+    }));
+  }
+
+  userOptions(user){
+    let popover = this.popCtrl.create(PopoverHomePage);
+    popover.present();
   }
 
 }

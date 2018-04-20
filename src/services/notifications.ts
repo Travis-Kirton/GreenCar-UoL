@@ -10,13 +10,21 @@ export class NotificationsService {
 
     notifications: any[] = [];
 
-    pushNotificationToUser(userID, datestamp, request, uid, token) {
-        let notification = { username: this.authService.getUsername(), userID: userID, journeyDate: datestamp, request: request };
+    pushNotificationToUser(userID, datestamp, request, uid, token, journey?) {
+        let notification = { username: this.authService.getUsername(), userID: userID, journeyDate: datestamp, request: request, journey: journey };
         return this.http.put('https://greencar-uol.firebaseio.com/' + uid + '/notification/' + (userID + '-' + datestamp) + '.json?auth=' + token, notification)
             .map((response: Response) => {
                 return response.json();
             });
     }
+
+    storeNotications(token: string){
+        const userId = this.authService.getActiveUser().uid;
+        return this.http.put('https://greencar-uol.firebaseio.com/' + userId + '/notification.json?auth=' + token, this.notifications)
+        .map((response: Response) => {
+          return response.json();
+        });
+      }
 
     fetchNotifications(token, uid) {
         const userId = this.authService.getActiveUser().uid;
@@ -33,12 +41,22 @@ export class NotificationsService {
             });
     }
 
+
+
     setNotifications(notifications: object[]) {
         this.notifications = notifications;
     }
 
     getNotifications(): any[] {
         return this.notifications;
+    }
+
+    removeNotification(rider){
+        this.notifications.forEach((item, index) => {
+            console.log(item)
+            console.log(index);
+            if(item == rider) this.notifications.splice(index, 1);
+        });
     }
 
 

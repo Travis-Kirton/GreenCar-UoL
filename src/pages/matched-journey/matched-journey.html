@@ -1,0 +1,19 @@
+<ion-header no-border>
+    <ion-navbar color="primary">
+      <ion-title>Journey Page</ion-title>
+      <ion-buttons left>
+        <button ion-button icon-only menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-navbar>
+  
+  </ion-header>
+
+
+<ion-content padding>
+  <p>Displaying all group info</p>
+  <div *ngIf="journey != undefined">
+    Booked on: {{journey.dateBooked | date}}
+  </div>
+</ion-content>

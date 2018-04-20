@@ -12,98 +12,98 @@
 
 <ion-content padding>
 
-    <div padding>
-        <ion-segment [(ngModel)]="journeys">
-          <ion-segment-button value="journeys">
-            Journey
-          </ion-segment-button>
-          <ion-segment-button value="allocation">
-            Allocation
-          </ion-segment-button>
-        </ion-segment>
-      </div>
+  <div padding>
+    <ion-segment [(ngModel)]="journeys">
+      <ion-segment-button value="journeys">
+        Journey
+      </ion-segment-button>
+      <ion-segment-button value="allocation">
+        Allocation
+      </ion-segment-button>
+    </ion-segment>
+  </div>
 
-      <div [ngSwitch]="journeys">
+  <div [ngSwitch]="journeys">
 
 
-  <ion-list no-lines *ngSwitchCase="'journeys'">
-  <p align="center" class="text-muted"> {{ routeSet == true ? 'Route Details:' : 'route missing. Add route below...' }}</p>
+    <ion-list no-lines *ngSwitchCase="'journeys'">
+      <p align="center" class="text-muted"> {{ routeSet == true ? 'Route Details:' : 'route missing. Add route below...' }}</p>
 
-  <p class="journeyPara" *ngIf="routeSet">Start:
-    <span>{{ start }}</span>
-  </p>
-  <p class="journeyPara" *ngIf="routeSet">Destination:
-    <span>{{ end }}</span>
-  </p>
+      <p class="journeyPara" *ngIf="routeSet">Start:
+        <span>{{ start }}</span>
+      </p>
+      <p class="journeyPara" *ngIf="routeSet">Destination:
+        <span>{{ end }}</span>
+      </p>
 
-  <ion-item no-lines text-center>
-    <button default ion-button round outline (click)="addRoute()">{{btnAddTitle}}</button>
-  </ion-item>
+      <ion-item no-lines text-center>
+        <button default ion-button round outline (click)="addRoute()">{{btnAddTitle}}</button>
+      </ion-item>
 
-  <ion-item>
-    <ion-label class="datetime">Start Date</ion-label>
-    <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="myDate"></ion-datetime>
-  </ion-item>
-  <ion-item>
-    <ion-label class="datetime">Pick Up Time</ion-label>
-    <ion-datetime displayFormat="HH:mm" [(ngModel)]="myTime"></ion-datetime>
-  </ion-item>
-
-  <ion-item id="repeatingToggle">
-    <ion-label>Repeating Journey</ion-label>
-    <ion-toggle [(ngModel)]="repeating"></ion-toggle>
-  </ion-item>
-
-  <ion-list id="daysOfWeek" *ngIf="repeating">
-    <ion-item>
-      <ion-checkbox [(ngModel)]="daysOfWeek.Mon"></ion-checkbox>
-      <ion-label>Monday</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-checkbox [(ngModel)]="daysOfWeek.Tue"></ion-checkbox>
-      <ion-label>Tuesday</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-checkbox [(ngModel)]="daysOfWeek.Wed"></ion-checkbox>
-      <ion-label>Wednesday</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-checkbox [(ngModel)]="daysOfWeek.Thu"></ion-checkbox>
-      <ion-label>Thursday</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-checkbox [(ngModel)]="daysOfWeek.Fri"></ion-checkbox>
-      <ion-label>Friday</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-checkbox [(ngModel)]="daysOfWeek.Sat"></ion-checkbox>
-      <ion-label>Saturday</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-checkbox [(ngModel)]="daysOfWeek.Sun"></ion-checkbox>
-      <ion-label>Sunday</ion-label>
-    </ion-item>
-  </ion-list>
-
-  <ion-list id="luggageWeight">
-      <div  *ngIf="userRole.rider">
-      <ion-label>
-          Luggage Weight (kg)
-          <ion-badge item-end>{{luggageWeight}} kg</ion-badge>
-    </ion-label>
       <ion-item>
-          <ion-range min="0" max="10" [(ngModel)]="luggageWeight" color="secondary">
-            <ion-label range-left>0</ion-label>
-            <ion-label range-right>10</ion-label>
-          </ion-range>
+        <ion-label class="datetime">Start Date</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="myDate"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label class="datetime">Pick Up Time</ion-label>
+        <ion-datetime displayFormat="HH:mm" [(ngModel)]="myTime"></ion-datetime>
+      </ion-item>
+
+      <ion-item id="repeatingToggle">
+        <ion-label>Repeating Journey</ion-label>
+        <ion-toggle [(ngModel)]="repeating"></ion-toggle>
+      </ion-item>
+
+      <ion-list id="daysOfWeek" *ngIf="repeating">
+        <ion-item>
+          <ion-checkbox [(ngModel)]="daysOfWeek.Mon"></ion-checkbox>
+          <ion-label>Monday</ion-label>
         </ion-item>
+        <ion-item>
+          <ion-checkbox [(ngModel)]="daysOfWeek.Tue"></ion-checkbox>
+          <ion-label>Tuesday</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-checkbox [(ngModel)]="daysOfWeek.Wed"></ion-checkbox>
+          <ion-label>Wednesday</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-checkbox [(ngModel)]="daysOfWeek.Thu"></ion-checkbox>
+          <ion-label>Thursday</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-checkbox [(ngModel)]="daysOfWeek.Fri"></ion-checkbox>
+          <ion-label>Friday</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-checkbox [(ngModel)]="daysOfWeek.Sat"></ion-checkbox>
+          <ion-label>Saturday</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-checkbox [(ngModel)]="daysOfWeek.Sun"></ion-checkbox>
+          <ion-label>Sunday</ion-label>
+        </ion-item>
+      </ion-list>
+
+      <ion-list id="luggageWeight">
+        <div *ngIf="userRole.rider">
+          <ion-label>
+            Luggage Weight (kg)
+            <ion-badge item-end>{{luggageWeight}} kg</ion-badge>
+          </ion-label>
+          <ion-item>
+            <ion-range min="0" max="10" [(ngModel)]="luggageWeight" color="secondary">
+              <ion-label range-left>0</ion-label>
+              <ion-label range-right>10</ion-label>
+            </ion-range>
+          </ion-item>
         </div>
         <div *ngIf="userRole.driver">
-        <ion-label>
+          <ion-label>
             Seats Available
             <ion-badge item-end>{{seatsAvailable}}</ion-badge>
-      </ion-label>
-        <ion-item>
+          </ion-label>
+          <ion-item>
             <ion-range min="0" max="7" [(ngModel)]="seatsAvailable" color="secondary">
               <ion-label range-left>0</ion-label>
               <ion-label range-right>7</ion-label>
@@ -113,48 +113,78 @@
       </ion-list>
 
       <ion-item id="commentBox">
-          <ion-label>Journey Comment</ion-label>
-          <ion-textarea [(ngModel)]="description" name="description" rows="3" columns="25" maxLength="500"></ion-textarea>
+        <ion-label>Journey Comment</ion-label>
+        <ion-textarea [(ngModel)]="description" name="description" rows="3" columns="25" maxLength="500"></ion-textarea>
       </ion-item>
 
-  <ion-item no-lines text-center>
-    <button default ion-button round outline color="danger" (click)="cancelJourney()">Cancel</button>
-    <button default ion-button round outline (click)="addJourney()">Confirm</button>
-  </ion-item>
-  </ion-list>
+      <ion-item no-lines text-center>
+        <button default ion-button round outline color="danger" (click)="cancelJourney()">Cancel</button>
+        <button default ion-button round outline (click)="addJourney()">Confirm</button>
+      </ion-item>
+    </ion-list>
 
 
-  <ion-list no-lines *ngSwitchCase="'allocation'">
+    <ion-list no-lines *ngSwitchCase="'allocation'">
 
-    <p id="muted" align="center">suggested journeys</p>
+      <!-- SHARED JOURNEY VIEW (DRIVER ONLY) -->
+      <div id="driverSharedView">
+        <p align="center" class="text-muted">Journey Info</p>
+        <p class="journeyPara" *ngIf="routeSet">Start:
+          <span>{{ start }}</span>
+        </p>
+        <p class="journeyPara" *ngIf="routeSet">Destination:
+          <span>{{ end }}</span>
+        </p>
+        <p class="journeyPara" *ngIf="routeSet">Pick Up:
+          <span>{{ myTime }}</span>
+        </p>
+
+        <p align="center" class="text-muted">Passengers</p>
+        <ion-item *ngFor="let user of users; let i = index">
+          <ion-avatar item-start (click)="userOptions(user)">
+            <img src="../../assets/img/avatar-leia.png">
+          </ion-avatar>
+          <h3>{{user.username}}</h3>
+          <p>From: Friar Lane</p>
+          <p>To: Hotel Street</p>
+        </ion-item>
+
+        <p align="center" class="text-muted">Discussion</p>
 
 
-    <ion-card *ngFor="let route of suggestedRoutes; let i = index">
+      </div>
+
+
+
+      <p *ngIf="suggestedRoutes != undefined" id="muted" align="center">suggested riders</p>
+      <ion-card *ngFor="let route of suggestedRoutes; let i = index">
 
         <ion-item>
-            <ion-avatar item-start>
-              <img src="../../assets/img/avatar-leia.png">
-            </ion-avatar>
-            <h2>{{route.journey.username}}</h2>
-            <p>Start Date: {{route.journey.startDate}}</p>
-          </ion-item>
-      
+          <ion-avatar item-start>
+            <img src="../../assets/img/avatar-leia.png">
+          </ion-avatar>
+          <h2>{{route.journey.username}}</h2>
+          <p>Start Date: {{route.journey.startDate}}</p>
+        </ion-item>
+
         <ion-item>
           <ion-icon name="pin" item-start large></ion-icon>
           <h2>{{route.journey.start}}</h2>
         </ion-item>
-      
+
         <ion-item>
-          <ion-icon name="pin" item-left large ></ion-icon>
+          <ion-icon name="pin" item-left large></ion-icon>
           <h2>{{route.journey.end}}</h2>
         </ion-item>
-      
+
         <ion-item id="suggestedJourneyInfo">
-          <span item-left> <ion-icon name="car"></ion-icon>18 min</span>
+          <span item-left>
+            <ion-icon name="car"></ion-icon>18 min</span>
           <span item-left>(2.6 mi)</span>
-          <span item-left> <ion-icon name="people"></ion-icon>3</span>
+          <span item-left>
+            <ion-icon name="people"></ion-icon>3</span>
           <button ion-button icon-left outline item-end (click)="joinJourney(route)" [style.color]="route.journey.status === 'pending' ? '#f3aa6f' : '#64bb64'"
-          [style.border-color]="route.journey.status === 'pending' ? '#f3aa6f' : '#64bb64'">
+            [style.border-color]="route.journey.status === 'pending' ? '#f3aa6f' : '#64bb64'">
             <ion-icon name="navigate"></ion-icon>
             {{route.journey.status == 'unmatched' ? 'join' : 'pending'}}
           </button>
@@ -174,23 +204,23 @@
       <ion-card *ngFor="let rider of suggestedRiders; let i = index">
 
         <ion-item>
-            <ion-avatar item-start>
-              <img src="../../assets/img/avatar-leia.png">
-            </ion-avatar>
-            <h2>{{rider.username}}</h2>
-            <p>Request type: {{rider.request}}</p>
-            <p>Request for: {{rider.journeyDate | date}}</p>
-          </ion-item>
+          <ion-avatar item-start>
+            <img src="../../assets/img/avatar-leia.png">
+          </ion-avatar>
+          <h2>{{rider.username}}</h2>
+          <p>Request type: {{rider.request}}</p>
+          <p>Request for: {{rider.journeyDate | date}}</p>
+        </ion-item>
 
-          <ion-item id="suggestedJourneyInfo">
-            <button ion-button icon-left outline item-end (click)="acceptRiderRequest(rider)">
-              <ion-icon name="navigate"></ion-icon>
-             accept
-            </button>
-          </ion-item>
+        <ion-item id="suggestedJourneyInfo">
+          <button ion-button icon-left outline item-end (click)="acceptRiderRequest(rider, i)">
+            <ion-icon name="navigate"></ion-icon>
+            accept
+          </button>
+        </ion-item>
       </ion-card>
 
-  </ion-list>
+    </ion-list>
   </div>
 
 </ion-content>

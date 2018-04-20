@@ -1,16 +1,15 @@
-export class Route{
-
+ export class Route{
     constructor(public status: string,
                 public disabled: boolean,
-                public dateBooked: number,
-                private startDate: string,
-                private pickUpTime: string,
-                private start:string,
-                private end: string,
-                private coords: number[][],
-                private username: string,
-                private repeating: boolean,
-                private daysOfWeek = {
+                public  dateBooked: number,
+                public  startDate: string,
+                public  pickUpTime: string,
+                public  start:string,
+                public  end: string,
+                public  coords: number[][],
+                public  username: string,
+                public  repeating: boolean,
+                public  daysOfWeek = {
                   Mon: false,
                   Tue: false,
                   Wed: false,
@@ -19,110 +18,126 @@ export class Route{
                   Sat: false,
                   Sun: false
                 },
-                private description: string,
-                private comments: string[],
-                private luggageWeight?: number,
-                private seatsAvailable?: number,
-                private users?: string[],
-                private matchedRoute?: Route,
-                private suggestedRoutes?: Route[]){}
+                public  description: string,
+                public  comments: string[],
+                public  luggageWeight?: number,
+                public  seatsAvailable?: number,
+                public  users?: any[],
+                public  matchedRoute?: Route,
+                public  suggestedRoutes?: Route[]){}
 
     
-  setStatus(status: string){
+  public setStatus(status: string){
     this.status = status;
   }
 
-  getStatus(): string{
+  public getStatus(): string{
     return this.status;
   }
 
 
-  getStart(): string{
+  public getStart(): string{
     return this.start;
   }
 
-  setStart(newStart: string){
+  public setStart(newStart: string){
     this.start = newStart;
   }
 
-  getEnd(): string{
+  public getEnd(): string{
     return this.end;
   }
 
-  setEnd(newEnd: string){
+  public setEnd(newEnd: string){
     this.end = newEnd;
   }
 
-  getCoords(): number[][]{
+  public getCoords(): number[][]{
     return this.coords;
   }
 
-  setCoords(newCoords: number[][]){
+  public setCoords(newCoords: number[][]){
     this.coords = newCoords;
   }
 
-  setUserName(username: string){
+  public setUserName(username: string){
     this.username = username;
   }
 
-  getUserName(): string{
+  public getUserName(): string{
     return this.username;
   }
 
-  getstartDate(): string{
+  public setRepeating(repeating: boolean){
+    this.repeating = repeating;
+  }
+
+  public getRepeating(){
+    return this.repeating;
+  }
+
+  public getstartDate(): string{
     return this.startDate
   }
 
-  getPickUpTime(): string{
+  public getPickUpTime(): string{
     return this.pickUpTime;
   }
 
-  getdaysOfWeek(): object{
+  public getdaysOfWeek(): object{
     return this.daysOfWeek;
   }
 
-  getLuggageWeight(): number{
+  public getLuggageWeight(): number{
     return this.luggageWeight;
   }
 
-  getDisabled(): boolean{
+  public getSeatsAvailable(): number{
+    return this.seatsAvailable;
+  }
+
+  public getDisabled(): boolean{
     return this.disabled;
   }
 
-  setDescription(desc){
+  public setDescription(desc){
     this.description = desc;
   }
 
-  getDescription(): string{
+  public getDescription(): string{
     return this.description;
   }
 
-  getComments(): string[]{
+  public getComments(): string[]{
     return this.comments;
   }
 
-  setSuggestedRoutes(routes: Route[]){
+  public setSuggestedRoutes(routes: Route[]){
     this.suggestedRoutes = routes;
   }
 
-  getSuggestedRoutes(){
+  public getSuggestedRoutes(){
     return this.suggestedRoutes;
   }
 
-  setMatchedRoute(route: Route){
+  public setMatchedRoute(route: Route){
     this.matchedRoute = route;
   }
 
-  getMatchedRoute(){
+  public getMatchedRoute(){
     return this.matchedRoute;
   }
 
-  setDateBooked(date: number){
+  public setDateBooked(date: number){
     this.dateBooked = date;
   }
 
-  getDateBooked(): number{
+  public getDateBooked(): number{
     return this.dateBooked;
+  }
+
+  public addUsers(user){
+    this.users.push(user);
   }
 
 

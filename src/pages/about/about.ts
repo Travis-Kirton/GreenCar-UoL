@@ -1,4 +1,3 @@
-import { Route } from './../../models/route';
 import { RoutingService } from './../../services/routing';
 import { AuthService } from './../../services/auth';
 import { LoadingController, AlertController } from 'ionic-angular';
@@ -10,6 +9,8 @@ import { JourneyRetrievalService } from '../../services/journeyRetrieval';
 import { JourneyMatchingService } from '../../services/journeyMatching';
 import { UserService } from '../../services/user';
 import { NotificationsService } from '../../services/notifications';
+import { MatchedJourneyPage } from '../matched-journey/matched-journey';
+import { Route } from '../../models/route';
 
 @Component({
   selector: 'page-about',
@@ -55,22 +56,22 @@ export class AboutPage {
     loading.present();
     this.authService.getActiveUser().getIdToken()
       .then((token: string) => {
-          this.routingService.fetchRoutes(token)
-            .subscribe(
-              (route: Route[]) => {
-                loading.dismiss();
-                if (route) {
-                  this.routes = route;
-                } else {
-                  this.routes = [];
-                }
-              },
-              error => {
-                loading.dismiss();
-                this.handleError(error.json().error);
+        this.routingService.fetchRoutes(token)
+          .subscribe(
+            (route: Route[]) => {
+              loading.dismiss();
+              if (route) {
+                this.routes = route;
+              } else {
+                this.routes = [];
               }
-            );
-        });
+            },
+            error => {
+              loading.dismiss();
+              this.handleError(error.json().error);
+            }
+          );
+      });
   }
 
   private handleError(errorMessage: string) {
@@ -83,7 +84,12 @@ export class AboutPage {
   }
 
   private showRoute(route: Route) {
-    this.navCtrl.push(JourneyViewPage, { route: route, showRoute: true });
+    console.log("asdasad");
+    if (route.status == "matched") {
+      this.navCtrl.push(MatchedJourneyPage, { route: route });
+    } else {
+      this.navCtrl.push(JourneyViewPage, { route: route, showRoute: true });
+    }
   }
 
   private changeCheckColour(status, disabled): string {

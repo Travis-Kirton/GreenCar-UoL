@@ -73,6 +73,11 @@ export class RoutingService {
 
   }
 
+  addUserToRoute(route: Route, rider){
+    route.addUsers(rider);
+    console.log(route);
+  }
+
   
 
 }

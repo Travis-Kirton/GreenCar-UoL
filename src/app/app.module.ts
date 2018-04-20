@@ -31,6 +31,7 @@ import { JourneyViewPage } from '../pages/journey-view/journey-view';
 import { JourneyMatchingService } from '../services/journeyMatching';
 import { JourneyJoiningService } from '../services/journeyJoining';
 import { NotificationsService } from '../services/notifications';
+import { MatchedJourneyPage } from '../pages/matched-journey/matched-journey';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { NotificationsService } from '../services/notifications';
     StatisticsPage,
     CreateJourneyPage,
     JourneyViewPage,
-    MessagesPage
+    MessagesPage,
+    MatchedJourneyPage
   ],
   imports: [
     BrowserModule,
@@ -70,7 +72,8 @@ import { NotificationsService } from '../services/notifications';
     StatisticsPage,
     CreateJourneyPage,
     JourneyViewPage,
-    MessagesPage
+    MessagesPage,
+    MatchedJourneyPage
   ],
   providers: [
     StatusBar,
