@@ -127,7 +127,7 @@
     <ion-list no-lines *ngSwitchCase="'allocation'">
 
       <!-- SHARED JOURNEY VIEW (DRIVER ONLY) -->
-      <div id="driverSharedView">
+      <div id="driverSharedView" *ngIf="userRole.driver">
         <p align="center" class="text-muted">Journey Info</p>
         <p class="journeyPara" *ngIf="routeSet">Start:
           <span>{{ start }}</span>
@@ -140,8 +140,8 @@
         </p>
 
         <p align="center" class="text-muted">Passengers</p>
-        <ion-item *ngFor="let user of users; let i = index">
-          <ion-avatar item-start (click)="userOptions(user)">
+        <ion-item *ngFor="let user of users; let i = index" (click)="userOptions(user)">
+          <ion-avatar item-start>
             <img src="../../assets/img/avatar-leia.png">
           </ion-avatar>
           <h3>{{user.username}}</h3>
@@ -150,13 +150,21 @@
         </ion-item>
 
         <p align="center" class="text-muted">Discussion</p>
-
+          
+        <ion-item *ngFor="let comment of comments">
+            {{comment.user}}
+            <p>{{comment.message}}</p>
+           </ion-item>
+          <ion-item id="comments">
+            <ion-input id="commentInput" type="text"  placeholder="  enter your message..."></ion-input>
+            <button ion-button outline item-right>Send</button>
+           </ion-item>
 
       </div>
 
 
 
-      <p *ngIf="suggestedRoutes != undefined" id="muted" align="center">suggested riders</p>
+      <p *ngIf="suggestedRoutes != undefined && userRole.driver" id="muted" align="center">suggested riders</p>
       <ion-card *ngFor="let route of suggestedRoutes; let i = index">
 
         <ion-item>

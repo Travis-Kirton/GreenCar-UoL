@@ -32,6 +32,7 @@ import { JourneyMatchingService } from '../services/journeyMatching';
 import { JourneyJoiningService } from '../services/journeyJoining';
 import { NotificationsService } from '../services/notifications';
 import { MatchedJourneyPage } from '../pages/matched-journey/matched-journey';
+import { PopoverHomePage } from '../pages/popover-home/popover-home';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { MatchedJourneyPage } from '../pages/matched-journey/matched-journey';
     CreateJourneyPage,
     JourneyViewPage,
     MessagesPage,
-    MatchedJourneyPage
+    MatchedJourneyPage,
+    PopoverHomePage
   ],
   imports: [
     BrowserModule,
@@ -73,7 +75,8 @@ import { MatchedJourneyPage } from '../pages/matched-journey/matched-journey';
     CreateJourneyPage,
     JourneyViewPage,
     MessagesPage,
-    MatchedJourneyPage
+    MatchedJourneyPage,
+    PopoverHomePage
   ],
   providers: [
     StatusBar,

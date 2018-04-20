@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, PopoverController } from 'ionic-angular';
 import { JourneyRetrievalService } from '../../services/journeyRetrieval';
 import { Route } from '../../models/route';
 import { AuthService } from '../../services/auth';
+import { PopoverHomePage } from '../popover-home/popover-home';
 
 @Component({
   selector: 'page-matched-journey',
@@ -11,8 +12,10 @@ import { AuthService } from '../../services/auth';
 export class MatchedJourneyPage {
 
   private journey: any = undefined;
+  private commentText: string = "";
 
   constructor(private authService: AuthService,
+    private popCtrl: PopoverController,
     private navParams: NavParams,
     private jrService: JourneyRetrievalService,
     private loadingCtrl: LoadingController) {
@@ -23,8 +26,7 @@ export class MatchedJourneyPage {
   }
 
 
-  loadRoute(){
-    
+  loadRoute(){ 
     const loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
@@ -50,6 +52,16 @@ export class MatchedJourneyPage {
           }
         );
     });
+  }
+
+  userOptions(user){
+    let popover = this.popCtrl.create(PopoverHomePage);
+    popover.present();
+  }
+
+  postComment(){
+    console.log(this.commentText);
+    this.commentText = " ";
   }
 
 }

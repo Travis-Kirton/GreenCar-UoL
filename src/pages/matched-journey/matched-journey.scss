@@ -1,6 +1,84 @@
 .ios, .md {
-    page-matched-journey{
-        ion-navbar .toolbar-background {
-      }
+    page-matched-journey {
+
+        .journeyPara{
+            font-weight: 250;
+            text-decoration: underline;
+            padding-left: 5%;
+        }
+        .journeyPara span{
+            background-color:rgb(234, 247, 234);
+            color: #64bb64;
+            padding:4px;
+            border-radius:3px;
+            border:1px solid #64bb64;
+            float:right;
+        }
+
+        ion-label{
+            font-size: 13px;
+        }
+
+        ion-list-header{
+            font-size: 13px;
+        }
+
+        #commentBox{
+            background-color:rgb(234, 247, 234);
+            color: #64bb64;
+            padding:4px;
+            border-radius:3px;
+            width:90%;
+            margin: 0 auto;
+            margin-top:1%;
+
+            ion-label{
+                margin-left:5%;
+                height:15px;
+            }
+
+            ion-textarea{
+                margin-top:15%;
+                background-color: white;
+                color:#000;
+                float:left;
+            }
+        }
     }
+
+    #muted{
+        color:gray;
+        font-size: 0.91em;
+    }
+
+    p span{
+        background-color:rgb(234, 247, 234);
+        color: #64bb64;
+        padding:1px;
+        border:1px solid #64bb64;
+        border-radius:3px;
+    }
+
+    #comments{ 
+        button{
+            height:70%;
+        }
+    }
+    #commentInput{
+        font-size: 13px;
+        background-color:#eeeeee;
+        height:70%;
+        border-radius:5px;
+        
+    }
+    .comment{
+        background-color: #e0f3e0;
+        border-radius:5px;
+        padding:10px;
+        
+        p{
+            color:#000;
+        }
+    }
+
 }

@@ -12,8 +12,40 @@
 
 
 <ion-content padding>
-  <p>Displaying all group info</p>
   <div *ngIf="journey != undefined">
-    Booked on: {{journey.dateBooked | date}}
+      <p align="center" class="text-muted">Journey Info</p>
+      <p class="journeyPara">Start:
+        <span>{{ journey.start }}</span>
+      </p>
+      <p class="journeyPara">Destination:
+        <span>{{ journey.end }}</span>
+      </p>
+      <p class="journeyPara">Pick Up:
+        <span>{{ journey.pickUpTime }}</span>
+      </p>
+
+
+      <p align="center" class="text-muted">Passengers</p>
+      <ion-item *ngFor="let user of journey.users; let i = index" (click)="userOptions(user)">
+        <ion-avatar item-start>
+          <img src="../../assets/img/avatar-leia.png">
+        </ion-avatar>
+        <h3>{{user.username}}</h3>
+        <p>From: Friar Lane</p>
+        <p>To: Hotel Street</p>
+      </ion-item>
+
+      <p align="center" class="text-muted">Discussion</p>
+        
+      <ion-item *ngFor="let comment of journey.comments">
+        <div class="comment">  
+        {{comment.user}}
+          <p>{{comment.message}}</p>
+        </div>
+         </ion-item>
+        <ion-item id="comments">
+          <ion-input id="commentInput" type="text"  placeholder="  enter your message..." [(ngModel)]="commentText"></ion-input>
+          <button ion-button outline item-right (click)="postComment()">Send</button>
+         </ion-item>
   </div>
 </ion-content>

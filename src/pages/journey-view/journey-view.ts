@@ -34,7 +34,7 @@ export class JourneyViewPage {
   luggageWeight: number;
   seatsAvailable: number;
   description: string;
-  comments: string[] = [];
+  comments: any[] = [];
   users: object[] = [];
 
   suggestedRoutes: Route[] = [];
@@ -84,7 +84,6 @@ export class JourneyViewPage {
       this.btnAddTitle = 'Edit Route';
     } else if (this.navParams.get('showRoute')) {
       this.journey = this.navParams.get('route');
-      console.log(this.journey);
       this.routeSet = true;
       this.dateBooked = this.journey.dateBooked;
       this.start = this.journey.start;
@@ -100,6 +99,7 @@ export class JourneyViewPage {
       this.comments = this.journey.comments;
       this.suggestedRoutes = this.journey.suggestedRoutes;
       this.users = this.journey.users;
+      console.log(this.comments);
     } else {
       this.routeSet = false;
     }
@@ -201,6 +201,8 @@ export class JourneyViewPage {
               alert.present();
               this.navCtrl.pop();
               this.navCtrl.push(MatchedJourneyPage, { route: this.journey });
+              this.notifService.removeNotification(notification);
+              this.storeNotifications();
             }
           }
         });
@@ -223,15 +225,18 @@ export class JourneyViewPage {
 
 
      // add user into current journey 
-     this.journey.users.push(rider);
+     if(this.journey.users == undefined){
+       this.journey.users = [];
+       this.journey.users.push(rider);
+     }else{
+       this.journey.users.push(rider);
+     }
    
     //remove rider from suggested riders
     this.suggestedRiders.splice(index);
    
     //push back to Firebase
     this.storeRoutes(false);
-
-    // change view to include riders, & comment section
 
   }
 

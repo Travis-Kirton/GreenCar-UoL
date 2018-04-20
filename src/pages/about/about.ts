@@ -84,7 +84,6 @@ export class AboutPage {
   }
 
   private showRoute(route: Route) {
-    console.log("asdasad");
     if (route.status == "matched") {
       this.navCtrl.push(MatchedJourneyPage, { route: route });
     } else {
