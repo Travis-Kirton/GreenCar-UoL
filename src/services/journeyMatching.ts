@@ -14,6 +14,7 @@ export class JourneyMatchingService {
                 private userService: UserService) {
         this.jrService.getJourneys()
             .then(journeys => {
+                console.log(journeys);
                 this.journeys = journeys;
                 console.log(this.journeys);
             })
@@ -24,11 +25,12 @@ export class JourneyMatchingService {
 
     findClosestStartMatch(lat: number, lon: number): object[] {
         let matches = this.findClosestJourneyCoords(this.journeys, lat, lon);
+        console.log(matches);
         return matches;
     }
 
-    matchBasedOnTimeAndPref(suggestedMatches: any[], journey: Route): any[]{
-        let matches: object[] = [];
+    matchBasedOnTimeAndPref(suggestedMatches: any[], journey: Route): Route[]{
+        let matches: Route[] = [];
 
         suggestedMatches.forEach((match) => {
             let suggestedDate = new Date(match.journey.startDate);
@@ -52,13 +54,14 @@ export class JourneyMatchingService {
                 let timeDiff = ((suggestedMinutes + this.preferences.waitTime) - journeyMinutes);
                 if(timeDiff >= 0 && timeDiff <= this.preferences.waitTime){
                     matches.push(match);
-                    console.log(match);
+                    console.log("pushed: " + match);
                 }
             }
         }
         });
         return matches;
     }
+
 
 
     findClosestNode(arr, lat, lon): MapNode {
@@ -78,6 +81,7 @@ export class JourneyMatchingService {
         journeys.forEach(journey => {
             let coords = journey.journey.coords[0];
             if (this.calcDistance(lat, lon, coords[0], coords[1]) < this.preferences.waitTime) {
+                console.log(journey);
                 matchedRoutes.push(journey);
             }
         });

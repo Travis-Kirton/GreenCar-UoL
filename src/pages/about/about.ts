@@ -32,7 +32,6 @@ export class AboutPage {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private routingService: RoutingService,
-    private journeyRetrieval: JourneyRetrievalService,
     private journeyMatching: JourneyMatchingService,
     private notificationService: NotificationsService
   ) {
@@ -46,7 +45,6 @@ export class AboutPage {
   ionViewDidLoad() {
     //load specific lists
     this.loadRoutes();
-    this.journeyRetrieval.getJourneys();
   }
 
   private loadRoutes() {

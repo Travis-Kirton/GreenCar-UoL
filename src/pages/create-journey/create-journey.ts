@@ -57,8 +57,7 @@ export class CreateJourneyPage implements OnInit {
     public navCtrl: NavController,
     private dijkstra: Dijkstra,
     private astar: Astar,
-    private journeyMatchingService: JourneyMatchingService,
-    private journeyRetrievalService: JourneyRetrievalService) { }
+    private journeyMatchingService: JourneyMatchingService){}
 
   saveRoute() {
     if(this.startingPoint == "Point Not Found" || this.destination == "Point Not Found"){

@@ -4,6 +4,7 @@ import { JourneyRetrievalService } from '../../services/journeyRetrieval';
 import { Route } from '../../models/route';
 import { AuthService } from '../../services/auth';
 import { PopoverHomePage } from '../popover-home/popover-home';
+import { RoutingService } from '../../services/routing';
 
 @Component({
   selector: 'page-matched-journey',
@@ -13,8 +14,10 @@ export class MatchedJourneyPage {
 
   private journey: any = undefined;
   private commentText: string = "";
+  private uid =this.navParams.get('route').matchedRoute.uid;
 
   constructor(private authService: AuthService,
+    private routingService: RoutingService,
     private popCtrl: PopoverController,
     private navParams: NavParams,
     private jrService: JourneyRetrievalService,
@@ -27,6 +30,7 @@ export class MatchedJourneyPage {
 
 
   loadRoute(){ 
+    console.log(this.uid);
     const loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
@@ -60,7 +64,7 @@ export class MatchedJourneyPage {
   }
 
   postComment(){
-    console.log(this.commentText);
+    this.routingService.addComment(this.uid, this.journey, this.commentText);
     this.commentText = " ";
   }
 

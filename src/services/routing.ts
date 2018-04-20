@@ -3,6 +3,7 @@ import { Route } from './../models/route';
 import { reorderArray, ToastController } from 'ionic-angular';
 import { Injectable } from "@angular/core";
 import { Http, Response } from "@angular/http";
+import firebase from 'firebase';
 import 'rxjs/Rx';
 
 @Injectable()
@@ -11,16 +12,17 @@ export class RoutingService {
   private routes: Route[] = [];
 
   constructor(private http: Http,
-              private toastCtrl: ToastController,
-              private authService: AuthService) {
+    private toastCtrl: ToastController,
+    private authService: AuthService) {
   }
 
-  addRoute(route: Route){
+
+  addRoute(route: Route) {
     console.log(route);
     this.routes.push(route);
   }
 
-  disableRoute(index: number){
+  disableRoute(index: number) {
     this.routes[index].disabled = !this.routes[index].disabled;
     let toast = this.toastCtrl.create({
       message: 'Disabled/Enabled Route',
@@ -34,27 +36,27 @@ export class RoutingService {
     }));
   }
 
-  getRoutes(){
+  getRoutes() {
     return this.routes.slice();
   }
 
-  removeRoute(index: number){
-    this.routes.splice(index,1);
+  removeRoute(index: number) {
+    this.routes.splice(index, 1);
     this.authService.getActiveUser().getIdToken().then((token => {
       this.storeRoutes(token)
         .subscribe();
     }));
   }
 
-  storeRoutes(token: string){
+  storeRoutes(token: string) {
     const userId = this.authService.getActiveUser().uid;
     return this.http.put('https://greencar-uol.firebaseio.com/' + userId + '/routes.json?auth=' + token, this.routes)
-    .map((response: Response) => {
-      return response.json();
-    });
+      .map((response: Response) => {
+        return response.json();
+      });
   }
 
-  fetchRoutes(token: string){
+  fetchRoutes(token: string) {
     const userId = this.authService.getActiveUser().uid;
     return this.http.get('https://greencar-uol.firebaseio.com/' + userId + '/routes.json?auth=' + token)
       .map((response: Response) => {
@@ -69,10 +71,16 @@ export class RoutingService {
       });
   }
 
-  addComment(){
+  addComment(uid: string, route: Route, comment) {
+    // push comment to specific user route
+    // HOW?!!
 
+    route.comments.push(comment);
+
+    var query = firebase.database().ref("/" + uid).orderByChild("dateBooked").equalTo(route.dateBooked);
+    return query.on("value", function (snapshot) {
+
+    });
   }
-
-  
 
 }

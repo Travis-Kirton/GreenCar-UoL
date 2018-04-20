@@ -9,13 +9,15 @@ import { AuthService } from './auth';
 export class JourneyRetrievalService {
 
     constructor(private http: Http,
-                private authService: AuthService) { }
+        private authService: AuthService) {
+         }
 
     routes: object[] = [];
 
     // retrieves all journeys stored in database, including uid, start & end coords
     // used for matching users based on journeys
-    getJourneys(): Promise<Array<object>> {
+    getJourneys(){
+        this.routes = [];
         var query = firebase.database().ref("/").orderByKey();
         return query
             .once("value")
@@ -32,12 +34,12 @@ export class JourneyRetrievalService {
             });
     }
 
-    getSpecificJourney(token, uid){
-    let route_toReturn: Route;
-    return this.http.get('https://greencar-uol.firebaseio.com/' + uid + '/routes.json?auth=' + token)
-      .map((response: Response) => {
-        return response.json();
-      });
+    getSpecificJourney(token, uid) {
+        let route_toReturn: Route;
+        return this.http.get('https://greencar-uol.firebaseio.com/' + uid + '/routes.json?auth=' + token)
+            .map((response: Response) => {
+                return response.json();
+            });
     }
 
 

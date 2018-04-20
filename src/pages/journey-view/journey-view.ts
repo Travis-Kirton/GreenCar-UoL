@@ -76,6 +76,8 @@ export class JourneyViewPage {
   }
 
   ngOnInit() {
+    this.userRole = this.userService.getUserRole();
+
     if (this.navParams.get('isSet')) {
       this.routeSet = true;
       this.start = this.navParams.get('start');
@@ -99,12 +101,11 @@ export class JourneyViewPage {
       this.comments = this.journey.comments;
       this.suggestedRoutes = this.journey.suggestedRoutes;
       this.users = this.journey.users;
-      console.log(this.comments);
+      console.log(this.suggestedRoutes);
+
     } else {
       this.routeSet = false;
     }
-
-    this.userRole = this.userService.getUserRole();
   }
 
   addRoute() {
@@ -139,8 +140,10 @@ export class JourneyViewPage {
     }
 
     let matches = this.jmService.findClosestStartMatch(this.route[0][0], this.route[0][1]);
-
+    this.suggestedRoutes = [];
+    console.log(matches);
     this.suggestedRoutes = this.jmService.matchBasedOnTimeAndPref(matches, this.journey);
+    console.log(this.suggestedRoutes);
     this.journey.setSuggestedRoutes(this.suggestedRoutes);
     this.journey.getSuggestedRoutes();
     this.routingService.addRoute(this.journey);
