@@ -101,7 +101,12 @@ export class JourneyViewPage {
       this.comments = this.journey.comments;
       this.suggestedRoutes = this.journey.suggestedRoutes;
       this.users = this.journey.users;
-      console.log(this.suggestedRoutes);
+
+      // match on each load of journey
+      let matches = this.jmService.findClosestStartMatch(this.route[0][0], this.route[0][1]);
+      this.suggestedRoutes = [];
+      this.suggestedRoutes = this.jmService.matchBasedOnTimeAndPref(matches, this.journey);
+      this.journey.suggestedRoutes = this.suggestedRoutes;
 
     } else {
       this.routeSet = false;
@@ -141,9 +146,7 @@ export class JourneyViewPage {
 
     let matches = this.jmService.findClosestStartMatch(this.route[0][0], this.route[0][1]);
     this.suggestedRoutes = [];
-    console.log(matches);
     this.suggestedRoutes = this.jmService.matchBasedOnTimeAndPref(matches, this.journey);
-    console.log(this.suggestedRoutes);
     this.journey.setSuggestedRoutes(this.suggestedRoutes);
     this.journey.getSuggestedRoutes();
     this.routingService.addRoute(this.journey);

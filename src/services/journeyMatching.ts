@@ -34,20 +34,20 @@ export class JourneyMatchingService {
 
         suggestedMatches.forEach((match) => {
             let suggestedDate = new Date(match.journey.startDate);
-            let journeyDate = new Date(journey.getstartDate());
+            let journeyDate = new Date(journey.startDate);
 
             let suggestedPickUp = match.journey.pickUpTime.split(':');
             suggestedDate.setHours(+suggestedPickUp[0]);
             suggestedDate.setMinutes(+suggestedPickUp[1]);
 
-            let journeyPickUp = journey.getPickUpTime().split(':');
+            let journeyPickUp = journey.pickUpTime.split(':');
             journeyDate.setHours(+journeyPickUp[0]);
             journeyDate.setMinutes(+journeyPickUp[1]);
 
             // check if route is disabled (don't match if true)
-            if(match.journey.disabled == false){
-            // find matches that are starting on/after the same date
-            if(suggestedDate.getDate() - journeyDate.getDate() >= 0){        
+            if(match.journey.disabled == false || (match.journey.users.length < match.journey.seatsAvailable)){
+            // find matches that are starting on/after the same date (unless repeating)
+            if((suggestedDate.getDate() - journeyDate.getDate() >= 0) && !match.journey.repeating){        
                let suggestedMinutes = (suggestedDate.getHours() * 60) + suggestedDate.getMinutes();
                let journeyMinutes = (journeyDate.getHours() * 60) + journeyDate.getMinutes();
                 //check pick-up time & user waiting allowance is compatible

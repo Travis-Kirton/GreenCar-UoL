@@ -25,7 +25,10 @@ export class JourneyRetrievalService {
                 snapshot.forEach(snap => {
                     if (snap.val().routes != undefined) {
                         snap.val().routes.forEach((route) => {
-                            this.routes.push({uid: snap.key, journey: route});
+                            //don't suggest users journeys own journeys
+                            if(this.authService.getActiveUser().uid != snap.key){
+                                this.routes.push({uid: snap.key, journey: route});
+                            }
                         });
                     }
                     return false;
