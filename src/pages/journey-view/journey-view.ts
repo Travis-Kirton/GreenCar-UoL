@@ -258,6 +258,8 @@ export class JourneyViewPage {
 
     this.notifications.forEach(notification => {
       notification.forEach(notif => {
+        console.log(this.journey);
+        console.log(this.myDate);
         if (notif.request == "joining") {
           if (this.journey.dateBooked == undefined) {
             console.log(this.journey.dateBooked);
