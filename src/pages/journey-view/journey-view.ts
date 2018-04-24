@@ -34,7 +34,7 @@ export class JourneyViewPage {
   btnAddTitle = 'Add Route';
   dateBooked: number;
   myDate: number;
-  myTime: number;
+  myTime: string;
   repeating: boolean = false;
   route: number[][] = [];
   userName = this.authService.getUsername();

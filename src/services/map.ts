@@ -19,6 +19,7 @@ export class MapService {
   private endPosition = new Subject<any>();
   startMarker: L.Marker;
   endMarker: L.Marker
+  polyline: L.Polyline;
 
   constructor(private toastCtrl: ToastController) { }
 
@@ -62,6 +63,7 @@ export class MapService {
     //check for maximum 2 markers (start+end)
     if (this.seMarkCounter < this.MARKER_MAX) {
       if (this.seMarkCounter < 1) {
+        console.log(e.latlng);
         this.startMarker = L.marker(e.latlng, {
           icon: this.startIcon,
           draggable: true
@@ -76,24 +78,15 @@ export class MapService {
       }
       this.seMarkCounter += 1;
     }
-    // emit event when marker is dragged
-    this.startMarker.on('dragend', (event) => {
-      this.startPosition.next(this.startMarker);
-    });
-    // if: ensures both markers are in place
-    if (this.seMarkCounter > 1) {
-      this.endMarker.on('dragend', (event) => {
-        this.endPosition.next(this.endMarker);
-      });
-    }
+    this.markersDragged();
   }
 
   //lock markers to road positions
-  repositionStartMarker(lat, lon){
-    this.startMarker.setLatLng([lat,lon]);
+  repositionStartMarker(lat, lon) {
+    this.startMarker.setLatLng([lat, lon]);
   }
 
-  repositionDestinationMarker(lat, lon){
+  repositionDestinationMarker(lat, lon) {
     this.endMarker.setLatLng([lat, lon]);
   }
 
@@ -117,12 +110,25 @@ export class MapService {
     let start = null;
     let end = null;
 
-    var polyline = L.polyline(latlngs, { color: 'red' }).addTo(this.map);
-    this.map.fitBounds(polyline.getBounds());
+    this.polyline = L.polyline(latlngs, { color: 'red' }).addTo(this.map);
+    this.map.fitBounds(this.polyline.getBounds());
 
-    start = L.marker(latlngs[0], { icon: this.startIcon }).addTo(this.map);
-    end = L.marker(latlngs[latlngs.length - 1], { icon: this.endIcon }).addTo(this.map);
+    this.startMarker = L.marker(latlngs[0], { icon: this.startIcon, draggable: true }).addTo(this.map);
+    this.endMarker = L.marker(latlngs[latlngs.length - 1], { icon: this.endIcon, draggable: true }).addTo(this.map);
+    this.markersDragged();
     latlngs = null;
+  }
+
+  markersDragged() {
+    this.startMarker.on('dragend', (event) => {
+      this.startPosition.next(this.startMarker);
+    });
+    // if: ensures both markers are in place
+    if (this.seMarkCounter > 1) {
+      this.endMarker.on('dragend', (event) => {
+        this.endPosition.next(this.endMarker);
+      });
+    }
   }
 
 

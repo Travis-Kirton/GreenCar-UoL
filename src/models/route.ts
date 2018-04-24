@@ -5,7 +5,7 @@ export interface Route {
   disabled: boolean;
   dateBooked: number;
   startDate: number;
-  pickUpTime: number;
+  pickUpTime: string;
   start: string;
   end: string;
   coords: number[][];

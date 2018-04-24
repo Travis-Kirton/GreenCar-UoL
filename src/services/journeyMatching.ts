@@ -75,17 +75,18 @@ export class JourneyMatchingService {
 
 
 
-    findClosestNode(arr, lat, lon): MapNode {
+    findClosestNode(arr, lat:number, lon:number): MapNode {
         let newNode = arr[0];
         arr.forEach(node => {
             if (this.calcDistance(lat, lon, node.lat, node.lon) < this.calcDistance(lat, lon, newNode.lat, newNode.lon)) {
                 newNode = node;
             }
         });
+        console.log(newNode);
         return newNode;
     }
 
-    findClosestJourneyCoords(journeys, lat, lon): object[] {
+    findClosestJourneyCoords(journeys, lat:number, lon:number): object[] {
         let currLat = 0;
         let currLon = 0;
         let matchedRoutes: object[] = [];
@@ -101,10 +102,8 @@ export class JourneyMatchingService {
     // Haversine formula for computing distances
     //https://rosettacode.org/wiki/Haversine_formula#JavaScript
     calcDistance(lat1, lon1, lat2, lon2) {
-        let R = 0;
-        if (this.preferences.distanceType == "km") {
-            R = 3958.75;  // calculating for kilometers
-        } else if (this.preferences.distanceType == "miles") {
+        let R = 3958.75; // (km) - default required
+        if (this.preferences.distanceType == "miles") {
             R = 6372.8;   // calculating for miles
         }
 

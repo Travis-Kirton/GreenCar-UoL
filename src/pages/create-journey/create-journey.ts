@@ -130,13 +130,12 @@ export class CreateJourneyPage implements OnInit {
   ngOnInit() {
     // if user sets markers on non-roads 
     this.mapService.eventStart.forEach((event) => {
-      this.startingPoint = event._latlng.lat + ", " + event._latlng.lng;
+      console.log(event);
       let node = this.journeyMatchingService.findClosestNode(this.nodeStorageService.getNodes(), event._latlng.lat, event._latlng.lng);
       this.mapService.repositionStartMarker(node.lat, node.lon);
       this.startingPoint = this.edgeStorageService.getEdgeNameByNodeId(node);
     });
     this.mapService.eventEnd.forEach((event) => {
-      this.destination = event._latlng.lat + ", " + event._latlng.lng;
       let node = this.journeyMatchingService.findClosestNode(this.nodeStorageService.getNodes(), event._latlng.lat, event._latlng.lng);
       this.mapService.repositionDestinationMarker(node.lat, node.lon);
       this.destination = this.edgeStorageService.getEdgeNameByNodeId(node);
