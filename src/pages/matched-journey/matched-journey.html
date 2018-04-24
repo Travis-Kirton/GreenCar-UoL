@@ -1,51 +1,56 @@
 <ion-header no-border>
-    <ion-navbar color="primary">
-      <ion-title>Journey Page</ion-title>
-      <ion-buttons left>
-        <button ion-button icon-only menuToggle>
-          <ion-icon name="menu"></ion-icon>
-        </button>
-      </ion-buttons>
-    </ion-navbar>
-  
-  </ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Journey Page</ion-title>
+    <ion-buttons left>
+      <button ion-button icon-only menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
 
 
 <ion-content padding>
   <div *ngIf="journey != undefined">
-      <p align="center" class="text-muted">Journey Info</p>
-      <p class="journeyPara">Start:
-        <span>{{ journey.start }}</span>
-      </p>
-      <p class="journeyPara">Destination:
-        <span>{{ journey.end }}</span>
-      </p>
-      <p class="journeyPara">Pick Up:
-        <span>{{ journey.pickUpTime }}</span>
-      </p>
+    <p align="center" class="text-muted">Journey Info</p>
+    <p class="journeyPara">Start:
+      <span>{{ journey.start }}</span>
+    </p>
+    <p class="journeyPara">Destination:
+      <span>{{ journey.end }}</span>
+    </p>
+    <p class="journeyPara">Pick Up:
+      <span>{{ journey.pickUpTime }}</span>
+    </p>
 
+    <p align="center" class="text-muted">Passengers</p>
+    <ion-item *ngFor="let user of journey.users; let i = index" (click)="userOptions(user)">
+      <ion-avatar item-start>
+        <img src="../../assets/img/avatar-leia.png">
+      </ion-avatar>
+      <h3>{{user.username}}</h3>
+      <p>From: Friar Lane</p>
+      <p>To: Hotel Street</p>
+    </ion-item>
 
-      <p align="center" class="text-muted">Passengers</p>
-      <ion-item *ngFor="let user of journey.users; let i = index" (click)="userOptions(user)">
+    <div id="discussion">
+      <p align="center" class="text-muted">Discussion</p>
+
+      <ion-item *ngFor="let comment of commentList$ | async">
         <ion-avatar item-start>
           <img src="../../assets/img/avatar-leia.png">
         </ion-avatar>
-        <h3>{{user.username}}</h3>
-        <p>From: Friar Lane</p>
-        <p>To: Hotel Street</p>
-      </ion-item>
-
-      <p align="center" class="text-muted">Discussion</p>
-        
-      <ion-item *ngFor="let comment of journey.comments">
-        <div class="comment">  
-        {{comment.user}}
-          <p>{{comment.message}}</p>
+        <div class="comment">
+          <p id="commentTime">{{comment.timeSent}}</p>
+          <p id="commentUser">{{comment.userName}}</p>
+          <p id="commentText">{{comment.message}}</p>
         </div>
-         </ion-item>
-        <ion-item id="comments">
-          <ion-input id="commentInput" type="text"  placeholder="  enter your message..." [(ngModel)]="commentText"></ion-input>
-          <button ion-button outline item-right (click)="postComment()">Send</button>
-         </ion-item>
+      </ion-item>
+      <ion-item id="comments">
+        <ion-input id="commentInput" type="text" placeholder="  enter your message..." [(ngModel)]="commentText"></ion-input>
+        <button ion-button outline item-right (click)="postComment()">Send</button>
+      </ion-item>
+    </div>
   </div>
 </ion-content>

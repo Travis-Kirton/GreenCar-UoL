@@ -134,18 +134,27 @@
             text-align: center;
         }
     }
+    .comment{
+        background-color: #e0f3e0;
+        border-radius:5px;
+        padding:10px;
 
-    #comments{ 
-        button{
-            height:70%;
+        #commentTime{
+            color:#525252;
+            font-size: 12px;
+        }
+
+        #commentUser{
+            
+        }
+        
+        p{
+            color:#000;
         }
     }
-    #commentInput{
-        font-size: 13px;
-        background-color:#eeeeee;
-        height:70%;
-        border-radius:5px;
-        
+
+    #discussion{
+
     }
 
 }

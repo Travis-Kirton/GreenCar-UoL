@@ -1,64 +1,35 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth';
 import { Http, Response } from "@angular/http";
+import { LoadingController, AlertController } from 'ionic-angular';
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { NotificationMessage } from '../models/notification';
+
 
 @Injectable()
 export class NotificationsService {
 
-    constructor(private authService: AuthService,
+    constructor(private authService: AuthService, 
+        private afDatabase: AngularFireDatabase, 
+        private loadingCtrl: LoadingController,
+        private alertCtrl: AlertController,
         private http: Http) { }
 
     notifications: any[] = [];
+    uid = this.authService.getActiveUser().uid; 
+    notificationRef = this.afDatabase.list<NotificationMessage>(this.uid + '/notifications');
 
-    pushNotificationToUser(userID, datestamp, request, uid, token, journey?) {
-        let notification = { username: this.authService.getUsername(), userID: userID, journeyDate: datestamp, request: request, journey: journey };
-        return this.http.put('https://greencar-uol.firebaseio.com/' + uid + '/notification/' + (userID + '-' + datestamp) + '.json?auth=' + token, notification)
-            .map((response: Response) => {
-                return response.json();
-            });
+    pushNotificationToUser(userID, datestamp, request, uid, journey?) {
+        let notificationRef = this.afDatabase.list<NotificationMessage>(uid + '/notifications');
+        let notification: NotificationMessage = { seen: false,username: this.authService.getUsername(), userID: userID, journeyDate: datestamp, request: request, journey: journey };
+        return notificationRef.push(notification);
     }
 
-    storeNotications(token: string){
-        const userId = this.authService.getActiveUser().uid;
-        return this.http.put('https://greencar-uol.firebaseio.com/' + userId + '/notification.json?auth=' + token, this.notifications)
-        .map((response: Response) => {
-          return response.json();
-        });
-      }
-
-    fetchNotifications(token, uid) {
-        const userId = this.authService.getActiveUser().uid;
-        return this.http.get('https://greencar-uol.firebaseio.com/' + uid + '/notification.json?auth=' + token)
-            .map((response: Response) => {
-                return response.json();
-            })
-            .do((notifications: any[]) => {
-                if (notifications) {
-                    this.notifications = notifications;
-                } else {
-                    this.notifications = [];
-                }
-            });
+    getNotifications() {
+        return this.notificationRef;
     }
 
-
-
-    setNotifications(notifications: object[]) {
-        this.notifications = notifications;
+    removeNotification(key) {
+        this.notificationRef.remove(key);
     }
-
-    getNotifications(): any[] {
-        return this.notifications;
-    }
-
-    removeNotification(rider){
-        this.notifications.forEach((item, index) => {
-            console.log(item)
-            console.log(index);
-            if(item == rider) this.notifications.splice(index, 1);
-        });
-    }
-
-
-
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
 import { NotificationsService } from '../../services/notifications';
+import { NotificationMessage } from '../../models/notification';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'page-contact',
@@ -8,15 +9,22 @@ import { NotificationsService } from '../../services/notifications';
 })
 export class ContactPage {
 
-  notifications: object[] = [];
+  notifications: Observable<NotificationMessage[]>;
 
-  constructor(public navCtrl: NavController,
-              public notifService: NotificationsService) {
-
+  constructor(public notifService: NotificationsService) {
+    this.notifications = this.notifService
+      .getNotifications()
+      .snapshotChanges() // Key:Value pairs
+      .map(changes => {
+        return changes.map(c => ({
+          key: c.payload.key,
+          ...c.payload.val()
+        }));
+      });
   }
 
-  ionViewDidLoad(){
-    this.notifications = this.notifService.getNotifications();
+  removeNotification(key){
+    this.notifService.removeNotification(key);
   }
 
 }

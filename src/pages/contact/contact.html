@@ -7,7 +7,18 @@
 </ion-header>
 
 <ion-content>
-  <ion-list *ngFor="let notif of notifications">
-    <ion-list-header>from {{notif.username}}, {{notif.request}} journey</ion-list-header>
-  </ion-list>
+    <ion-list>
+      <ion-item-sliding  *ngFor="let notif of notifications |async">
+        <ion-item>
+        <p>from: {{notif.username}}, {{notif.request}} journey</p>
+        </ion-item>
+
+        
+        <ion-item-options side="right">
+          <button color="danger" ion-button icon-only (click)="removeNotification(notif.key)">
+            <ion-icon name="trash"></ion-icon>
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+      </ion-list>
 </ion-content>

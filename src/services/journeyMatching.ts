@@ -7,16 +7,15 @@ import { UserService } from './user';
 @Injectable()
 export class JourneyMatchingService {
 
-    journeys: object[] = [];
+    journeys: any[] = [];
     preferences = this.userService.getPreferences();
 
     constructor(private jrService: JourneyRetrievalService,
-                private userService: UserService) {
+        private userService: UserService) {
+
         this.jrService.getJourneys()
             .then(journeys => {
-                console.log(journeys);
                 this.journeys = journeys;
-                console.log(this.journeys);
             })
             .catch(error => {
                 console.log(error);
@@ -24,19 +23,21 @@ export class JourneyMatchingService {
     }
 
     findClosestStartMatch(lat: number, lon: number): object[] {
+        this.populateJoureys();
+        console.log(lat + ", " + lon)
+        console.log(this.journeys);
         let matches = this.findClosestJourneyCoords(this.journeys, lat, lon);
-        console.log(matches);
         return matches;
     }
 
-    matchBasedOnTimeAndPref(suggestedMatches: any[], journey: Route): Route[]{
+    matchBasedOnTimeAndPref(suggestedMatches: any[], journey: Route): Route[] {
         let matches: Route[] = [];
 
         suggestedMatches.forEach((match) => {
-            let suggestedDate = new Date(match.journey.startDate);
+            let suggestedDate = new Date(match.startDate);
             let journeyDate = new Date(journey.startDate);
 
-            let suggestedPickUp = match.journey.pickUpTime.split(':');
+            let suggestedPickUp = match.pickUpTime.split(':');
             suggestedDate.setHours(+suggestedPickUp[0]);
             suggestedDate.setMinutes(+suggestedPickUp[1]);
 
@@ -45,21 +46,31 @@ export class JourneyMatchingService {
             journeyDate.setMinutes(+journeyPickUp[1]);
 
             // check if route is disabled (don't match if true)
-            if(match.journey.disabled == false || (match.journey.users.length < match.journey.seatsAvailable)){
-            // find matches that are starting on/after the same date (unless repeating)
-            if((suggestedDate.getDate() - journeyDate.getDate() >= 0) && !match.journey.repeating){        
-               let suggestedMinutes = (suggestedDate.getHours() * 60) + suggestedDate.getMinutes();
-               let journeyMinutes = (journeyDate.getHours() * 60) + journeyDate.getMinutes();
-                //check pick-up time & user waiting allowance is compatible
-                let timeDiff = ((suggestedMinutes + this.preferences.waitTime) - journeyMinutes);
-                if(timeDiff >= 0 && timeDiff <= this.preferences.waitTime){
-                    matches.push(match);
-                    console.log("pushed: " + match);
+            if (match.disabled == false || (match.users.length < match.seatsAvailable)) {
+                // find matches that are starting on/after the same date (unless repeating)
+                if ((suggestedDate.getDate() - journeyDate.getDate() >= 0) && !match.repeating) {
+                    let suggestedMinutes = (suggestedDate.getHours() * 60) + suggestedDate.getMinutes();
+                    let journeyMinutes = (journeyDate.getHours() * 60) + journeyDate.getMinutes();
+                    //check pick-up time & user waiting allowance is compatible
+                    let timeDiff = ((suggestedMinutes + this.preferences.waitTime) - journeyMinutes);
+                    if (timeDiff >= 0 && timeDiff <= this.preferences.waitTime) {
+                        matches.push(match);
+                    }
                 }
             }
-        }
         });
         return matches;
+    }
+
+    populateJoureys(){
+        this.jrService.getJourneys()
+            .then(journeys => {
+                this.journeys = journeys;
+                console.log(this.journeys);
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
 
@@ -79,9 +90,8 @@ export class JourneyMatchingService {
         let currLon = 0;
         let matchedRoutes: object[] = [];
         journeys.forEach(journey => {
-            let coords = journey.journey.coords[0];
+            let coords = journey.coords[0];
             if (this.calcDistance(lat, lon, coords[0], coords[1]) < this.preferences.waitTime) {
-                console.log(journey);
                 matchedRoutes.push(journey);
             }
         });
@@ -92,9 +102,9 @@ export class JourneyMatchingService {
     //https://rosettacode.org/wiki/Haversine_formula#JavaScript
     calcDistance(lat1, lon1, lat2, lon2) {
         let R = 0;
-        if(this.preferences.distanceType == "km"){
+        if (this.preferences.distanceType == "km") {
             R = 3958.75;  // calculating for kilometers
-        }else if(this.preferences.distanceType == "miles"){
+        } else if (this.preferences.distanceType == "miles") {
             R = 6372.8;   // calculating for miles
         }
 

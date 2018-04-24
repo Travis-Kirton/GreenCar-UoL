@@ -10,6 +10,8 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 import firebase from 'firebase';
 import { EdgeStorageService } from '../services/edgeStorage';
 import { UserService } from '../services/user';
+import { JourneyViewPage } from '../pages/journey-view/journey-view';
+import { CommentService } from '../services/commentService';
 
 
 @Component({

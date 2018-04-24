@@ -33,6 +33,12 @@ import { JourneyJoiningService } from '../services/journeyJoining';
 import { NotificationsService } from '../services/notifications';
 import { MatchedJourneyPage } from '../pages/matched-journey/matched-journey';
 import { PopoverHomePage } from '../pages/popover-home/popover-home';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { CommentService } from '../services/commentService';
+import { FIREBASE_CONFIG } from './firebase.credentials';
+
+
 
 @NgModule({
   declarations: [
@@ -59,6 +65,8 @@ import { PopoverHomePage } from '../pages/popover-home/popover-home';
       scrollAssist: true,
       autoFocusAssist:false
     }),
+    AngularFireModule.initializeApp(FIREBASE_CONFIG),
+    AngularFireDatabaseModule,
     AngularOpenlayersModule
   ],
   bootstrap: [IonicApp],
@@ -95,7 +103,9 @@ import { PopoverHomePage } from '../pages/popover-home/popover-home';
     JourneyRetrievalService,
     JourneyMatchingService,
     JourneyJoiningService,
-    NotificationsService
+    NotificationsService,
+    CommentService,
+    AngularFireDatabaseModule
   ]
 })
 export class AppModule {}

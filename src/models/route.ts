@@ -1,29 +1,24 @@
- export class Route{
-    constructor(public status: string,
-                public disabled: boolean,
-                public  dateBooked: number,
-                public  startDate: string,
-                public  pickUpTime: string,
-                public  start:string,
-                public  end: string,
-                public  coords: number[][],
-                public  username: string,
-                public  repeating: boolean,
-                public  daysOfWeek = {
-                  Mon: false,
-                  Tue: false,
-                  Wed: false,
-                  Thu: false,
-                  Fri: false,
-                  Sat: false,
-                  Sun: false
-                },
-                public  description: string,
-                public  comments: string[],
-                public  luggageWeight?: number,
-                public  seatsAvailable?: number,
-                public  users?: any[],
-                public  matchedRoute?: Route,
-                public  suggestedRoutes?: Route[]){}
-
+export interface Route {
+  uid: string,
+  role: string,
+  status: string;
+  disabled: boolean;
+  dateBooked: number;
+  startDate: number;
+  pickUpTime: number;
+  start: string;
+  end: string;
+  coords: number[][];
+  username: string;
+  repeating: boolean;
+  daysOfWeek: object;
+  description: string;
+  comments: string[];
+  luggageWeight?: number;
+  seatsAvailable?: number;
+  users?: any[];
+  matchedRoute?: Route;
+  suggestedRoutes?: Route[];
 }
+
+

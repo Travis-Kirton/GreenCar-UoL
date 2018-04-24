@@ -8,32 +8,57 @@ import { AuthService } from '../../services/auth';
 import { UserService } from '../../services/user';
 import { AlertController } from 'ionic-angular';
 import { NotificationsService } from '../../services/notifications';
+import { AngularFireDatabase } from 'angularfire2/database';
+import { NotificationMessage } from '../../models/notification';
+import { Observable } from 'rxjs/Observable';
+import firebase from 'firebase';
 
 @Component({
   templateUrl: 'tabs.html'
 })
 export class TabsPage {
 
-  tab1Root = HomePage;
+  //tab1Root = HomePage;
   tab2Root = AboutPage;
   tab3Root = ContactPage;
   tab4Root = MessagesPage;
 
   userRole: any;
 
-  tab1BadgeCount: number;
+  private tab1BadgeCount$: Observable<NotificationMessage[]>;
+  private tab1BadgeCount: number = 0;
+  //private uid = this.authService.getActiveUser().uid;
 
   constructor(private authService: AuthService,
     private userService: UserService,
     private alertCtrl: AlertController,
-    private notificationService: NotificationsService) {
+    private notificationService: NotificationsService,
+    private afDatabase: AngularFireDatabase) {
+
+        this.tab1BadgeCount$ = this.notificationService
+          .getNotifications() // DB List
+          .snapshotChanges() // Key:Value pairs
+          .map(changes => {
+            return changes.map(c => ({
+              key: c.payload.key,
+              ...c.payload.val()
+            }));
+          });
+
+        this.tab1BadgeCount$.forEach(notifications => {
+          notifications.forEach(notification => {
+            console.log(notification.seen);
+            if (notification.seen == false) {
+              this.tab1BadgeCount++;
+            }
+          })
+        });
+     
+
+
 
     this.setUserType();
 
-  }
-
-  ionViewDidLoad(){
-    this.loadNotifications();
   }
 
   setUserType() {
@@ -53,28 +78,6 @@ export class TabsPage {
               }
             );
         });
-  }
-
-  private loadNotifications(){
-    this.authService.getActiveUser().getIdToken()
-      .then((token: string) => {
-        let uid = this.authService.getActiveUser().uid;
-        this.notificationService.fetchNotifications(token, uid)
-          .subscribe((notifications: object[]) => {
-            if(notifications){
-              let ArrNotifications = notifications = Object.keys(notifications).map(key => {
-                return notifications[key];
-            });
-              this.tab1BadgeCount = ArrNotifications.length;
-              this.notificationService.setNotifications(ArrNotifications);
-            }else{
-              console.log(notifications);
-            }
-          },
-          error => {
-            this.handleError(error.json().error);
-          });
-      });
   }
 
   private handleError(errorMessage: string) {

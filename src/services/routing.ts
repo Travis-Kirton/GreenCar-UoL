@@ -1,86 +1,52 @@
 import { AuthService } from './auth';
 import { Route } from './../models/route';
-import { reorderArray, ToastController } from 'ionic-angular';
+import { ToastController } from 'ionic-angular';
 import { Injectable } from "@angular/core";
 import { Http, Response } from "@angular/http";
-import firebase from 'firebase';
-import 'rxjs/Rx';
+import { AngularFireDatabase } from 'angularfire2/database';
+import  firebase  from 'firebase';
 
 @Injectable()
 export class RoutingService {
 
   private routes: Route[] = [];
+  private uid = firebase.auth().currentUser.uid;
+  private routeRef = this.afDatabase.list<Route>(this.uid + '/routes');
 
-  constructor(private http: Http,
-    private toastCtrl: ToastController,
-    private authService: AuthService) {
+  constructor(private afDatabase: AngularFireDatabase,
+              private toastCtrl: ToastController,
+              private authService: AuthService) {
   }
-
 
   addRoute(route: Route) {
-    console.log(route);
-    this.routes.push(route);
+    console.log(this.uid);
+    this.routeRef.push(route);
   }
 
-  disableRoute(index: number) {
-    this.routes[index].disabled = !this.routes[index].disabled;
-    let toast = this.toastCtrl.create({
-      message: 'Disabled/Enabled Route',
-      duration: 3000,
-      position: 'bottom'
-    });
-    toast.present();
-    this.authService.getActiveUser().getIdToken().then((token => {
-      this.storeRoutes(token)
-        .subscribe();
-    }));
+  disableRoute(key: string, disabled) {
+    this.afDatabase.object(this.uid + '/routes/' + key + '/disabled').set(!disabled);
+  }
+
+  updateStatus(key: string,journey:Route, status: string){
+    console.log(journey);
+    this.afDatabase.object(this.uid + '/routes/' + key + '/status').set(status);
+  }
+
+  updateJourney(key: string, journey:Route){
+    this.afDatabase.object(this.uid + '/routes/' + key).set(journey);
   }
 
   getRoutes() {
-    return this.routes.slice();
+    let uid = firebase.auth().currentUser.uid;
+    return this.afDatabase.list<Route>(uid + '/routes');;
   }
 
-  removeRoute(index: number) {
-    this.routes.splice(index, 1);
-    this.authService.getActiveUser().getIdToken().then((token => {
-      this.storeRoutes(token)
-        .subscribe();
-    }));
+  getAllRoutes(){
+    return this.afDatabase.list<Route>('/');
+
   }
 
-  storeRoutes(token: string) {
-    const userId = this.authService.getActiveUser().uid;
-    return this.http.put('https://greencar-uol.firebaseio.com/' + userId + '/routes.json?auth=' + token, this.routes)
-      .map((response: Response) => {
-        return response.json();
-      });
+  removeRoute(key: string) {
+    this.routeRef.remove(key);
   }
-
-  fetchRoutes(token: string) {
-    const userId = this.authService.getActiveUser().uid;
-    return this.http.get('https://greencar-uol.firebaseio.com/' + userId + '/routes.json?auth=' + token)
-      .map((response: Response) => {
-        return response.json();
-      })
-      .do((routes: Route[]) => {
-        if (routes) {
-          this.routes = routes;
-        } else {
-          this.routes = [];
-        }
-      });
-  }
-
-  addComment(uid: string, route: Route, comment) {
-    // push comment to specific user route
-    // HOW?!!
-
-    route.comments.push(comment);
-
-    var query = firebase.database().ref("/" + uid).orderByChild("dateBooked").equalTo(route.dateBooked);
-    return query.on("value", function (snapshot) {
-
-    });
-  }
-
 }

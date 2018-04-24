@@ -27,6 +27,7 @@
     "@types/leaflet": "^1.2.2",
     "angular2-calendar-heatmap": "^0.1.8",
     "angular2-moment": "^1.8.0",
+    "angularfire2": "^5.0.0-rc.6.0",
     "calendar-heatmap-graph": "0.0.10",
     "chart.js": "^2.7.1",
     "cordova-android": "7.0.0",

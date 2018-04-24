@@ -5,11 +5,10 @@ import { CreateJourneyPage } from './../create-journey/create-journey';
 import { JourneyViewPage } from '../journey-view/journey-view';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { JourneyRetrievalService } from '../../services/journeyRetrieval';
-import { JourneyMatchingService } from '../../services/journeyMatching';
 import { UserService } from '../../services/user';
 import { NotificationsService } from '../../services/notifications';
 import { MatchedJourneyPage } from '../matched-journey/matched-journey';
+import { Observable } from 'rxjs/Observable';
 import { Route } from '../../models/route';
 
 @Component({
@@ -18,9 +17,8 @@ import { Route } from '../../models/route';
 })
 export class AboutPage {
 
-  routes: Route[];
+  private routes: Observable<Route[]>;
   userRole: any;
-
   matchedColour = '#000';
 
   private journeys: string = "createdJourneys";
@@ -32,10 +30,17 @@ export class AboutPage {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private routingService: RoutingService,
-    private journeyMatching: JourneyMatchingService,
-    private notificationService: NotificationsService
+    private notificationService: NotificationsService,
   ) {
-
+    // this.routes = this.routingService
+    // .getRoutes() // DB List
+    //   .snapshotChanges() // Key:Value pairs
+    //   .map(changes => {
+    //     return changes.map(c => ({
+    //       key: c.payload.key,
+    //       ...c.payload.val()
+    //     }));
+    //   });
   }
 
   private createJourney() {
@@ -43,49 +48,24 @@ export class AboutPage {
   }
 
   ionViewDidLoad() {
-    //load specific lists
-    this.loadRoutes();
-  }
-
-  private loadRoutes() {
-    const loading = this.loadingCtrl.create({
-      content: 'Please wait...'
-    });
-    loading.present();
-    this.authService.getActiveUser().getIdToken()
-      .then((token: string) => {
-        this.routingService.fetchRoutes(token)
-          .subscribe(
-            (route: Route[]) => {
-              loading.dismiss();
-              if (route) {
-                this.routes = route;
-              } else {
-                this.routes = [];
-              }
-            },
-            error => {
-              loading.dismiss();
-              this.handleError(error.json().error);
-            }
-          );
+    this.routes = undefined;
+    this.routes = this.routingService
+    .getRoutes() // DB List
+      .snapshotChanges() // Key:Value pairs
+      .map(changes => {
+        return changes.map(c => ({
+          key: c.payload.key,
+          ...c.payload.val()
+        }));
       });
+
   }
 
-  private handleError(errorMessage: string) {
-    const alert = this.alertCtrl.create({
-      title: 'An error occurred!',
-      message: errorMessage,
-      buttons: ['Ok']
-    });
-    alert.present();
-  }
-
-  private showRoute(route: Route) {
+  private showRoute(route: Route, key: string) {
     if (route.status == "matched") {
-      this.navCtrl.push(MatchedJourneyPage, { route: route });
+      this.navCtrl.push(MatchedJourneyPage, { route: route});
     } else {
-      this.navCtrl.push(JourneyViewPage, { route: route, showRoute: true });
+      this.navCtrl.push(JourneyViewPage, { route: route, showRoute: true, key: key });
     }
   }
 
@@ -102,6 +82,10 @@ export class AboutPage {
           return '#f3aa6f';
       }
     }
+  }
+
+  ngOnDestroy(){
+    this.routes.subscribe().unsubscribe();
   }
 
 }

@@ -13,9 +13,9 @@
 <ion-content padding>
       <ion-list-header align="center">journeys</ion-list-header>
       <ion-list>
-      <ion-item-sliding *ngFor="let route of routes; let i = index">
+      <ion-item-sliding *ngFor="let route of routes | async">
 
-        <ion-item (click)="showRoute(route)">
+        <ion-item (click)="showRoute(route, route.key)">
           <ion-avatar item-start style="zoom:1.4;">
             <img src="../../assets/travatar.png">
           </ion-avatar>
@@ -29,10 +29,10 @@
         
 
         <ion-item-options side="right">
-          <button color="danger" ion-button icon-only (click)="routingService.removeRoute(i)">
+          <button color="danger" ion-button icon-only (click)="routingService.removeRoute(route.key)">
             <ion-icon name="trash"></ion-icon>
           </button>
-          <button color="dark" ion-button icon-only (click)="routingService.disableRoute(i)">
+          <button color="dark" ion-button icon-only (click)="routingService.disableRoute(route.key, route.disabled)">
               <ion-icon name="eye-off"></ion-icon>
             </button>
         </ion-item-options>
