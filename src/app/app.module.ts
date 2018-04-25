@@ -37,6 +37,8 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { CommentService } from '../services/commentService';
 import { FIREBASE_CONFIG } from './firebase.credentials';
+import { MessagingService } from '../services/messaging';
+import { ChatPage } from '../pages/chat/chat';
 
 
 
@@ -55,7 +57,8 @@ import { FIREBASE_CONFIG } from './firebase.credentials';
     JourneyViewPage,
     MessagesPage,
     MatchedJourneyPage,
-    PopoverHomePage
+    PopoverHomePage,
+    ChatPage
   ],
   imports: [
     BrowserModule,
@@ -84,7 +87,8 @@ import { FIREBASE_CONFIG } from './firebase.credentials';
     JourneyViewPage,
     MessagesPage,
     MatchedJourneyPage,
-    PopoverHomePage
+    PopoverHomePage,
+    ChatPage
   ],
   providers: [
     StatusBar,
@@ -105,7 +109,8 @@ import { FIREBASE_CONFIG } from './firebase.credentials';
     JourneyJoiningService,
     NotificationsService,
     CommentService,
-    AngularFireDatabaseModule
+    MessagingService,
+    AngularFireDatabaseModule,
   ]
 })
 export class AppModule {}

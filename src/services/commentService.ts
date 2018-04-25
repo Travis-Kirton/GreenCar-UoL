@@ -9,7 +9,7 @@ export class CommentService {
 
 
     constructor(private afDatabase: AngularFireDatabase,
-        public authService: AuthService) { }
+                private authService: AuthService) { }
     
     commentRef: any;
     username = this.authService.getActiveUser().displayName;
@@ -24,6 +24,7 @@ export class CommentService {
         this.commentMessages = this.getComments(uid, routeKey);
         console.log(this.username);
         this.commentMessage = {
+            uid: this.authService.getActiveUser().uid,
             message: msg,
             timeSent: timestamp,
             userName: this.username

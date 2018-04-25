@@ -14,7 +14,6 @@ import { PopoverHomePage } from '../popover-home/popover-home';
 import { Observable } from 'rxjs/Observable';
 import { NotificationMessage } from '../../models/notification';
 import { AngularFireDatabase } from 'angularfire2/database';
-import { User } from '../../models/User';
 import { CommentMessage } from '../../models/comment';
 import { CommentService } from '../../services/commentService';
 
@@ -25,6 +24,7 @@ import { CommentService } from '../../services/commentService';
 })
 export class JourneyViewPage {
 
+  uid: string = this.authService.getActiveUser().uid;
   journeyKey: string;
 
   userType: any;
@@ -310,7 +310,7 @@ export class JourneyViewPage {
   }
 
   userOptions(user) {
-    let popover = this.popCtrl.create(PopoverHomePage);
+    let popover = this.popCtrl.create(PopoverHomePage, { user: user });
     popover.present();
   }
 

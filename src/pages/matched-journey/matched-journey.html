@@ -25,13 +25,15 @@
     </p>
 
     <p align="center" class="text-muted">Passengers</p>
-    <ion-item *ngFor="let user of journey.users; let i = index" (click)="userOptions(user)">
+    <ion-item *ngFor="let user of journey.users" (click)="userOptions(user)">
+      <span *ngIf="user.userID != currentUserUID">
       <ion-avatar item-start>
         <img src="../../assets/img/avatar-leia.png">
       </ion-avatar>
       <h3>{{user.username}}</h3>
-      <p>From: Friar Lane</p>
-      <p>To: Hotel Street</p>
+      <p>From: {{user.journey.start}}</p>
+      <p>To: {{user.journey.end}}</p>
+      </span>
     </ion-item>
 
     <div id="discussion">

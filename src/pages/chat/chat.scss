@@ -1,0 +1,34 @@
+.ios,
+.md {
+    page-chat {
+        #messageInput{
+            height:75px;
+            background-color: #e2f1e2;
+
+            ion-input{
+                background-color: rgb(255, 255, 255);
+            }
+
+            button{
+                height:50px;
+                border-color: floralwhite;
+                
+            }
+        }
+
+        .comment{
+            //background-color: #d8d8d8;
+            border-radius:5px;
+            padding:10px;
+    
+            #commentTime{
+                color:#525252;
+                font-size: 12px;
+            }
+            
+            p{
+                color:#000;
+            }
+        }
+    }
+}

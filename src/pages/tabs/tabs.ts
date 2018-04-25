@@ -17,17 +17,14 @@ import firebase from 'firebase';
   templateUrl: 'tabs.html'
 })
 export class TabsPage {
-
-  //tab1Root = HomePage;
+  
   tab2Root = AboutPage;
   tab3Root = ContactPage;
-  tab4Root = MessagesPage;
 
   userRole: any;
 
   private tab1BadgeCount$: Observable<NotificationMessage[]>;
   private tab1BadgeCount: number = 0;
-  //private uid = this.authService.getActiveUser().uid;
 
   constructor(private authService: AuthService,
     private userService: UserService,
@@ -46,12 +43,7 @@ export class TabsPage {
           });
 
         this.tab1BadgeCount$.forEach(notifications => {
-          notifications.forEach(notification => {
-            console.log(notification.seen);
-            if (notification.seen == false) {
-              this.tab1BadgeCount++;
-            }
-          })
+          this.tab1BadgeCount = notifications.length;
         });
      
 

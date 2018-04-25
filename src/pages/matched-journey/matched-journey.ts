@@ -21,6 +21,7 @@ export class MatchedJourneyPage {
   private journey: any = undefined;
   private commentText: string = "";
   private uid = this.navParams.get('route').matchedRoute.uid;
+  private currentUserUID = this.authService.getActiveUser().uid;
   private driverRoutes: Route[];
   private journeyKey: string;
 
@@ -69,7 +70,7 @@ export class MatchedJourneyPage {
   }
 
   userOptions(user) {
-    let popover = this.popCtrl.create(PopoverHomePage);
+    let popover = this.popCtrl.create(PopoverHomePage, {user: user});
     popover.present();
   }
 

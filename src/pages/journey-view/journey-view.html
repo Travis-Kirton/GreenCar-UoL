@@ -141,85 +141,87 @@
 
         <p align="center" class="text-muted">Passengers</p>
         <ion-item *ngFor="let user of users" (click)="userOptions(user)">
-          <ion-avatar item-start>
-            <img src="../../assets/img/avatar-leia.png">
-          </ion-avatar>
-          <h3>{{user.username}}</h3>
-          <p>From: Friar Lane</p>
-          <p>To: Hotel Street</p>
+          <span *ngIf="user.userID != uid">
+            <ion-avatar item-start>
+              <img src="../../assets/img/avatar-leia.png">
+            </ion-avatar>
+            <h3>{{user.username}}</h3>
+            <p>From: {{user.journey.start}}</p>
+            <p>To: {{user.journey.end}}</p>
+          </span>
         </ion-item>
-                
+
         <div id="discussion">
-            <p align="center" class="text-muted">Discussion</p>
-      
-            <ion-item *ngFor="let comment of commentList$ | async">
-              <ion-avatar item-start>
-                <img src="../../assets/img/avatar-leia.png">
-              </ion-avatar>
-              <div class="comment">
-                <p id="commentTime">{{comment.timeSent}}</p>
-                <p id="commentUser">{{comment.userName}}</p>
-                <p id="commentText">{{comment.message}}</p>
-              </div>
-            </ion-item>
-            <ion-item id="comments">
-              <ion-input id="commentInput" type="text" placeholder="  enter your message..." [(ngModel)]="commentText"></ion-input>
-              <button ion-button outline item-right (click)="postComment()">Send</button>
-            </ion-item>
-          </div>
+          <p align="center" class="text-muted">Discussion</p>
+
+          <ion-item *ngFor="let comment of commentList$ | async">
+            <ion-avatar item-start>
+              <img src="../../assets/img/avatar-leia.png">
+            </ion-avatar>
+            <div class="comment">
+              <p id="commentTime">{{comment.timeSent}}</p>
+              <p id="commentUser">{{comment.userName}}</p>
+              <p id="commentText">{{comment.message}}</p>
+            </div>
+          </ion-item>
+          <ion-item id="comments">
+            <ion-input id="commentInput" type="text" placeholder="  enter your message..." [(ngModel)]="commentText"></ion-input>
+            <button ion-button outline item-right (click)="postComment()">Send</button>
+          </ion-item>
+        </div>
 
       </div>
 
 
       <div *ngIf="userRole.rider">
-      <p *ngIf="suggestedRoutes != undefined" id="muted" align="center">suggested riders</p>
-      <ion-card *ngFor="let route of suggestedRoutes; let i = index">
+        <p *ngIf="suggestedRoutes != undefined" id="muted" align="center">suggested riders</p>
+        <ion-card *ngFor="let route of suggestedRoutes; let i = index">
 
-        <ion-item>
-          <ion-avatar item-start>
-            <img src="../../assets/img/avatar-leia.png">
-          </ion-avatar>
-          <h2>{{route.username}}</h2>
-          <p>Start Date: {{route.startDate}}</p>
-        </ion-item>
+          <ion-item>
+            <ion-avatar item-start>
+              <img src="../../assets/img/avatar-leia.png">
+            </ion-avatar>
+            <h2>{{route.username}}</h2>
+            <p>Start Date: {{route.startDate}}</p>
+          </ion-item>
 
-        <ion-item>
-          <ion-icon name="pin" item-start large></ion-icon>
-          <h2>{{route.start}}</h2>
-        </ion-item>
+          <ion-item>
+            <ion-icon name="pin" item-start large></ion-icon>
+            <h2>{{route.start}}</h2>
+          </ion-item>
 
-        <ion-item>
-          <ion-icon name="pin" item-left large></ion-icon>
-          <h2>{{route.end}}</h2>
-        </ion-item>
+          <ion-item>
+            <ion-icon name="pin" item-left large></ion-icon>
+            <h2>{{route.end}}</h2>
+          </ion-item>
 
-        <ion-item id="suggestedJourneyInfo">
-          <span item-left>
-            <ion-icon name="car"></ion-icon>18 min</span>
-          <span item-left>(2.6 mi)</span>
-          <span item-left>
-            <ion-icon name="people"></ion-icon>{{route.users == undefined ? '0': route.users.length }} / {{route.seatsAvailable}}</span>
-          <button ion-button icon-left outline item-end (click)="joinJourney(route)" [style.color]="route.status === 'pending' ? '#f3aa6f' : '#64bb64'"
-            [style.border-color]="route.status === 'pending' ? '#f3aa6f' : '#64bb64'">
-            <ion-icon name="navigate"></ion-icon>
-            {{route.status == 'unmatched' ? 'join' : 'pending'}}
-          </button>
-        </ion-item>
+          <ion-item id="suggestedJourneyInfo">
+            <span item-left>
+              <ion-icon name="car"></ion-icon>18 min</span>
+            <span item-left>(2.6 mi)</span>
+            <span item-left>
+              <ion-icon name="people"></ion-icon>{{route.users == undefined ? '0': route.users.length }} / {{route.seatsAvailable}}</span>
+            <button ion-button icon-left outline item-end (click)="joinJourney(route)" [style.color]="route.status === 'pending' ? '#f3aa6f' : '#64bb64'"
+              [style.border-color]="route.status === 'pending' ? '#f3aa6f' : '#64bb64'">
+              <ion-icon name="navigate"></ion-icon>
+              {{route.status == 'unmatched' ? 'join' : 'pending'}}
+            </button>
+          </ion-item>
 
-        <ion-item id="suggestedJourneyDays">
-          <span class="day" [style.background-color]="route.daysOfWeek.Mon === true ? '#64bb64' : '#aca9a9'">M</span>
-          <span class="day" [style.background-color]="route.daysOfWeek.Tue === true ? '#64bb64' : '#aca9a9'">T</span>
-          <span class="day" [style.background-color]="route.daysOfWeek.Wed === true ? '#64bb64' : '#aca9a9'">W</span>
-          <span class="day" [style.background-color]="route.daysOfWeek.Thu === true ? '#64bb64' : '#aca9a9'">T</span>
-          <span class="day" [style.background-color]="route.daysOfWeek.Fri === true ? '#64bb64' : '#aca9a9'">F</span>
-          <span class="day" [style.background-color]="route.daysOfWeek.Sat === true ? '#64bb64' : '#aca9a9'">S</span>
-          <span class="day" [style.background-color]="route.daysOfWeek.Sun === true ? '#64bb64' : '#aca9a9'">S</span>
-        </ion-item>
-      </ion-card>
-    </div>
+          <ion-item id="suggestedJourneyDays">
+            <span class="day" [style.background-color]="route.daysOfWeek.Mon === true ? '#64bb64' : '#aca9a9'">M</span>
+            <span class="day" [style.background-color]="route.daysOfWeek.Tue === true ? '#64bb64' : '#aca9a9'">T</span>
+            <span class="day" [style.background-color]="route.daysOfWeek.Wed === true ? '#64bb64' : '#aca9a9'">W</span>
+            <span class="day" [style.background-color]="route.daysOfWeek.Thu === true ? '#64bb64' : '#aca9a9'">T</span>
+            <span class="day" [style.background-color]="route.daysOfWeek.Fri === true ? '#64bb64' : '#aca9a9'">F</span>
+            <span class="day" [style.background-color]="route.daysOfWeek.Sat === true ? '#64bb64' : '#aca9a9'">S</span>
+            <span class="day" [style.background-color]="route.daysOfWeek.Sun === true ? '#64bb64' : '#aca9a9'">S</span>
+          </ion-item>
+        </ion-card>
+      </div>
 
       <div *ngIf="userRole.driver">
-        <ion-card *ngFor="let rider of suggestedRiders; let i = index">     
+        <ion-card *ngFor="let rider of suggestedRiders; let i = index">
           <ion-item>
             <ion-avatar item-start>
               <img src="../../assets/img/avatar-leia.png">
@@ -228,7 +230,7 @@
             <p>Request type: {{rider.request}}</p>
             <p>Request for: {{rider.journeyDate | date}}</p>
           </ion-item>
-          
+
           <ion-item id="suggestedJourneyInfo">
             <button ion-button icon-left outline item-end (click)="acceptRiderRequest(rider, i)">
               <ion-icon name="navigate"></ion-icon>
@@ -237,8 +239,8 @@
           </ion-item>
         </ion-card>
       </div>
-        
-      </ion-list>
-    </div>
-    
-  </ion-content>
+
+    </ion-list>
+  </div>
+
+</ion-content>
