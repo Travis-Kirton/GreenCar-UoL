@@ -38,7 +38,7 @@ export class RoutingService {
 
   getRoutes() {
     let uid = firebase.auth().currentUser.uid;
-    return this.afDatabase.list<Route>(uid + '/routes');;
+    return this.afDatabase.list<Route>(uid + '/routes');
   }
 
   getAllRoutes(){

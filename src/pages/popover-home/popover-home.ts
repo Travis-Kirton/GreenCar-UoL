@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ChatPage } from '../chat/chat';
+import { UserService } from '../../services/user';
 
 /**
  * Generated class for the PopoverHomePage page.
@@ -16,10 +17,14 @@ import { ChatPage } from '../chat/chat';
 export class PopoverHomePage {
 
   user: any;
+  userRole: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, 
+              public navParams: NavParams,
+              public userService: UserService) {
     this.user = this.navParams.get('user');
-    console.log(this.user);
+    
+    this.userRole = this.userService.getUserRole();
   }
 
   messageUser(){

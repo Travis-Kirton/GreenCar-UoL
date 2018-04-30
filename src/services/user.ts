@@ -1,10 +1,13 @@
 import { Injectable } from "@angular/core";
 import { AuthService } from './auth';
 import { Http, Response } from "@angular/http";
+import { AngularFireDatabase } from "angularfire2/database";
+import { Observable } from "rxjs/Observable";
 
 @Injectable()
 export class UserService {
 
+  userColor: Observable<any>;
   private userRole: object;
   private preferences = {
     radius: 10,
@@ -13,14 +16,11 @@ export class UserService {
   }
 
   constructor(private http: Http,
-    private authService: AuthService) {}
+    private authService: AuthService,
+    public afDatabase: AngularFireDatabase) { }
 
-  addProfilePicture() {
-
-  }
-
-  editProfilePicture() {
-
+  getInitial(): string {
+    return this.authService.getUsername().charAt(0);
   }
 
   addUserType(token, userType) {
@@ -48,7 +48,7 @@ export class UserService {
       });
   }
 
-  fetchRoles(token: string){
+  fetchRoles(token: string) {
     const userId = this.authService.getActiveUser().uid;
     return this.http.get('https://greencar-uol.firebaseio.com/' + userId + '/roles.json?auth=' + token)
       .map((response: Response) => {
@@ -56,22 +56,24 @@ export class UserService {
       });
   }
 
+  reportUser(){
+    
+  }
 
-  setUserRole(role){
+
+  setUserRole(role) {
     this.userRole = role;
   }
 
-  getUserRole(): object{
+  getUserRole(): any {
     return this.userRole;
   }
 
-  setPreferences(preferences){
+  setPreferences(preferences) {
     this.preferences = preferences;
   }
 
-  getPreferences(): any{
+  getPreferences(): any {
     return this.preferences;
   }
-
-
 }

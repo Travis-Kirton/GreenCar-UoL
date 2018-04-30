@@ -63,6 +63,7 @@ export class MessagingService {
         for(let i = 0; i < contactUID.length; i++){
             number2+=contactUID.charCodeAt(i)
         }
+        
         // query to create comment feed binding
         return this.messageRef = this.afDatabase.list<CommentMessage>('messages/' + (number1+number2));
     }

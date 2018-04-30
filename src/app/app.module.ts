@@ -16,20 +16,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { AngularOpenlayersModule } from 'ngx-openlayers';
-
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
-import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
-
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { MessagesPage } from '../pages/messages/messages';
 import { UserService } from '../services/user';
 import { JourneyRetrievalService } from '../services/journeyRetrieval';
 import { JourneyViewPage } from '../pages/journey-view/journey-view';
 import { JourneyMatchingService } from '../services/journeyMatching';
-import { JourneyJoiningService } from '../services/journeyJoining';
 import { NotificationsService } from '../services/notifications';
 import { MatchedJourneyPage } from '../pages/matched-journey/matched-journey';
 import { PopoverHomePage } from '../pages/popover-home/popover-home';
@@ -39,7 +34,10 @@ import { CommentService } from '../services/commentService';
 import { FIREBASE_CONFIG } from './firebase.credentials';
 import { MessagingService } from '../services/messaging';
 import { ChatPage } from '../pages/chat/chat';
-
+import { Camera } from '@ionic-native/camera';
+import { AngularFireAuth, AngularFireAuthModule } from 'angularfire2/auth';
+import { AdminPage } from '../pages/admin/admin';
+import { AdminService } from '../services/admin';
 
 
 @NgModule({
@@ -47,7 +45,6 @@ import { ChatPage } from '../pages/chat/chat';
     MyApp,
     AboutPage,
     ContactPage,
-    HomePage,
     TabsPage,
     SigninPage,
     SignupPage,
@@ -55,10 +52,10 @@ import { ChatPage } from '../pages/chat/chat';
     StatisticsPage,
     CreateJourneyPage,
     JourneyViewPage,
-    MessagesPage,
     MatchedJourneyPage,
     PopoverHomePage,
-    ChatPage
+    ChatPage,
+    AdminPage
   ],
   imports: [
     BrowserModule,
@@ -70,14 +67,14 @@ import { ChatPage } from '../pages/chat/chat';
     }),
     AngularFireModule.initializeApp(FIREBASE_CONFIG),
     AngularFireDatabaseModule,
-    AngularOpenlayersModule
+    AngularOpenlayersModule,
+    AngularFireAuthModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     AboutPage,
     ContactPage,
-    HomePage,
     TabsPage,
     SigninPage,
     SignupPage,
@@ -85,16 +82,17 @@ import { ChatPage } from '../pages/chat/chat';
     StatisticsPage,
     CreateJourneyPage,
     JourneyViewPage,
-    MessagesPage,
     MatchedJourneyPage,
     PopoverHomePage,
-    ChatPage
+    ChatPage,
+    AdminPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthService,
+    AngularFireAuth,
     UserService,
     SignupPage,
     RoutingService,
@@ -104,13 +102,14 @@ import { ChatPage } from '../pages/chat/chat';
     RoutingService,
     Astar,
     Dijkstra,
+    Camera,
     JourneyRetrievalService,
     JourneyMatchingService,
-    JourneyJoiningService,
     NotificationsService,
     CommentService,
     MessagingService,
     AngularFireDatabaseModule,
+    AdminService
   ]
 })
 export class AppModule {}

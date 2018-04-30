@@ -13,12 +13,12 @@
 <ion-content padding>
       <ion-list-header align="center">journeys</ion-list-header>
       <ion-list>
-      <ion-item-sliding *ngFor="let route of routes | async">
+      <ion-item-sliding *ngFor="let route of routes | async" no-lines>
 
-        <ion-item (click)="showRoute(route, route.key)">
-          <ion-avatar item-start style="zoom:1.4;">
-            <img src="../../assets/travatar.png">
-          </ion-avatar>
+        <ion-item no-lines (click)="showRoute(route, route.key)">
+          <div id="initial" item-start style="zoom:1.2;">
+            {{userService.getInitial()}}
+          </div>
           <p class="dateAdded text-muted">{{route.dateBooked | date:'dd-MMM'}}</p>
           <h4>Route Details</h4>
           <p>From: {{route.start}}</p>
@@ -39,7 +39,6 @@
       </ion-item-sliding>
       </ion-list>
       <button ion-button block (click)="createJourney()">Create Journey</button>
-
 
       
 </ion-content>

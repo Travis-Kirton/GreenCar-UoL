@@ -142,12 +142,14 @@
         <p align="center" class="text-muted">Passengers</p>
         <ion-item *ngFor="let user of users" (click)="userOptions(user)">
           <span *ngIf="user.userID != uid">
-            <ion-avatar item-start>
-              <img src="../../assets/img/avatar-leia.png">
-            </ion-avatar>
-            <h3>{{user.username}}</h3>
-            <p>From: {{user.journey.start}}</p>
-            <p>To: {{user.journey.end}}</p>
+            <ion-item no-lines>
+              <div id="initial" item-start style="zoom:1.2;">
+                {{user.username.charAt(0)}}
+              </div>
+              <h3>{{user.username}}</h3>
+              <p>From: {{user.journey.start}}</p>
+              <p>To: {{user.journey.end}}</p>
+            </ion-item>
           </span>
         </ion-item>
 
@@ -155,14 +157,17 @@
           <p align="center" class="text-muted">Discussion</p>
 
           <ion-item *ngFor="let comment of commentList$ | async">
-            <ion-avatar item-start>
-              <img src="../../assets/img/avatar-leia.png">
-            </ion-avatar>
-            <div class="comment">
-              <p id="commentTime">{{comment.timeSent}}</p>
-              <p id="commentUser">{{comment.userName}}</p>
-              <p id="commentText">{{comment.message}}</p>
-            </div>
+              <div id="initial" item-start style="zoom:1.2;" *ngIf="comment.uid != uid">
+                  {{comment.userName.charAt(0)}}
+                </div>
+              <div id="initial" item-end style="zoom:1.2;" *ngIf="comment.uid == uid">
+                  {{comment.userName.charAt(0)}}
+                </div>
+              <div class="comment" [style.background-color]="comment.uid == uid ? '#e0f3e0' : '#e6e4e4'">
+                <p id="commentTime">{{comment.timeSent}}</p>
+                <p id="commentUser">{{comment.userName}}</p>
+                <p id="commentText">{{comment.message}}</p>
+              </div>
           </ion-item>
           <ion-item id="comments">
             <ion-input id="commentInput" type="text" placeholder="  enter your message..." [(ngModel)]="commentText"></ion-input>
@@ -178,9 +183,9 @@
         <ion-card *ngFor="let route of suggestedRoutes; let i = index">
 
           <ion-item>
-            <ion-avatar item-start>
-              <img src="../../assets/img/avatar-leia.png">
-            </ion-avatar>
+            <div id="initial" item-start style="zoom:1.2;">
+              {{route.username.charAt(0)}}
+            </div>
             <h2>{{route.username}}</h2>
             <p>Start Date: {{route.startDate}}</p>
           </ion-item>
@@ -223,9 +228,9 @@
       <div *ngIf="userRole.driver">
         <ion-card *ngFor="let rider of suggestedRiders; let i = index">
           <ion-item>
-            <ion-avatar item-start>
-              <img src="../../assets/img/avatar-leia.png">
-            </ion-avatar>
+            <div id="initial" item-start style="zoom:1.2;">
+              {{rider.username.charAt(0)}}
+            </div>
             <h2>{{rider.username}}</h2>
             <p>Request type: {{rider.request}}</p>
             <p>Request for: {{rider.journeyDate | date}}</p>

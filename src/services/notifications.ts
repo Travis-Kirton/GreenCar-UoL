@@ -17,7 +17,7 @@ export class NotificationsService {
 
     notifications: any[] = [];
     uid = this.authService.getActiveUser().uid; 
-    notificationRef = this.afDatabase.list<NotificationMessage>(this.uid + '/notifications');
+    notificationRef: AngularFireList<any> = this.afDatabase.list<NotificationMessage>(this.uid + '/notifications');
 
     pushNotificationToUser(userID, datestamp, request, uid, journey?) {
         let notificationRef = this.afDatabase.list<NotificationMessage>(uid + '/notifications');

@@ -16,12 +16,12 @@
 <ion-content padding>
 
     <ion-item *ngFor="let message of messageList$ | async" no-lines>
-        <ion-avatar *ngIf="message.uid != user.userID" item-end>
-          <img src="../../assets/img/avatar-leia.png">
-        </ion-avatar>
-        <ion-avatar *ngIf="message.uid == user.userID" item-start>
-            <img src="../../assets/img/avatar-leia.png">
-          </ion-avatar>
+        <div id="initial" item-start style="zoom:1.2;" *ngIf="message.uid != uid">
+            {{message.userName.charAt(0)}}
+          </div>
+        <div id="initial" item-end style="zoom:1.2;" *ngIf="message.uid == uid">
+            {{message.userName.charAt(0)}}
+          </div>
         <div class="comment" [style.background-color]="message.uid == uid ? '#e0f3e0' : '#e6e4e4'">
           <p id="commentTime">{{message.timeSent}}</p>
           <p id="commentUser">{{message.userName}}</p>

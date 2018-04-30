@@ -10,6 +10,7 @@ import { Observable } from 'rxjs/Observable';
 import { CommentMessage } from '../../models/comment';
 import { AngularFireDatabase } from 'angularfire2/database';
 import firebase from 'firebase';
+import { UserService } from '../../services/user';
 
 
 @Component({
@@ -35,7 +36,8 @@ export class MatchedJourneyPage {
     private navParams: NavParams,
     private jrService: JourneyRetrievalService,
     private loadingCtrl: LoadingController,
-    private afDatabase: AngularFireDatabase) {
+    private afDatabase: AngularFireDatabase,
+    private userService: UserService) {
   }
 
   ionViewDidLoad() {

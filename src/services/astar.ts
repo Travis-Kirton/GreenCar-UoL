@@ -92,7 +92,6 @@ export class Astar {
             neighbour.g = tempG;
             neighbour.f = neighbour.g + neighbour.h;
             neighbour.previous = current;
-            console.log(current.nodeId);
           }
         });
       }

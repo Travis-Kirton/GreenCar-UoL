@@ -15,15 +15,7 @@ export class JourneyRetrievalService {
         private authService: AuthService,
         private routingService: RoutingService,
         private afDatabase: AngularFireDatabase) {
-        this.routes = this.routingService
-            .getAllRoutes() // DB List
-            .snapshotChanges() // Key:Value pairs
-            .map(changes => {
-                return changes.map(c => ({
-                    key: c.payload.key,
-                    ...c.payload.val()
-                }));
-            });
+        
     }
 
     //routes: object[] = [];
@@ -43,7 +35,8 @@ export class JourneyRetrievalService {
                 snapshot.forEach(snap => {
                     if (snap.val().routes != undefined) {
                            // don't suggest users journeys own journeys
-                            if (this.uid != snap.key) {
+                           // only suggest driver created journeys
+                            if (this.uid != snap.key && snap.val().roles.driver) {
                                 routeArray.push(snap.val().routes = Object.keys(snap.val().routes).map(key => {
                                     return snap.val().routes[key];
                                 }));

@@ -102,10 +102,17 @@ export class CreateJourneyPage implements OnInit {
           let destination = this.destination;
           let route = this.dijkstraRoute;
 
+          console.log("completed");
           this.navCtrl.setRoot(JourneyViewPage, { start: this.startingPoint, destination: this.destination, route: this.dijkstraRoute, isSet: true });
         }
       });
-    });
+    // this.astar.performAstar(this.startingPoint, this.destination).then(() => {
+    //   console.log(JSON.stringify(this.astar.getPathAsCoords()));
+    //   this.dijkstraRoute = this.astar.getPathAsCoords();
+    //   this.mapService.drawRoute(this.dijkstraRoute);
+    //   loading.dismiss();
+    // });
+     });
   }
   }
 

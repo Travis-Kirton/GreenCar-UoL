@@ -1,11 +1,11 @@
 import { SignupPage } from './../signup/signup';
-import { HomePage } from './../home/home';
 import { Component } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { LoadingController, AlertController, NavController, Events, MenuController } from "ionic-angular";
 
 import { AuthService } from "../../services/auth";
 import firebase from 'firebase';
+import { AboutPage } from '../about/about';
 
 @Component({
   selector: 'page-signin',
@@ -30,7 +30,7 @@ export class SigninPage {
       .then(data => {
         loading.dismiss();
         this.events.publish('user:name', firebase.auth().currentUser.displayName);
-        this.navCtrl.push(HomePage);
+        this.navCtrl.push(AboutPage);
       })
       .catch(error => {
         loading.dismiss();

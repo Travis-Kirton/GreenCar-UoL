@@ -38,5 +38,9 @@ export class ChatPage {
     this.messageText = ' ';
   }
 
+  ngOnDestroy(){
+    this.messageList$.subscribe().unsubscribe();
+  }
+
 
 }

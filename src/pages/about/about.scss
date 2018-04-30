@@ -24,6 +24,14 @@
       background-color: #fff;
   }
 
+  .list > .item-wrapper:last-child .item-block {
+    border-bottom: 0px solid #c8c7cc;
+  }
+    
+    ion-list{
+    border-bottom: 0px solid;
+  }
+
   ion-item {
       height:90px;
 

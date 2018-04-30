@@ -150,7 +150,6 @@ export class Dijkstra {
       step = this.predecessors.get(step);
       path.push(step);
     }
-
     //Order correctly
     path.reverse();
     return path;

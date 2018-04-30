@@ -7,7 +7,6 @@ import { AuthService } from '../../services/auth';
 import { JourneyMatchingService } from '../../services/journeyMatching';
 import { AboutPage } from '../about/about';
 import { UserService } from '../../services/user';
-import { JourneyJoiningService } from '../../services/journeyJoining';
 import { NotificationsService } from '../../services/notifications';
 import { MatchedJourneyPage } from '../matched-journey/matched-journey';
 import { PopoverHomePage } from '../popover-home/popover-home';
@@ -16,6 +15,7 @@ import { NotificationMessage } from '../../models/notification';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { CommentMessage } from '../../models/comment';
 import { CommentService } from '../../services/commentService';
+import { User } from '@firebase/auth-types';
 
 
 @Component({
@@ -93,8 +93,14 @@ export class JourneyViewPage {
       });
   }
 
+  
+
   ionViewDidLoad() {
     this.checkPendingNotifications();
+  }
+
+  ngOnDestroy(){
+    
   }
 
   ngOnInit() {
@@ -135,7 +141,7 @@ export class JourneyViewPage {
           }));
         });
 
-      // //match on each load of journey (only if no pending requests)
+      //match on each load of journey (only if no pending requests)
       // if (this.status == "unmatched") {
       //   let matches = this.jmService.findClosestStartMatch(this.route[0][0], this.route[0][1]);
       //   console.log(matches);

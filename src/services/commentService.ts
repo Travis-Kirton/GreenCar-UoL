@@ -22,7 +22,6 @@ export class CommentService {
         this.commentRef = this.afDatabase.list<CommentMessage>(uid + '/routes/' + routeKey + '/comments');
         const timestamp = this.getTimeStamp();
         this.commentMessages = this.getComments(uid, routeKey);
-        console.log(this.username);
         this.commentMessage = {
             uid: this.authService.getActiveUser().uid,
             message: msg,

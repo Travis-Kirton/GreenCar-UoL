@@ -1,30 +1,28 @@
 <ion-menu [content]="nav">
   <ion-content>
-
     <ion-list>
       <ion-item>
-        <ion-thumbnail item-left>
-          <img src="../assets/travatar.png">
-        </ion-thumbnail>
+         <div item-start id="initial" style="zoom:1.3;">{{initial}}</div> 
         <h2>{{userName}}</h2>
         <p>{{userType}}</p>
       </ion-item>
+      
       <button ion-item icon-left (click)="onLoad(tabsPage)">
-          <ion-icon name="home-outline"></ion-icon>
-          Home
-        </button>
+        <ion-icon name="home-outline"></ion-icon>
+        Home
+      </button>
       <button ion-item icon-left (click)="onPushPage(preferencesPage)">
         <ion-icon name="options-outline"></ion-icon>
         Preferences
       </button>
       <button ion-item icon-left (click)="onPushPage(statisticsPage)">
-      <ion-icon name="stats-outline"></ion-icon>
-      Statistics
-    </button>
+        <ion-icon name="stats-outline"></ion-icon>
+        Statistics
+      </button>
       <button ion-item icon-left (click)="onLogout()">
-          <ion-icon name="log-out-outline"></ion-icon>
-          Logout
-        </button>
+        <ion-icon name="log-out-outline"></ion-icon>
+        Logout
+      </button>
     </ion-list>
   </ion-content>
 </ion-menu>Loading GreenCar...

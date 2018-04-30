@@ -7,12 +7,14 @@ import { AuthService } from './../services/auth';
 import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { Platform, NavController, MenuController, Events, AlertController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
-import firebase from 'firebase';
+import { AngularFireDatabase } from "angularfire2/database";
+import { AngularFireAuth } from 'angularfire2/auth';
 import { EdgeStorageService } from '../services/edgeStorage';
 import { UserService } from '../services/user';
 import { JourneyViewPage } from '../pages/journey-view/journey-view';
 import { CommentService } from '../services/commentService';
-
+import { Observable } from 'rxjs/Observable';
+import { AdminPage } from '../pages/admin/admin';
 
 @Component({
   templateUrl: 'app.html'
@@ -26,7 +28,9 @@ export class MyApp {
   isAuthenticated = false;
 
   userName: string;
-
+  uid: string = ' ';
+  initial: any;
+  
   @ViewChild('nav') nav: NavController;
 
   constructor(platform: Platform,
@@ -34,21 +38,19 @@ export class MyApp {
     private alertCtrl: AlertController,
     private authService: AuthService,
     private events: Events,
+    private afDatabase: AngularFireDatabase,
+    private afAuth: AngularFireAuth,
     private userService: UserService,
-    private eSS: EdgeStorageService) {
-    var config = {
-      apiKey: "AIzaSyD3J_qrrKO3avQltX5mgtbA4ZY9QHbway4",
-      authDomain: "greencar-uol.firebaseapp.com",
-      databaseURL: "https://greencar-uol.firebaseio.com",
-      projectId: "greencar-uol",
-      storageBucket: "greencar-uol.appspot.com",
-      messagingSenderId: "762723967654"
-    };
+    private eSS: EdgeStorageService,
+    private user: UserService) {
 
-    firebase.initializeApp(config);
     this.checkIfVerified();
     events.subscribe('user:name', (username) => {
       this.userName = username;
+      this.uid = this.afAuth.auth.currentUser.uid;
+      if(username != undefined){
+        this.initial = this.userName.charAt(0);
+      }
       this.authService.setUserName(this.userName);
     });
 
@@ -75,14 +77,14 @@ export class MyApp {
   }
 
   checkIfVerified() {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.events.publish('user:name', firebase.auth().currentUser.displayName);
+    this.afAuth.authState.subscribe(res => {
+      if (res && res.uid) {
+        this.events.publish('user:name', this.afAuth.auth.currentUser.displayName);
         this.nav.setRoot(TabsPage);
-      }
-      else {
+      } else {
         this.nav.setRoot(SigninPage);
       }
     });
+
   }
 }

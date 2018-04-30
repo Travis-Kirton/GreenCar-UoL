@@ -10,6 +10,9 @@ import { NotificationsService } from '../../services/notifications';
 import { MatchedJourneyPage } from '../matched-journey/matched-journey';
 import { Observable } from 'rxjs/Observable';
 import { Route } from '../../models/route';
+import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { AdminPage } from '../admin/admin';
 
 @Component({
   selector: 'page-about',
@@ -17,10 +20,9 @@ import { Route } from '../../models/route';
 })
 export class AboutPage {
 
-  private routes: Observable<Route[]>;
+  routes: Observable<Route[]>;
   userRole: any;
   matchedColour = '#000';
-
   private journeys: string = "createdJourneys";
 
 
@@ -30,18 +32,10 @@ export class AboutPage {
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private routingService: RoutingService,
+    private afDatabase: AngularFireDatabase,
+    private afAuth: AngularFireAuth,
     private notificationService: NotificationsService,
-  ) {
-    // this.routes = this.routingService
-    // .getRoutes() // DB List
-    //   .snapshotChanges() // Key:Value pairs
-    //   .map(changes => {
-    //     return changes.map(c => ({
-    //       key: c.payload.key,
-    //       ...c.payload.val()
-    //     }));
-    //   });
-  }
+  ) {}
 
   private createJourney() {
     this.navCtrl.push(JourneyViewPage);
@@ -58,7 +52,6 @@ export class AboutPage {
           ...c.payload.val()
         }));
       });
-
   }
 
   private showRoute(route: Route, key: string) {
