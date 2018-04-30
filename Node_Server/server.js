@@ -10,6 +10,10 @@ const pool = new Pool({
   connectionString: connectionString
 });
 
+app.listen(4000, function () {
+  console.log('Server is running.. on Port 4000');
+});
+
 // Allow access via GET/POST methods etc
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -111,9 +115,4 @@ app.get('/allEdge', function (req, res, next) {
       client.release();
     });
   });
-});
-
-
-app.listen(4000, function () {
-  console.log('Server is running.. on Port 4000');
 });
