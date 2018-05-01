@@ -1,7 +1,6 @@
 <ion-list>
     <ion-list-header color="primary">Options</ion-list-header>
     <button ion-item (click)="messageUser()">message</button>
-    <button ion-item id="reportBtn" (click)="reportUser()">report</button>
     <button *ngIf="userRole.driver" ion-item (click)="removeUser()">remove</button>
  </ion-list>
  

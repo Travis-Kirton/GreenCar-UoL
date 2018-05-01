@@ -9,7 +9,6 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { NotificationMessage } from '../../models/notification';
 import { Observable } from 'rxjs/Observable';
 import firebase from 'firebase';
-import { AdminPage } from '../admin/admin';
 
 @Component({
   templateUrl: 'tabs.html'
@@ -33,7 +32,7 @@ export class TabsPage {
     this.setUserType();
     this.getNotifications();
   }
-  
+
 
   setUserType() {
     this.authService.getActiveUser().getIdToken()
@@ -45,11 +44,6 @@ export class TabsPage {
                 if (roles) {
                   this.userRole = roles;
                   this.userService.setUserRole(this.userRole);
-
-                  if(this.userRole.admin){
-                    console.log("admin");
-                    this.nav.setRoot(AdminPage, { username: this.authService.getUsername()});
-                  }
                 }
               },
               error => {

@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ChatPage } from '../chat/chat';
 import { UserService } from '../../services/user';
+import { RoutingService } from '../../services/routing';
+import { AuthService } from '../../services/auth';
+import { Route } from '../../models/route';
 
 /**
  * Generated class for the PopoverHomePage page.
@@ -18,12 +21,21 @@ export class PopoverHomePage {
 
   user: any;
   userRole: any;
+  uid: string;
+  journey: Route;
+  routeKey: string;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
-              public userService: UserService) {
+              public routingService: RoutingService,
+              public userService: UserService,
+              public authService: AuthService) {
     this.user = this.navParams.get('user');
+    this.routeKey = this.navParams.get('routeKey');
+    this.journey = this.navParams.get('journey');
     
+
+    this.uid = this.authService.getActiveUser().uid;
     this.userRole = this.userService.getUserRole();
   }
 
@@ -32,6 +44,7 @@ export class PopoverHomePage {
   }
 
   removeUser(){
-
+    this.routingService.removeUser(this.journey, this.navParams.get('index'));
+    this.navCtrl.pop();
   }
 }

@@ -1,4 +1,3 @@
-import { StatisticsPage } from './../pages/statistics/statistics';
 import { SignupPage } from './../pages/signup/signup';
 import { PreferencesPage } from './../pages/preferences/preferences';
 import { SigninPage } from './../pages/signin/signin';
@@ -14,7 +13,6 @@ import { UserService } from '../services/user';
 import { JourneyViewPage } from '../pages/journey-view/journey-view';
 import { CommentService } from '../services/commentService';
 import { Observable } from 'rxjs/Observable';
-import { AdminPage } from '../pages/admin/admin';
 
 @Component({
   templateUrl: 'app.html'
@@ -24,7 +22,6 @@ export class MyApp {
   signinPage = SigninPage;
   signupPage = SignupPage;
   preferencesPage = PreferencesPage;
-  statisticsPage = StatisticsPage;
   isAuthenticated = false;
 
   userName: string;

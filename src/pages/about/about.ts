@@ -12,7 +12,6 @@ import { Observable } from 'rxjs/Observable';
 import { Route } from '../../models/route';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { AdminPage } from '../admin/admin';
 
 @Component({
   selector: 'page-about',

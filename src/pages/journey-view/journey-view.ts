@@ -86,21 +86,18 @@ export class JourneyViewPage {
       .getNotifications()
       .snapshotChanges() // Key:Value pairs
       .map(changes => {
+        this.checkPendingNotifications();
         return changes.map(c => ({
+
           key: c.payload.key,
           ...c.payload.val()
         }));
+
       });
   }
 
-  
+  ngOnDestroy() {
 
-  ionViewDidLoad() {
-    this.checkPendingNotifications();
-  }
-
-  ngOnDestroy(){
-    
   }
 
   ngOnInit() {
@@ -141,19 +138,12 @@ export class JourneyViewPage {
           }));
         });
 
-      //match on each load of journey (only if no pending requests)
-      // if (this.status == "unmatched") {
-      //   let matches = this.jmService.findClosestStartMatch(this.route[0][0], this.route[0][1]);
-      //   console.log(matches);
-      //   console.log(this.journey);
-      //   this.suggestedRoutes = [];
-      //   this.suggestedRoutes = this.jmService.matchBasedOnTimeAndPref(matches, this.journey);
-      //   console.log(this.suggestedRoutes);
-      //   this.journey.suggestedRoutes = this.suggestedRoutes;
-      // }
-
     } else {
       this.routeSet = false;
+    }
+    console.log(this.notifications);
+    if (this.notifications != undefined) {
+      this.checkPendingNotifications();
     }
   }
 
@@ -255,11 +245,12 @@ export class JourneyViewPage {
     this.journey.status = "pending";
     route.status = "pending";
     console.log(route);
-    this.routingService.updateJourney(this.journeyKey, this.journey, );
+    this.routingService.updateJourney(this.journeyKey, this.journey);
     let userUID = this.authService.getActiveUser().uid;
     this.notifService.pushNotificationToUser(userUID, route.dateBooked, "joining", route.uid, this.journey);
   }
   checkPendingNotifications() {
+    console.log("called")
     let userUID = this.authService.getActiveUser().uid;
 
     this.notifications.forEach(notification => {
@@ -315,8 +306,8 @@ export class JourneyViewPage {
     this.navCtrl.setRoot(AboutPage);
   }
 
-  userOptions(user) {
-    let popover = this.popCtrl.create(PopoverHomePage, { user: user });
+  userOptions(user, index) {
+    let popover = this.popCtrl.create(PopoverHomePage, { index: index, journey: this.journey });
     popover.present();
   }
 

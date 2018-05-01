@@ -43,10 +43,17 @@ export class RoutingService {
 
   getAllRoutes(){
     return this.afDatabase.list<Route>('/');
-
   }
 
   removeRoute(key: string) {
     this.routeRef.remove(key);
   }
+
+  removeUser(journey: any, userIndex){
+    journey.users.splice(userIndex, 1);
+    console.log(journey);
+    this.updateJourney(journey.key, journey);  
+    
+  }
+    
 }

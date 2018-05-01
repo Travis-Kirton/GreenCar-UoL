@@ -9,7 +9,6 @@ import { CreateJourneyPage } from './../pages/create-journey/create-journey';
 import { PreferencesPage } from './../pages/preferences/preferences';
 import { SignupPage } from './../pages/signup/signup';
 import { SigninPage } from './../pages/signin/signin';
-import { StatisticsPage } from './../pages/statistics/statistics';
 import { AuthService } from './../services/auth';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -36,8 +35,6 @@ import { MessagingService } from '../services/messaging';
 import { ChatPage } from '../pages/chat/chat';
 import { Camera } from '@ionic-native/camera';
 import { AngularFireAuth, AngularFireAuthModule } from 'angularfire2/auth';
-import { AdminPage } from '../pages/admin/admin';
-import { AdminService } from '../services/admin';
 
 
 @NgModule({
@@ -49,13 +46,11 @@ import { AdminService } from '../services/admin';
     SigninPage,
     SignupPage,
     PreferencesPage,
-    StatisticsPage,
     CreateJourneyPage,
     JourneyViewPage,
     MatchedJourneyPage,
     PopoverHomePage,
     ChatPage,
-    AdminPage
   ],
   imports: [
     BrowserModule,
@@ -79,14 +74,12 @@ import { AdminService } from '../services/admin';
     SigninPage,
     SignupPage,
     PreferencesPage,
-    StatisticsPage,
     CreateJourneyPage,
     JourneyViewPage,
     MatchedJourneyPage,
     PopoverHomePage,
-    ChatPage,
-    AdminPage
-  ],
+    ChatPage
+    ],
   providers: [
     StatusBar,
     SplashScreen,
@@ -109,7 +102,6 @@ import { AdminService } from '../services/admin';
     CommentService,
     MessagingService,
     AngularFireDatabaseModule,
-    AdminService
   ]
 })
 export class AppModule {}

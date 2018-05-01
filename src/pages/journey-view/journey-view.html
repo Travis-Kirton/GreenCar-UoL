@@ -46,7 +46,7 @@
       </ion-item>
       <ion-item>
         <ion-label class="datetime">Pick Up Time</ion-label>
-        <ion-datetime displayFormat="HH:mm" [(ngModel)]="myTime"></ion-datetime>
+        <ion-datetime displayFormat="HH:mmz" [(ngModel)]="myTime"></ion-datetime>
       </ion-item>
 
       <ion-item id="repeatingToggle">
@@ -140,7 +140,7 @@
         </p>
 
         <p align="center" class="text-muted">Passengers</p>
-        <ion-item *ngFor="let user of users" (click)="userOptions(user)">
+        <ion-item *ngFor="let user of users; let i = index" (click)="userOptions(user, i)">
           <span *ngIf="user.userID != uid">
             <ion-item no-lines>
               <div id="initial" item-start style="zoom:1.2;">
