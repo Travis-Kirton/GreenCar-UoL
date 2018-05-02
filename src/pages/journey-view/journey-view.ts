@@ -288,7 +288,6 @@ export class JourneyViewPage {
 
   acceptRiderRequest(rider: any, index) {
     // send notification to user with accept & include journeyDate
-
     let userUID = this.authService.getActiveUser().uid;
     this.notifService.pushNotificationToUser(userUID, rider.journeyDate, "accepting", rider.userID, this.journey);
 
@@ -298,13 +297,15 @@ export class JourneyViewPage {
     // add user into current journey 
     if (this.journey.users == undefined) this.journey.users = [];
 
+
+
     this.journey.users.push(rider);
     this.routingService.updateJourney(this.journeyKey, this.journey);
     this.navCtrl.setRoot(AboutPage);
   }
 
   userOptions(user, index) {
-    let popover = this.popCtrl.create(PopoverHomePage, { index: index, journey: this.journey });
+    let popover = this.popCtrl.create(PopoverHomePage, { index: index, journey: this.journey, user: user });
     popover.present();
   }
 

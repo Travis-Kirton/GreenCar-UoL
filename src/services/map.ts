@@ -21,6 +21,9 @@ export class MapService {
   endMarker: L.Marker
   polyline: L.Polyline;
 
+  //variable to stop more markers being placed
+  placeMarkers: boolean = true;
+
   constructor(private toastCtrl: ToastController) { }
 
   initialise(): void {
@@ -61,7 +64,7 @@ export class MapService {
 
   onMapClick(e) {
     //check for maximum 2 markers (start+end)
-    if (this.seMarkCounter < this.MARKER_MAX) {
+    if (this.seMarkCounter < this.MARKER_MAX && this.placeMarkers) {
       if (this.seMarkCounter < 1) {
         console.log(e.latlng);
         this.startMarker = L.marker(e.latlng, {
@@ -123,10 +126,17 @@ export class MapService {
     let start = null;
     let end = null;
     let polyLine = null;
+    this.placeMarkers = false;
 
     routeMapObjects.forEach(element => {
-      polyLine = L.polyline(element.coords, {color: element.color}).addTo(this.map);
+      polyLine = L.polyline(element.coords, element.options).addTo(this.map);
       this.map.fitBounds(polyLine.getBounds());
+      L.marker(element.coords[0], { icon: this.startIcon, draggable: true })
+      .bindPopup(element.popup.start)
+      .addTo(this.map);
+      L.marker(element.coords[element.coords.length - 1], { icon: this.endIcon, draggable: true })
+      .bindPopup(element.popup.end)
+      .addTo(this.map);
     });
   }
 
@@ -149,7 +159,7 @@ export class MapService {
     iconUrl: '../assets/icon/start.png',
     iconSize: [38, 42],
     iconAnchor: [20, 42],
-    popupAnchor: [-3, -76],
+    popupAnchor: [-3, -30],
     shadowSize: [68, 95],
   });
 
@@ -157,7 +167,7 @@ export class MapService {
     iconUrl: '../assets/icon/end.png',
     iconSize: [38, 42],
     iconAnchor: [20, 42],
-    popupAnchor: [-3, -76],
+    popupAnchor: [-3, -30],
     shadowSize: [68, 95],
   });
 

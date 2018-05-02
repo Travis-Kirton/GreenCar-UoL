@@ -44,7 +44,11 @@ export class PopoverHomePage {
   }
 
   removeUser(){
+    console.log(this.user);
+    this.user.journey.status = 'unmatched';
+    this.user.journey.suggestedRoutes.splice(0, this.user.journey.suggestedRoutes.length);
     this.routingService.removeUser(this.journey, this.navParams.get('index'));
+    this.routingService.updateUserJourney(this.user.userID, this.user.journey.key, this.user.journey);
     this.navCtrl.pop();
   }
 }

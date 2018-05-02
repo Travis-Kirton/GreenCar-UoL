@@ -36,6 +36,11 @@ export class RoutingService {
     this.afDatabase.object(this.uid + '/routes/' + key).set(journey);
   }
 
+  updateUserJourney(uid: string, key: string, journey:Route){
+    this.afDatabase.object(uid + '/routes/' + key).set(journey);
+
+  }
+
   getRoutes() {
     let uid = firebase.auth().currentUser.uid;
     return this.afDatabase.list<Route>(uid + '/routes');
