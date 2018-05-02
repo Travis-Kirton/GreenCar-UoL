@@ -15,7 +15,7 @@ import { JourneyViewPage } from '../journey-view/journey-view';
 import { JourneyMatchingService } from '../../services/journeyMatching';
 import * as L from 'leaflet';
 import { JourneyRetrievalService } from '../../services/journeyRetrieval';
-import firebase from 'firebase';
+import  * as firebase  from 'firebase';
 
 
 @Component({

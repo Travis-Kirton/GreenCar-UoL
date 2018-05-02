@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { LoadingController, AlertController, Events, MenuController } from "ionic-angular";
-import firebase from 'firebase';
+import  * as firebase  from 'firebase';
 import { AuthService } from "../../services/auth";
 import { UserService } from "../../services/user";
 import { Http, Response } from "@angular/http";

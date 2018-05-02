@@ -8,7 +8,7 @@ import { NotificationsService } from '../../services/notifications';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { NotificationMessage } from '../../models/notification';
 import { Observable } from 'rxjs/Observable';
-import firebase from 'firebase';
+import  * as firebase  from 'firebase';
 
 @Component({
   templateUrl: 'tabs.html'

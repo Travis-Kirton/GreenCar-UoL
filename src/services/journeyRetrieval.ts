@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import firebase from 'firebase';
+import  * as firebase  from 'firebase';
 import { Route } from '../models/route';
 import { Http, Response } from "@angular/http";
 import { AuthService } from './auth';

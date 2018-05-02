@@ -4,8 +4,9 @@ import { NgForm } from "@angular/forms";
 import { LoadingController, AlertController, NavController, Events, MenuController } from "ionic-angular";
 
 import { AuthService } from "../../services/auth";
-import firebase from 'firebase';
+import  * as firebase  from 'firebase';
 import { AboutPage } from '../about/about';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component({
   selector: 'page-signin',
@@ -18,6 +19,7 @@ export class SigninPage {
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController,
               private navCtrl: NavController,
+              private afAuth: AngularFireAuth,
               private menuCtrl: MenuController) {
   }
 
@@ -47,11 +49,60 @@ export class SigninPage {
     this.navCtrl.push(SignupPage);
   }
 
+  
   ionViewDidEnter() {
     this.menuCtrl.swipeEnable(false);
   }
-
+  
   ionViewWillLeave() {
     this.menuCtrl.swipeEnable(true);
-   }
+  }
+
+
+  onForgottenPassword(){
+   let alert = this.alertCtrl.create({
+    title: 'Password Reset',
+    inputs: [
+      {
+        name: 'email',
+        placeholder: 'email'
+      }
+    ],
+    buttons: [
+      {
+        text: 'Cancel',
+        role: 'cancel',
+        handler: data => {
+          console.log('Cancel clicked');
+        }
+      },
+      {
+        text: 'Reset',
+        handler: data => {
+          console.log(data);
+          this.afAuth.auth.sendPasswordResetEmail(data.email)
+          .then(res => {
+            const alert = this.alertCtrl.create({
+              title: 'Email Sent!',
+              message: 'an email has been sent to reset your password',
+              buttons: ['Ok']
+            });
+            alert.present();
+          })
+          .catch(error => {
+            const alert = this.alertCtrl.create({
+              title: 'Signin failed!',
+              message: error.message,
+              buttons: ['Ok']
+            });
+            alert.present();
+          })
+        }
+      }
+    ]
+  });
+  alert.present();
+  
+  
+  }
 }

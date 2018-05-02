@@ -4,7 +4,7 @@ import { ToastController } from 'ionic-angular';
 import { Injectable } from "@angular/core";
 import { Http, Response } from "@angular/http";
 import { AngularFireDatabase } from 'angularfire2/database';
-import  firebase  from 'firebase';
+import  * as firebase  from 'firebase';
 
 @Injectable()
 export class RoutingService {

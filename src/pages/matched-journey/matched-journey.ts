@@ -9,7 +9,7 @@ import { CommentService } from '../../services/commentService';
 import { Observable } from 'rxjs/Observable';
 import { CommentMessage } from '../../models/comment';
 import { AngularFireDatabase } from 'angularfire2/database';
-import firebase from 'firebase';
+import  * as firebase  from 'firebase';
 import { UserService } from '../../services/user';
 
 
