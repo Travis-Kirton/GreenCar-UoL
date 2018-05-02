@@ -20,9 +20,21 @@
     <p class="journeyPara">Destination:
       <span>{{ journey.end }}</span>
     </p>
-    <p class="journeyPara">Pick Up:
-      <span>{{ journey.pickUpTime }}</span>
-    </p>
+    <p class="journeyPara" *ngIf="!journey.repeating">Start Date:
+        <span>{{ journey.startDate | date }}</span>
+      </p>
+      <p class="journeyPara" *ngIf="routeSet">Pick Up:
+        <span>{{ journey.pickUpTime }}</span>
+      </p>
+      <ion-item *ngIf="journey.repeating" id="suggestedJourneyDays">
+        <span class="day" [style.background-color]="journey.daysOfWeek.Mon === true ? '#64bb64' : '#aca9a9'">M</span>
+        <span class="day" [style.background-color]="journey.daysOfWeek.Tue === true ? '#64bb64' : '#aca9a9'">T</span>
+        <span class="day" [style.background-color]="journeydaysOfWeek.Wed === true ? '#64bb64' : '#aca9a9'">W</span>
+        <span class="day" [style.background-color]="journey.daysOfWeek.Thu === true ? '#64bb64' : '#aca9a9'">T</span>
+        <span class="day" [style.background-color]="journey.daysOfWeek.Fri === true ? '#64bb64' : '#aca9a9'">F</span>
+        <span class="day" [style.background-color]="journey.daysOfWeek.Sat === true ? '#64bb64' : '#aca9a9'">S</span>
+        <span class="day" [style.background-color]="journey.daysOfWeek.Sun === true ? '#64bb64' : '#aca9a9'">S</span>
+      </ion-item>
 
     <p align="center" class="text-muted">Passengers</p>
     <ion-item *ngFor="let user of journey.users" (click)="userOptions(user)" no-lines>

@@ -252,7 +252,7 @@ export class JourneyViewPage {
     
     this.notifications.forEach(notification => {
       console.log(notification)
-      notification.forEach(notif => {
+      notification.forEach((notif: any) => {
         console.log(notif);
         if (notif.request == "joining") {
           if (this.journey.dateBooked == undefined) {
@@ -261,7 +261,7 @@ export class JourneyViewPage {
             this.journey.dateBooked = this.myDate
           }
           if (notif.journeyDate == this.journey.dateBooked) {
-            this.suggestedRiders.push(notif);
+            this.suggestedRiders.push({key: notif.key, notif: notif});
           }
         } else if (notif.request == "accepting") {
           this.suggestedRoutes.forEach((route: any) => {
@@ -286,10 +286,12 @@ export class JourneyViewPage {
 
   }
 
-  acceptRiderRequest(rider: any, index) {
+  acceptRiderRequest(rider: any, key, index) {
     // send notification to user with accept & include journeyDate
     let userUID = this.authService.getActiveUser().uid;
     this.notifService.pushNotificationToUser(userUID, rider.journeyDate, "accepting", rider.userID, this.journey);
+
+    this.notifService.removeNotification(key);
 
     //remove rider from suggested riders
     this.suggestedRiders.splice(index);
