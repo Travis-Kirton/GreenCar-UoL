@@ -16,6 +16,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { CommentMessage } from '../../models/comment';
 import { CommentService } from '../../services/commentService';
 import { User } from '@firebase/auth-types';
+import { DriverMapPage } from '../driver-map/driver-map';
 
 
 @Component({
@@ -85,14 +86,12 @@ export class JourneyViewPage {
     this.notifications = this.notifService
       .getNotifications()
       .snapshotChanges() // Key:Value pairs
-      .map(changes => {
-        this.checkPendingNotifications();
+      .map(changes => {    
         return changes.map(c => ({
 
           key: c.payload.key,
           ...c.payload.val()
         }));
-
       });
   }
 
@@ -110,6 +109,7 @@ export class JourneyViewPage {
       this.route = this.navParams.get('route')
       this.btnAddTitle = 'Edit Route';
     } else if (this.navParams.get('showRoute')) {
+      this.checkPendingNotifications();
       this.journeyKey = this.navParams.get('key');
       this.journey = this.navParams.get('route');
       this.routeSet = true;
@@ -140,10 +140,6 @@ export class JourneyViewPage {
 
     } else {
       this.routeSet = false;
-    }
-    console.log(this.notifications);
-    if (this.notifications != undefined) {
-      this.checkPendingNotifications();
     }
   }
 
@@ -250,13 +246,14 @@ export class JourneyViewPage {
     this.notifService.pushNotificationToUser(userUID, route.dateBooked, "joining", route.uid, this.journey);
   }
   checkPendingNotifications() {
-    console.log("called")
+    console.log("checking notifications...")
     let userUID = this.authService.getActiveUser().uid;
-
+    console.log(this.notifications);
+    
     this.notifications.forEach(notification => {
+      console.log(notification)
       notification.forEach(notif => {
-        console.log(this.journey);
-        console.log(this.myDate);
+        console.log(notif);
         if (notif.request == "joining") {
           if (this.journey.dateBooked == undefined) {
             console.log(this.journey.dateBooked);
@@ -315,6 +312,10 @@ export class JourneyViewPage {
     this.commentService.addComment(this.journeyKey, this.commentText, this.authService.getActiveUser().uid).then(ref => {
     });
     this.commentText = ' ';
+  }
+
+  showDriverMap(){
+    this.navCtrl.push(DriverMapPage, {journey: this.journey, users: this.users});
   }
 
 }

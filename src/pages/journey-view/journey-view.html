@@ -135,9 +135,22 @@
         <p class="journeyPara" *ngIf="routeSet">Destination:
           <span>{{ end }}</span>
         </p>
+        <p class="journeyPara" *ngIf="!repeating">Start Date:
+          <span>{{ myDate | date }}</span>
+        </p>
         <p class="journeyPara" *ngIf="routeSet">Pick Up:
           <span>{{ myTime }}</span>
         </p>
+        <ion-item *ngIf="repeating" id="suggestedJourneyDays">
+          <span class="day" [style.background-color]="daysOfWeek.Mon === true ? '#64bb64' : '#aca9a9'">M</span>
+          <span class="day" [style.background-color]="daysOfWeek.Tue === true ? '#64bb64' : '#aca9a9'">T</span>
+          <span class="day" [style.background-color]="daysOfWeek.Wed === true ? '#64bb64' : '#aca9a9'">W</span>
+          <span class="day" [style.background-color]="daysOfWeek.Thu === true ? '#64bb64' : '#aca9a9'">T</span>
+          <span class="day" [style.background-color]="daysOfWeek.Fri === true ? '#64bb64' : '#aca9a9'">F</span>
+          <span class="day" [style.background-color]="daysOfWeek.Sat === true ? '#64bb64' : '#aca9a9'">S</span>
+          <span class="day" [style.background-color]="daysOfWeek.Sun === true ? '#64bb64' : '#aca9a9'">S</span>
+        </ion-item>
+        <button ion-button id="mapBtn" color="primary"  (click)="showDriverMap()" full outline>map</button>
 
         <p align="center" class="text-muted">Passengers</p>
         <ion-item *ngFor="let user of users; let i = index" (click)="userOptions(user, i)">
@@ -157,17 +170,17 @@
           <p align="center" class="text-muted">Discussion</p>
 
           <ion-item *ngFor="let comment of commentList$ | async">
-              <div id="initial" item-start style="zoom:1.2;" *ngIf="comment.uid != uid">
-                  {{comment.userName.charAt(0)}}
-                </div>
-              <div id="initial" item-end style="zoom:1.2;" *ngIf="comment.uid == uid">
-                  {{comment.userName.charAt(0)}}
-                </div>
-              <div class="comment" [style.background-color]="comment.uid == uid ? '#e0f3e0' : '#e6e4e4'">
-                <p id="commentTime">{{comment.timeSent}}</p>
-                <p id="commentUser">{{comment.userName}}</p>
-                <p id="commentText">{{comment.message}}</p>
-              </div>
+            <div id="initial" item-start style="zoom:1.2;" *ngIf="comment.uid != uid">
+              {{comment.userName.charAt(0)}}
+            </div>
+            <div id="initial" item-end style="zoom:1.2;" *ngIf="comment.uid == uid">
+              {{comment.userName.charAt(0)}}
+            </div>
+            <div class="comment" [style.background-color]="comment.uid == uid ? '#e0f3e0' : '#e6e4e4'">
+              <p id="commentTime">{{comment.timeSent}}</p>
+              <p id="commentUser">{{comment.userName}}</p>
+              <p id="commentText">{{comment.message}}</p>
+            </div>
           </ion-item>
           <ion-item id="comments">
             <ion-input id="commentInput" type="text" placeholder="  enter your message..." [(ngModel)]="commentText"></ion-input>

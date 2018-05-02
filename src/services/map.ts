@@ -106,17 +106,28 @@ export class MapService {
     return this.currentLocation.latlng;
   }
 
-  drawRoute(latlngs) {
+  drawRoute(latlngs, color?, lineStyle?) {
     let start = null;
     let end = null;
 
-    this.polyline = L.polyline(latlngs, { color: 'red' }).addTo(this.map);
+    this.polyline = L.polyline(latlngs, { color: '#0099cc' }).addTo(this.map);
     this.map.fitBounds(this.polyline.getBounds());
 
     this.startMarker = L.marker(latlngs[0], { icon: this.startIcon, draggable: true }).addTo(this.map);
     this.endMarker = L.marker(latlngs[latlngs.length - 1], { icon: this.endIcon, draggable: true }).addTo(this.map);
     this.markersDragged();
     latlngs = null;
+  }
+
+  drawMultipleRoutes(routeMapObjects){
+    let start = null;
+    let end = null;
+    let polyLine = null;
+
+    routeMapObjects.forEach(element => {
+      polyLine = L.polyline(element.coords, {color: element.color}).addTo(this.map);
+      this.map.fitBounds(polyLine.getBounds());
+    });
   }
 
   markersDragged() {

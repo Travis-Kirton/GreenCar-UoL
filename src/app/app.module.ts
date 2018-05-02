@@ -35,6 +35,7 @@ import { MessagingService } from '../services/messaging';
 import { ChatPage } from '../pages/chat/chat';
 import { Camera } from '@ionic-native/camera';
 import { AngularFireAuth, AngularFireAuthModule } from 'angularfire2/auth';
+import { DriverMapPage } from '../pages/driver-map/driver-map';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { AngularFireAuth, AngularFireAuthModule } from 'angularfire2/auth';
     MatchedJourneyPage,
     PopoverHomePage,
     ChatPage,
+    DriverMapPage
   ],
   imports: [
     BrowserModule,
@@ -78,7 +80,8 @@ import { AngularFireAuth, AngularFireAuthModule } from 'angularfire2/auth';
     JourneyViewPage,
     MatchedJourneyPage,
     PopoverHomePage,
-    ChatPage
+    ChatPage,
+    DriverMapPage
     ],
   providers: [
     StatusBar,

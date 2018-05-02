@@ -22,6 +22,7 @@ export class NotificationsService {
     pushNotificationToUser(userID, datestamp, request, uid, journey?) {
         let notificationRef = this.afDatabase.list<NotificationMessage>(uid + '/notifications');
         let notification: NotificationMessage = { seen: false,username: this.authService.getUsername(), userID: userID, journeyDate: datestamp, request: request, journey: journey };
+        console.log("pushing to DB");
         return notificationRef.push(notification);
     }
 
