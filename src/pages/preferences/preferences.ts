@@ -4,12 +4,19 @@ import { LoadingController, NavController, AlertController } from 'ionic-angular
 import { AuthService } from './../../services/auth';
 import { JourneyRetrievalService } from './../../services/journeyRetrieval';
 
+/**
+ * Author: Travis Kirton
+ * Desription: PreferencesPage Componenet
+ * Date: 03/05/2018
+ */
+
 @Component({
   selector: 'page-preferences',
   templateUrl: 'preferences.html',
 })
 export class PreferencesPage {
 
+  // preferences object to store data
   private preferences = {
     radius: 0,
     waitTime: 0,
@@ -23,10 +30,12 @@ export class PreferencesPage {
               private authService: AuthService,
               private  journeyService: JourneyRetrievalService) {}
 
+  // load preferences on page load
   ionViewDidLoad() {
     this.loadPreferences();
   }
 
+  // updates distance, switching between km/miles
   updateDistance(){
     if(this.preferences.distance == "miles"){
       this.preferences.distance = "km";
@@ -35,6 +44,8 @@ export class PreferencesPage {
     }
   }
 
+
+  // pushes current preferences to userService & Saving to Firebase
   savePreferences(){
     const loading = this.loadingCtrl.create({
       content: 'Saving...'
@@ -53,6 +64,7 @@ export class PreferencesPage {
     }));
   }
 
+  // Fetches preferences from Firebase
   loadPreferences(){
     const loading = this.loadingCtrl.create({
       content: 'Please wait...'
@@ -66,7 +78,6 @@ export class PreferencesPage {
           (preferences) => {
             loading.dismiss();
             if (preferences) {
-              console.log(preferences);
               this.preferences = preferences
               this.userService.setPreferences(this.preferences);
             } else {
@@ -80,6 +91,8 @@ export class PreferencesPage {
           );
       });
   }
+
+  // Reset preferences & Save
   resetPreferences(){
     this.preferences.radius = 0;
     this.preferences.distance = "km";
@@ -87,6 +100,7 @@ export class PreferencesPage {
     this.savePreferences();
   }
 
+  // Handle Errors from Loading
   private handleError(errorMessage: string) {
     const alert = this.alertCtrl.create({
       title: 'An error occurred!',

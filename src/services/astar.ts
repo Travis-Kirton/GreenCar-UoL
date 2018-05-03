@@ -6,9 +6,16 @@ import { NodeStorageService } from './nodeStorage';
 import { Injectable } from '@angular/core';
 import { MapNode } from './../models/node';
 
+/**
+ * Author: Travis Kirton
+ * Desription: Astar @Service Componenet
+ * Date: 03/05/2018
+ */
+
 @Injectable()
 export class Astar {
 
+  // open & closed sets
   openSet: BinaryHeap;
   closedSet: BinaryHeap;
 
@@ -31,12 +38,14 @@ export class Astar {
     this.edges = this.graph.getEdges();
   }
 
+  // returns instance of BinaryHeap to use
   heap(): BinaryHeap {
     return new BinaryHeap(function (node: MapNode) {
       return node.f;
     });
   }
 
+  // perform Astar algorithm, given start/end points
   performAstar(source: string, target: string) {
 
     return new Promise((resolve => {
@@ -130,6 +139,7 @@ export class Astar {
 
   }
 
+  // convert value to Radian
   toRadians(value) {
     return value * Math.PI / 180;
   }
@@ -145,6 +155,7 @@ export class Astar {
     return includes;
   }
 
+  // get distance between two nodes
   getDistance(node: MapNode, target: MapNode): number {
     this.edges.forEach(edge => {
       if (edge.source == node.nodeId && edge.target == target.nodeId) {
@@ -154,6 +165,7 @@ export class Astar {
     return null;
   }
 
+  // return path as coordinate array
   getPathAsCoords(): number[][] {
     this.lat_lng_pairs = [];
     for (let i = 0; i < this.path.length; i++) {

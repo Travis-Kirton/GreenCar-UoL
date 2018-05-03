@@ -7,10 +7,9 @@ import { AuthService } from '../../services/auth';
 import { Route } from '../../models/route';
 
 /**
- * Generated class for the PopoverHomePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
+ * Author: Travis Kirton
+ * Desription: PopoverHomePage Component
+ * Date: 03/05/2018
  */
 
 @Component({
@@ -30,21 +29,25 @@ export class PopoverHomePage {
               public routingService: RoutingService,
               public userService: UserService,
               public authService: AuthService) {
+    
+    // fetch details passed in when page pushed
     this.user = this.navParams.get('user');
     this.routeKey = this.navParams.get('routeKey');
     this.journey = this.navParams.get('journey');
     
-
+    // get current user details
     this.uid = this.authService.getActiveUser().uid;
     this.userRole = this.userService.getUserRole();
   }
 
+  // Push Chat Page and pass specific user for messaging
   messageUser(){
     this.navCtrl.push(ChatPage, {user: this.user});
   }
 
+
+  // remove user from Journey (driver only)
   removeUser(){
-    console.log(this.user);
     this.user.journey.status = 'unmatched';
     this.user.journey.suggestedRoutes.splice(0, this.user.journey.suggestedRoutes.length);
     this.routingService.removeUser(this.journey, this.navParams.get('index'));

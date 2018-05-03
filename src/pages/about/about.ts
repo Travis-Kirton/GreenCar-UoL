@@ -13,6 +13,12 @@ import { Route } from '../../models/route';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 
+/**
+ * Author: Travis Kirton
+ * Desription: AboutPage Component
+ * Date: 03/05/2018
+ */
+
 @Component({
   selector: 'page-about',
   templateUrl: 'about.html'
@@ -36,12 +42,13 @@ export class AboutPage {
     private notificationService: NotificationsService,
   ) {}
 
+  // Push JourneyViewPage
   private createJourney() {
     this.navCtrl.push(JourneyViewPage);
   }
 
+  // on page load, populate routes
   ionViewDidLoad() {
-    this.routes = undefined;
     this.routes = this.routingService
     .getRoutes() // DB List
       .snapshotChanges() // Key:Value pairs
@@ -53,6 +60,7 @@ export class AboutPage {
       });
   }
 
+  // on clicking route, navigate to page with arguments passed
   private showRoute(route: Route, key: string) {
     if (route.status == "matched") {
       this.navCtrl.push(MatchedJourneyPage, { route: route});
@@ -61,6 +69,7 @@ export class AboutPage {
     }
   }
 
+  // Change tick colour depending on journey status
   private changeCheckColour(status, disabled): string {
     if (disabled == true) {
       return 'gray'
@@ -76,6 +85,7 @@ export class AboutPage {
     }
   }
 
+  // on leaving page, unsubscribe to Observable
   ngOnDestroy(){
     this.routes.subscribe().unsubscribe();
   }

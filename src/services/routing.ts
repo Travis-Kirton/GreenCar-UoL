@@ -4,13 +4,20 @@ import { ToastController } from 'ionic-angular';
 import { Injectable } from "@angular/core";
 import { Http, Response } from "@angular/http";
 import { AngularFireDatabase } from 'angularfire2/database';
-import  * as firebase  from 'firebase';
+import firebase  from 'firebase';
+
+/**
+ * Author: Travis Kirton
+ * Desription: RoutingService @Service Component
+ * Date: 03/05/2018
+ */
 
 @Injectable()
 export class RoutingService {
 
   private routes: Route[] = [];
   private uid = firebase.auth().currentUser.uid;
+  // Create DB References to  current user routes in Firebase
   private routeRef = this.afDatabase.list<Route>(this.uid + '/routes');
 
   constructor(private afDatabase: AngularFireDatabase,
@@ -19,19 +26,19 @@ export class RoutingService {
   }
 
   addRoute(route: Route) {
-    console.log(this.uid);
     this.routeRef.push(route);
   }
 
+  // Set specific value of route
   disableRoute(key: string, disabled) {
     this.afDatabase.object(this.uid + '/routes/' + key + '/disabled').set(!disabled);
   }
 
   updateStatus(key: string,journey:Route, status: string){
-    console.log(journey);
     this.afDatabase.object(this.uid + '/routes/' + key + '/status').set(status);
   }
 
+  // Set Journey in DB to new Journey being passed in
   updateJourney(key: string, journey:Route){
     this.afDatabase.object(this.uid + '/routes/' + key).set(journey);
   }
@@ -56,9 +63,7 @@ export class RoutingService {
 
   removeUser(journey: any, userIndex){
     journey.users.splice(userIndex, 1);
-    console.log(journey);
     this.updateJourney(journey.key, journey);  
-    
   }
     
 }

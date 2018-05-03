@@ -3,7 +3,11 @@ import { ToastController } from 'ionic-angular';
 import { Observable, Subject } from 'rxjs/Rx';
 import * as L from 'leaflet';
 
-
+/**
+ * Author: Travis Kirton
+ * Desription: MapService @Service Component
+ * Date: 03/05/2018
+ */
 
 @Injectable()
 export class MapService {
@@ -26,7 +30,10 @@ export class MapService {
 
   constructor(private toastCtrl: ToastController) { }
 
+  // Initialised map
   initialise(): void {
+    this.seMarkCounter = 0;
+    this.placeMarkers = true;
 
     this.map = L.map("map", {
       center: [52.633141, -1.136198],
@@ -35,15 +42,19 @@ export class MapService {
       maxZoom: 18
     });
 
+    // Adding OpenStreetMap Tiles
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 18,
     }).addTo(this.map);
 
+    // If Location of user found, call specific methods
+    // If map clicked on, call specific methods
     this.map.locate({ setView: true, maxZoom: 17 });
     this.map.on('locationfound', (e) => this.onLocationFound(e));
     this.map.on('click', (e) => { this.onMapClick(e) });
   }
 
+  // Pan to current location and add marker
   onLocationFound(e) {
     this.currentLocation = e;
     if (this.currentLocation == undefined) {
@@ -62,11 +73,11 @@ export class MapService {
     }
   }
 
+  // On map click add markers (no more than 2)
   onMapClick(e) {
     //check for maximum 2 markers (start+end)
-    if (this.seMarkCounter < this.MARKER_MAX && this.placeMarkers) {
+    if (this.seMarkCounter < this.MARKER_MAX) {
       if (this.seMarkCounter < 1) {
-        console.log(e.latlng);
         this.startMarker = L.marker(e.latlng, {
           icon: this.startIcon,
           draggable: true
@@ -109,6 +120,7 @@ export class MapService {
     return this.currentLocation.latlng;
   }
 
+  // Draw Single route based on coordinates and color/style options
   drawRoute(latlngs, color?, lineStyle?) {
     let start = null;
     let end = null;
@@ -118,10 +130,12 @@ export class MapService {
 
     this.startMarker = L.marker(latlngs[0], { icon: this.startIcon, draggable: true }).addTo(this.map);
     this.endMarker = L.marker(latlngs[latlngs.length - 1], { icon: this.endIcon, draggable: true }).addTo(this.map);
+    this.seMarkCounter = 2;
     this.markersDragged();
     latlngs = null;
   }
 
+  // Draw Multiple route based on coordinates and color/style options
   drawMultipleRoutes(routeMapObjects){
     let start = null;
     let end = null;
@@ -138,8 +152,10 @@ export class MapService {
       .bindPopup(element.popup.end)
       .addTo(this.map);
     });
+    this.seMarkCounter = 2;
   }
 
+  // If Markers are dragged, update road positions
   markersDragged() {
     this.startMarker.on('dragend', (event) => {
       this.startPosition.next(this.startMarker);
@@ -154,7 +170,7 @@ export class MapService {
 
 
 
-
+  
   startIcon = L.icon({
     iconUrl: '../assets/icon/start.png',
     iconSize: [38, 42],

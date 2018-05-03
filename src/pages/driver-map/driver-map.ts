@@ -3,6 +3,12 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { MapService } from '../../services/map';
 import { Route } from '../../models/route';
 
+/**
+ * Author: Travis Kirton
+ * Desription: DriverMapPage Component
+ * Date: 03/05/2018
+ */
+
 @Component({
   selector: 'page-driver-map',
   templateUrl: 'driver-map.html',
@@ -18,11 +24,14 @@ export class DriverMapPage implements OnInit {
     public mapService: MapService) {
   }
 
+  // on page initialise
   ngOnInit() {
+    // grab data passed when current page added to page stack
     this.journey = this.navParams.get('journey');
     this.users = this.navParams.get('users');
     this.mapService.initialise();
     
+    // for each user, add journey to object array
     this.users.forEach(element => {
       this.mapObjects.push({
         coords: element.journey.coords,
@@ -38,6 +47,7 @@ export class DriverMapPage implements OnInit {
       });
     });
 
+    // push driver journey coordinates into object array
     this.mapObjects.push({
       coords: this.journey.coords,
       options: {
@@ -50,6 +60,7 @@ export class DriverMapPage implements OnInit {
       }
     });
 
+    // call map service to draw multiple routes
     this.mapService.drawMultipleRoutes(this.mapObjects);
 
   }

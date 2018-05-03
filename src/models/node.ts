@@ -1,3 +1,10 @@
+
+/**
+ * Author: Travis Kirton
+ * Desription: MapNode Model
+ * Date: 03/05/2018
+ */
+
 export class MapNode{
   constructor(public nodeId: number,
               public lat: number,

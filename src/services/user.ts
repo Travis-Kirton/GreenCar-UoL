@@ -4,6 +4,12 @@ import { Http, Response } from "@angular/http";
 import { AngularFireDatabase } from "angularfire2/database";
 import { Observable } from "rxjs/Observable";
 
+/**
+ * Author: Travis Kirton
+ * Desription: UserService @Service Component
+ * Date: 03/05/2018
+ */
+
 @Injectable()
 export class UserService {
 
@@ -19,19 +25,21 @@ export class UserService {
     private authService: AuthService,
     public afDatabase: AngularFireDatabase) { }
 
+  // Returns initial of User to be used as profile
   getInitial(): string {
     return this.authService.getUsername().charAt(0);
   }
 
+  // Add user Type to DB
   addUserType(token, userType) {
     const userId = this.authService.getActiveUser().uid;
     return this.http.put('https://greencar-uol.firebaseio.com/' + userId + '/roles.json?auth=' + token, userType)
       .map((response: Response) => {
-        console.log("type saved");
         return response.json();
       });
   }
 
+  // Saving Preferences to DB
   savePreferences(token, preferences) {
     const userId = this.authService.getActiveUser().uid;
     return this.http.put('https://greencar-uol.firebaseio.com/' + userId + '/preferences.json?auth=' + token, preferences)
@@ -40,6 +48,7 @@ export class UserService {
       });
   }
 
+  // Fetch Preferences from DB
   fetchPreferences(token: string) {
     const userId = this.authService.getActiveUser().uid;
     return this.http.get('https://greencar-uol.firebaseio.com/' + userId + '/preferences.json?auth=' + token)
@@ -48,6 +57,7 @@ export class UserService {
       });
   }
 
+  // Fetch Roles from FB
   fetchRoles(token: string) {
     const userId = this.authService.getActiveUser().uid;
     return this.http.get('https://greencar-uol.firebaseio.com/' + userId + '/roles.json?auth=' + token)
@@ -55,11 +65,6 @@ export class UserService {
         return response.json();
       });
   }
-
-  reportUser(){
-    
-  }
-
 
   setUserRole(role) {
     this.userRole = role;

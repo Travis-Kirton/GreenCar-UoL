@@ -1,3 +1,9 @@
+/**
+ * Author: Travis Kirton
+ * Desription: Route Model
+ * Date: 03/05/2018
+ */
+
 export interface Route {
   uid: string,
   role: string,

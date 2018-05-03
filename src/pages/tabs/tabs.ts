@@ -8,13 +8,20 @@ import { NotificationsService } from '../../services/notifications';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { NotificationMessage } from '../../models/notification';
 import { Observable } from 'rxjs/Observable';
-import  * as firebase  from 'firebase';
+import firebase  from 'firebase';
+
+/**
+ * Author: Travis Kirton
+ * Desription: TabsPage Component
+ * Date: 03/05/2018
+ */
 
 @Component({
   templateUrl: 'tabs.html'
 })
 export class TabsPage {
 
+  // Set Tab Pages
   tab2Root = AboutPage;
   tab3Root = ContactPage;
 
@@ -33,7 +40,7 @@ export class TabsPage {
     this.getNotifications();
   }
 
-
+  // Set User Type by fetching from UserService
   setUserType() {
     this.authService.getActiveUser().getIdToken()
       .then(
@@ -53,6 +60,7 @@ export class TabsPage {
         });
   }
 
+  // Handle Any Error Messages and display to user
   private handleError(errorMessage: string) {
     const alert = this.alertCtrl.create({
       title: 'An error occurred!',
@@ -62,6 +70,7 @@ export class TabsPage {
     alert.present();
   }
 
+  // Get Notifications and set Tab badge count to length of notifications
   getNotifications() {
     this.notifSub = this.notificationService
       .getNotifications().snapshotChanges().subscribe(data => {
@@ -69,6 +78,7 @@ export class TabsPage {
       });
   }
 
+  // On page leave - unsubscribe from observable
   ngOnDestroy() {
     this.notifSub.unsubscribe();
   }

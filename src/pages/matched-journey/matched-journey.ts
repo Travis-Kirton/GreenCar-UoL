@@ -9,8 +9,14 @@ import { CommentService } from '../../services/commentService';
 import { Observable } from 'rxjs/Observable';
 import { CommentMessage } from '../../models/comment';
 import { AngularFireDatabase } from 'angularfire2/database';
-import  * as firebase  from 'firebase';
+import firebase  from 'firebase';
 import { UserService } from '../../services/user';
+
+/**
+ * Author: Travis Kirton
+ * Desription: MatchedJourneyPage Component
+ * Date: 03/05/2018
+ */
 
 
 @Component({
@@ -40,22 +46,24 @@ export class MatchedJourneyPage {
     private userService: UserService) {
   }
 
+  // load route on page load
   ionViewDidLoad() {
     this.loadRoute();
   }
 
 
+  // fetches matched journey from Firebase to show to user
   loadRoute() {
     var query = firebase.database().ref(this.navParams.get('route').matchedRoute.uid + '/routes/').orderByKey();
     return query
       .once("value")
       .then(snapshot => {
         snapshot.forEach(snap => {
-          console.log(snap.key);
           if (snap.val().dateBooked == this.navParams.get('route').matchedRoute.dateBooked) {
             this.journey = snap.val();
             this.journeyKey = snap.key;
 
+            // populates comment list with journey comments
             this.commentList$ = this.commentService
               .getComments(this.navParams.get('route').matchedRoute.uid, this.journeyKey) // DB List
               .snapshotChanges() // Key:Value pairs
@@ -71,17 +79,20 @@ export class MatchedJourneyPage {
 
   }
 
+  // shows options when clicking on user profile
   userOptions(user) {
     let popover = this.popCtrl.create(PopoverHomePage, {user: user});
     popover.present();
   }
 
+  // Post comment to group using CommentService
   postComment() {
     this.commentService.addComment(this.journeyKey, this.commentText, this.uid).then(ref => {
     });
     this.commentText = ' ';
   }
 
+  // on leaving page unsubscribe to observable
   ngOnDestroy(){
     this.commentList$.subscribe().unsubscribe();
   }

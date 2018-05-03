@@ -8,6 +8,12 @@ import { MapNode } from './../models/node';
 import { RoutingService } from './routing';
 import * as Collections from 'typescript-collections';
 
+/**
+ * Author: Travis Kirton
+ * Desription: Dijkstra @Service Component
+ * Date: 03/05/2018
+ */
+
 @Injectable()
 export class Dijkstra {
   source: MapNode;
@@ -68,7 +74,6 @@ export class Dijkstra {
         if (node.nodeId == this.target.nodeId) break; //found target node
       }
       let t1 = performance.now();
-      console.log(this.target);
       console.log(`Dijkstra Completed in: ${(t1 - t0)}ms`);
       resolve(true);
     });
@@ -138,6 +143,7 @@ export class Dijkstra {
     }
   }
 
+  // Returns path
   getPath(target: MapNode): MapNode[] {
     let path: MapNode[] = [];
     let step = target;
@@ -155,6 +161,7 @@ export class Dijkstra {
     return path;
   }
 
+  // Returns path as 2-D coordinate array
   getPathAsCoords(): number[][] {
     let path = this.getPath(this.target);
     this.lat_lng_pairs = [];
@@ -167,6 +174,7 @@ export class Dijkstra {
     return this.lat_lng_pairs;
   }
 
+  // Calculates Time Taken using distance between nodes in final path
   calculateTimeTaken(){
     let path = this.getPath(this.target);
     let totalTimeTaken = 0;

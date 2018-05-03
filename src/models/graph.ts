@@ -2,6 +2,13 @@ import { EdgeStorageService } from './../services/edgeStorage';
 import { NodeStorageService } from './../services/nodeStorage';
 import { Edge } from './edge';
 import { MapNode } from './node';
+
+/**
+ * Author: Travis Kirton
+ * Desription: Graph Model
+ * Date: 03/05/2018
+ */
+
 export class Graph{
 
   vertexes: MapNode[];

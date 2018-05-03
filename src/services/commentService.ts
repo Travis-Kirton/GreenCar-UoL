@@ -4,6 +4,12 @@ import { AuthService } from "./auth";
 import { CommentMessage } from "../models/comment";
 import { Observable } from "openlayers";
 
+/**
+ * Author: Travis Kirton
+ * Desription: CommentService @Service Component
+ * Date: 03/05/2018
+ */
+
 @Injectable()
 export class CommentService {
 
@@ -18,7 +24,9 @@ export class CommentService {
     uid: string;
 
 
+    // Add Comment, passing in key of Journey, Message and User ID
     addComment(routeKey: string, msg: string, uid: string) {
+        // Create Database reference using AngularFire2
         this.commentRef = this.afDatabase.list<CommentMessage>(uid + '/routes/' + routeKey + '/comments');
         const timestamp = this.getTimeStamp();
         this.commentMessages = this.getComments(uid, routeKey);
@@ -32,6 +40,7 @@ export class CommentService {
     }
 
 
+    // Create TimeStamp using current Date()
     getTimeStamp(): string {
         const now = new Date();
         const date = now.getUTCFullYear() + '/' +

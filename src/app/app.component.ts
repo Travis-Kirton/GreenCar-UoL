@@ -14,6 +14,12 @@ import { JourneyViewPage } from '../pages/journey-view/journey-view';
 import { CommentService } from '../services/commentService';
 import { Observable } from 'rxjs/Observable';
 
+/**
+ * Author: Travis Kirton
+ * Desription: App Component Module
+ * Date: 03/05/2018
+ */
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -57,22 +63,26 @@ export class MyApp {
     });
   }
 
+  // loading specified page
   onLoad(page: any) {
     this.nav.setRoot(page);
     this.menuCtrl.close();
   }
 
+  // Pushing specified page
   onPushPage(page: any) {
     this.nav.push(page);
     this.menuCtrl.close();
   }
 
+  // User Logout
   onLogout() {
     this.authService.logout();
     this.menuCtrl.close();
     this.nav.setRoot(SigninPage);
   }
 
+  // Calling Auth to verify and redirect user
   checkIfVerified() {
     this.afAuth.authState.subscribe(res => {
       if (res && res.uid) {

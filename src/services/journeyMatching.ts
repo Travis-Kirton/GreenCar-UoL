@@ -4,6 +4,12 @@ import { Route } from '../models/route';
 import { MapNode } from '../models/node';
 import { UserService } from './user';
 
+/**
+ * Author: Travis Kirton
+ * Desription: JourneyMatchingService @Service Component
+ * Date: 03/05/2018
+ */
+
 @Injectable()
 export class JourneyMatchingService {
 
@@ -13,6 +19,7 @@ export class JourneyMatchingService {
     constructor(private jrService: JourneyRetrievalService,
         private userService: UserService) {
 
+        // populate all journeys on page injection
         this.jrService.getJourneys()
             .then(journeys => {
                 this.journeys = journeys;
@@ -22,14 +29,14 @@ export class JourneyMatchingService {
             });
     }
 
+    // Find list of closest journeys based on current preferences
     findClosestStartMatch(lat: number, lon: number): object[] {
         this.populateJoureys();
-        console.log(lat + ", " + lon)
-        console.log(this.journeys);
         let matches = this.findClosestJourneyCoords(this.journeys, lat, lon);
         return matches;
     }
 
+    // Refine matches based on Time, Repeating, & Preferences
     matchBasedOnTimeAndPref(suggestedMatches: any[], journey: Route): Route[] {
         let matches: Route[] = [];
 
@@ -48,7 +55,7 @@ export class JourneyMatchingService {
             // check if route is disabled (don't match if true)
             if (match.disabled == false || (match.users.length < match.seatsAvailable)) {
                 // find matches that are starting on/after the same date (unless repeating)
-                if ((suggestedDate.getDate() - journeyDate.getDate() >= 0) && !match.repeating) {
+                if (((suggestedDate.getDate() - journeyDate.getDate() >= 0) && !match.repeating) || match.repeating) {
                     let suggestedMinutes = (suggestedDate.getHours() * 60) + suggestedDate.getMinutes();
                     let journeyMinutes = (journeyDate.getHours() * 60) + journeyDate.getMinutes();
                     //check pick-up time & user waiting allowance is compatible
@@ -66,7 +73,6 @@ export class JourneyMatchingService {
         this.jrService.getJourneys()
             .then(journeys => {
                 this.journeys = journeys;
-                console.log(this.journeys);
             })
             .catch(error => {
                 console.log(error);
@@ -75,6 +81,7 @@ export class JourneyMatchingService {
 
 
 
+    // Finds closest Nodes
     findClosestNode(arr, lat:number, lon:number): MapNode {
         let newNode = arr[0];
         arr.forEach(node => {
@@ -82,10 +89,10 @@ export class JourneyMatchingService {
                 newNode = node;
             }
         });
-        console.log(newNode);
         return newNode;
     }
 
+    // Finds closest array of journeys
     findClosestJourneyCoords(journeys, lat:number, lon:number): object[] {
         let currLat = 0;
         let currLon = 0;

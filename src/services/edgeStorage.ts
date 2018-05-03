@@ -5,6 +5,12 @@ import { MapNode } from './../models/node';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 
+/**
+ * Author: Travis Kirton
+ * Desription: EdgeStorageService @Service Component
+ * Date: 03/05/2018
+ */
+
 @Injectable()
 export class EdgeStorageService {
   edges: Edge[] = [];
@@ -13,6 +19,7 @@ export class EdgeStorageService {
 
   constructor(private http: Http,
     private nodeSS: NodeStorageService) {
+    // populates edges with API call to PostGreSQL DB
     this.getAllEdgesFromAPI().subscribe(nodes => {
       nodes.forEach(node => {
         this.edges.push(new Edge(node.source, node.target, node.name, node.cost, node.cost_s, node.reverse_cost, node.maxspeed_forward));
@@ -56,6 +63,7 @@ export class EdgeStorageService {
     return nodeId;
   }
 
+  // Returns Edge name (road name) from given node
   getEdgeNameByNodeId(node: MapNode): string {
     let edgeName = "Point Not Found";
     this.edges.forEach(edge => {

@@ -1,4 +1,11 @@
 import { MapNode } from './../models/node';
+
+/**
+ * Author: Travis Kirton
+ * Desription: BinaryHeap DataStructure
+ * Date: 03/05/2018
+ */
+
 export class BinaryHeap{
   content: MapNode[];
   scoreFunction: (node: MapNode) => number;

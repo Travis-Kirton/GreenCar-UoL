@@ -28,7 +28,7 @@
       <ion-item padding no-lines>
           <ion-icon name="man" item-left></ion-icon>
           <ion-label>Rider or Driver</ion-label>
-          <ion-select [(ngModel)]="type" multiple="false" name="userType">
+          <ion-select [(ngModel)]="type" multiple="false" name="userType" required>
             <ion-option value="rider">Rider</ion-option>
             <ion-option value="driver">Driver</ion-option>
           </ion-select>

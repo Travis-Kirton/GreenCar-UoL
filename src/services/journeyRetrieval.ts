@@ -1,11 +1,17 @@
 import { Injectable } from '@angular/core';
-import  * as firebase  from 'firebase';
+import firebase  from 'firebase';
 import { Route } from '../models/route';
 import { Http, Response } from "@angular/http";
 import { AuthService } from './auth';
 import { Observable } from 'rxjs/Observable';
 import { RoutingService } from './routing';
 import { AngularFireDatabase } from 'angularfire2/database';
+
+/**
+ * Author: Travis Kirton
+ * Desription: JourneyRetrievalService @Service Component
+ * Date: 03/05/2018
+ */
 
 
 @Injectable()
@@ -54,7 +60,7 @@ export class JourneyRetrievalService {
     }
 
 
-
+    // returns specific journey based on UID
     getSpecificJourney(token, uid) {
         let route_toReturn: Route;
         return this.http.get('https://greencar-uol.firebaseio.com/' + uid + '/routes.json?auth=' + token)

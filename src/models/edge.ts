@@ -1,4 +1,11 @@
 import { MapNode } from './node';
+
+/**
+ * Author: Travis Kirton
+ * Desription: Edge Model
+ * Date: 03/05/2018
+ */
+
 export class Edge{
   constructor(public source: number,
               public target: number,

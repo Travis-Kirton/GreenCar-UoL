@@ -250,6 +250,10 @@
           </ion-item>
 
           <ion-item id="suggestedJourneyInfo">
+              <button ion-button icon-left outline item-end  color="danger"(click)="rejectRiderRequest(rider.notif,rider.key, i)">
+                  <ion-icon name="navigate"></ion-icon>
+                  reject
+                </button>
             <button ion-button icon-left outline item-end (click)="acceptRiderRequest(rider.notif,rider.key, i)">
               <ion-icon name="navigate"></ion-icon>
               accept

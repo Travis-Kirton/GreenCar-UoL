@@ -54,13 +54,13 @@
       <p align="center" class="text-muted">Discussion</p>
 
       <ion-item *ngFor="let comment of commentList$ | async" no-lines>
-          <div id="initial" item-start style="zoom:1.2;" *ngIf="comment.uid != uid">
+          <div id="initial" item-start style="zoom:1.2;" *ngIf="comment.uid != currentUserUID">
               {{comment.userName.charAt(0)}}
             </div>
-          <div id="initial" item-end style="zoom:1.2;" *ngIf="comment.uid == uid">
+          <div id="initial" item-end style="zoom:1.2;" *ngIf="comment.uid == currentUserUID">
               {{comment.userName.charAt(0)}}
             </div>
-          <div class="comment" [style.background-color]="comment.uid == uid ? '#e0f3e0' : '#e6e4e4'">
+            <div class="comment" [style.background-color]="comment.uid == currentUserUID ? '#e0f3e0' : '#e6e4e4'">
             <p id="commentTime">{{comment.timeSent}}</p>
             <p id="commentUser">{{comment.userName}}</p>
             <p id="commentText">{{comment.message}}</p>

@@ -1,19 +1,12 @@
-<!--
-  Generated template for the ChatPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
-
-  <ion-navbar>
+<ion-header no-border>
+  <ion-navbar color="primary">
     <ion-title>{{user.username}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content #content padding>
 
     <ion-item *ngFor="let message of messageList$ | async" no-lines>
         <div id="initial" item-start style="zoom:1.2;" *ngIf="message.uid != uid">
@@ -28,12 +21,13 @@
           <p id="commentText">{{message.message}}</p>
         </div>
       </ion-item>
+    </ion-content>
 
     <ion-footer keyboard-attach class="bar-stable item-input-inset">
-        <ion-item id="messageInput">
-            <ion-input id="commentInput" type="text" placeholder="  enter your message..." [(ngModel)]="messageText"></ion-input>
+      <ion-item id="messageInput">
+            <ion-input id="commentInput" type="text" placeholder="  enter your message..." [(ngModel)]="messageText" (keyup.enter)="sendMessage()"></ion-input>
             <button ion-button item-right (click)="sendMessage()">Send</button>
           </ion-item>
       </ion-footer>
 
-</ion-content>
+

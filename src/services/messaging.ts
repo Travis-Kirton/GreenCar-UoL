@@ -4,6 +4,12 @@ import { AuthService } from "./auth";
 import { CommentMessage } from "../models/comment";
 import { Observable } from "openlayers";
 
+/**
+ * Author: Travis Kirton
+ * Desription: MessagingService @Service Component
+ * Date: 03/05/2018
+ */
+
 @Injectable()
 export class MessagingService {
 
@@ -18,6 +24,8 @@ export class MessagingService {
     commentMessage: CommentMessage;
     uid = this.authService.getActiveUser().uid;
 
+    // Send message, creating unique number for each 2-User combination
+    // which allows unique storage in FireBase
     sendMessage(msg: string, senderUID: string) {
         let number1:number = 0;
         let number2:number = 0;
@@ -28,12 +36,10 @@ export class MessagingService {
             number2+=senderUID.charCodeAt(i)
         }
 
-
-        console.log(number1 + number2);
+        // Create Database Reference to message storage location
         this.messageRef = this.afDatabase.list<CommentMessage>('messages/' + (number1+number2));
         const timestamp = this.getTimeStamp();
         this.commentMessages = this.getMessages(senderUID);
-        console.log(this.username);
         this.commentMessage = {
             uid: this.uid,
             message: msg,
@@ -43,6 +49,7 @@ export class MessagingService {
         return this.messageRef.push(this.commentMessage);
     }
 
+    // Get TimeStamp based on current Date()
     getTimeStamp(): string {
         const now = new Date();
         const date = now.getUTCFullYear() + '/' +
@@ -54,6 +61,7 @@ export class MessagingService {
         return (date + ' ' + time);
     }
 
+    // return all messages from unique location in Firebase
     getMessages(contactUID: string) {
         let number1:number = 0;
         let number2:number = 0;
