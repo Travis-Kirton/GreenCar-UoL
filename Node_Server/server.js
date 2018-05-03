@@ -2,7 +2,7 @@ var express = require('express');
 const { Pool, Client } = require('pg')
 var app = express();
 
-// connection details (pw will need hiding later)
+// connection details
 connectionString = 'postgresql://postgres:admin@localhost:5432/greencar_uol';
 
 // create Pool object for connections
